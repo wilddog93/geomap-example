@@ -41,16 +41,16 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   });
 
   return (
-    <Component
-      {...getBaseProps({
-        className: clsx(
-          "px-px transition-opacity hover:opacity-80 cursor-pointer",
-          className,
-          classNames?.base
-        ),
-      })}
-    >
-      <Fragment>
+    <Fragment>
+      <Component
+        {...getBaseProps({
+          className: clsx(
+            "px-px transition-opacity hover:opacity-80 cursor-pointer",
+            className,
+            classNames?.base
+          ),
+        })}
+      >
         <VisuallyHidden>
           <input {...getInputProps()} />
         </VisuallyHidden>
@@ -79,7 +79,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
             <MoonFilledIcon size={22} />
           )}
         </div>
-      </Fragment>
-    </Component>
+      </Component>
+    </Fragment>
   );
 };
