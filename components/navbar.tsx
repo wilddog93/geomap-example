@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Navbar as NextUINavbar,
@@ -28,13 +28,25 @@ import {
   SearchIcon,
 } from "@/components/icons";
 
+// icons
+import { MdCamera, MdSettings } from "react-icons/md";
+
 import { Logo } from "@/components/icons";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { User } from "@nextui-org/user";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
+import { Avatar } from "@nextui-org/avatar";
+import { useDisclosure } from "@nextui-org/modal";
 // import { ThemeSwitch } from "./theme-switch";
 
 export const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const searchInput = (
     <Input
       aria-label="Search"
@@ -56,7 +68,9 @@ export const Navbar = () => {
     />
   );
 
-  console.log(router, 'params')
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  console.log(router, "params");
 
   return (
     <NextUINavbar className="shadow-sm" maxWidth="xl" position="sticky">
@@ -112,19 +126,40 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
+        <User
+          name={<span className="hidden sm:flex">John Doe</span>}
+          description={<span className="hidden sm:flex">Administrator</span>}
+          avatarProps={{
+            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+            size: "sm",
+            color: "secondary",
+          }}
+          className="transition-transform hidden sm:flex"
+        />
+        <div className="hidden sm:block border-l h-10 mx-0 sm:mx-2"></div>
+        <Dropdown placement="bottom-end">
+          <DropdownTrigger>
+            <button className="focus:outline-none">
+              <MdSettings className="w-6 h-6" />
+            </button>
+          </DropdownTrigger>
+          <DropdownMenu
+            aria-label="Profile Actions"
             variant="flat"
+            color="primary"
+            className="text-black"
           >
-            Sponsor
-          </Button>
-        </NavbarItem>
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold">Signed in as</p>
+              <p className="font-semibold">John Doe</p>
+            </DropdownItem>
+            <DropdownItem key="settings">My Settings</DropdownItem>
+            <DropdownItem key="configurations">Configurations</DropdownItem>
+            <DropdownItem key="logout" color="danger" onPress={onOpen}>
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </NavbarContent>
 
       {/* <NavbarContent
@@ -159,9 +194,42 @@ export const Navbar = () => {
 			</NavbarContent> */}
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal href={siteConfig.links.github} aria-label="Github">
-          <GithubIcon className="text-default-500" />
-        </Link>
+        <Dropdown placement="bottom-end">
+          <DropdownTrigger>
+            <button className="focus:outline-none">
+              <Avatar
+                className="transition-transform"
+                color="secondary"
+                name="John Doe"
+                size="sm"
+                src="https://i.pravatar.cc/150?u=a04258114e29026702d"
+                fallback={
+                  <MdCamera
+                    className="animate-pulse w-6 h-6 text-default-500"
+                    fill="currentColor"
+                    size={20}
+                  />
+                }
+              />
+            </button>
+          </DropdownTrigger>
+          <DropdownMenu
+            aria-label="Profile Actions"
+            variant="flat"
+            color="primary"
+            className="text-black"
+          >
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold">Signed in as</p>
+              <p className="font-semibold">John Doe</p>
+            </DropdownItem>
+            <DropdownItem key="settings">My Settings</DropdownItem>
+            <DropdownItem key="configurations">Configurations</DropdownItem>
+            <DropdownItem key="logout" color="danger" onPress={onOpen}>
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <NavbarMenuToggle />
       </NavbarContent>
 
