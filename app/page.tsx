@@ -16,8 +16,8 @@ export default function Home() {
   return (
     <section className="relative overflow-y-auto w-full h-full flex">
       <div
-        className={`absolute inset-y-0 h-full left-0 z-10 flex w-full flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0 ${
-          sidebar ? "translate-x-0" : "-translate-x-full w-0"
+        className={`absolute inset-y-0 h-full left-0 z-10 flex  flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0 ${
+          sidebar ? "translate-x-0 w-full" : "-translate-x-full w-0"
         }`}
       >
         <ScrollShadow hideScrollBar className="w-full h-full">
@@ -39,8 +39,8 @@ export default function Home() {
       >
         <button
           type="button"
-          className={`static lg:absolute z-10 -left-[2.6rem] top-10 rounded-l-lg rounded-r-none px-3 py-2 bg-white shadow ${
-            !sidebar ? "left-auto right-10 border rounded-r-lg" : ""
+          className={`static lg:absolute z-10 -left-[2.6rem] top-10 rounded-l-lg px-3 py-2 bg-white shadow ${
+            !sidebar ? "left-auto right-10 border rounded-r-lg" : "rounded-r-none"
           }`}
           onClick={sideFunction}
         >
