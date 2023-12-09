@@ -4,13 +4,14 @@ import { useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { MdChevronLeft, MdChevronRight, MdClose } from "react-icons/md";
 import MapComponent from "@/components/maps/MapComponent";
+import { Tab, Tabs } from "@nextui-org/tabs";
 
 export default function Home() {
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState(true);
 
   const sideFunction = () => {
-    setSidebar(state => !state)
-  }
+    setSidebar((state) => !state);
+  };
 
   return (
     <section className="relative overflow-y-auto w-full h-full flex">
@@ -21,9 +22,9 @@ export default function Home() {
       >
         <ScrollShadow hideScrollBar className="w-full h-full">
           <button
-          type="button"
-          className="inline-flex lg:hidden absolute z-10 right-1 mt-1 p-1 rounded-sm bg-white shadow"
-          onClick={sideFunction}
+            type="button"
+            className="inline-flex lg:hidden absolute z-10 right-1 mt-1 p-1 rounded-sm bg-white shadow"
+            onClick={sideFunction}
           >
             <MdClose className="w-4 h-4" />
           </button>
@@ -31,17 +32,39 @@ export default function Home() {
         </ScrollShadow>
       </div>
 
-      <div className={`relative w-full p-4 border-l-2 border-stroke ${sidebar ? "max-w-md" : ""}`}>
+      <div
+        className={`relative w-full p-4 border-l-2 border-stroke ${
+          sidebar ? "max-w-md" : ""
+        }`}
+      >
         <button
           type="button"
-          className={`static lg:absolute z-10 -left-[2.6rem] top-10 rounded-l-lg rounded-r-none px-3 py-2 bg-white shadow ${!sidebar ? "left-auto right-10 border rounded-r-lg" : ""}`}
+          className={`static lg:absolute z-10 -left-[2.6rem] top-10 rounded-l-lg rounded-r-none px-3 py-2 bg-white shadow ${
+            !sidebar ? "left-auto right-10 border rounded-r-lg" : ""
+          }`}
           onClick={sideFunction}
         >
-          {
-            !sidebar ? <MdChevronRight className="w-4 h-4" /> : <MdChevronLeft className="w-4 h-4" />
-          }
+          {!sidebar ? (
+            <MdChevronRight className="w-4 h-4" />
+          ) : (
+            <MdChevronLeft className="w-4 h-4" />
+          )}
         </button>
         <ScrollShadow hideScrollBar className="w-full h-full">
+          <div className="gap-4">
+            <Tabs variant="underlined" aria-label="Tabs variants">
+              <Tab key="photos" title={<div>
+                <p>lala</p>
+                <p>pero</p>
+              </div>}>
+                <div>
+                  this is page photo  
+                </div>
+              </Tab>
+              <Tab key="music" title="Music" />
+              <Tab key="videos" title="Videos" />
+            </Tabs>
+          </div>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
           laudantium, tenetur dolores, ea quas libero dolore labore perspiciatis
           quasi delectus facere quibusdam. Distinctio perspiciatis in maxime
