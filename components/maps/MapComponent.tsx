@@ -38,17 +38,12 @@ const MapComponent: React.FC = () => {
         }),
       ],
       view: new View({
-        center: [11886429.74, -697879.89],
+        // extent: [13164840.120333597, -191866.6366120975],
+        center: [13164840.120333597, -191866.6366120975],
         zoom: 4,
-      }),
-    });
-
-    // add icon
-    const iconStyle = new Style({
-      image: new Icon({
-        anchor: [0.5, 1],
-        src: "/location.png",
-        scale: 0.06,
+        maxZoom: 10,
+        minZoom: 4,
+        constrainOnlyCenter: true,
       }),
     });
 
@@ -56,36 +51,71 @@ const MapComponent: React.FC = () => {
       new Feature({
         geometry: new Point([11886463.76, -697838.04]),
         name: "Jakarta Selatan",
-        ccategory: "Oil Palm",
+        category: "Oil Palm",
         population: 4000,
         rainfall: 500,
       }),
       new Feature({
-        geometry: new Point([11286429.69, -7.447661]),
+        geometry: new Point([11178245.135473102, -111678.44319488533]),
+        name: "Padang",
+        category: "Secondary Forest",
+        population: 4000,
+        rainfall: 500,
+      }),
+      new Feature({
+        geometry: new Point([11629259.353076728, 119001.71560729994]),
+        name: "Kepulauan Riau",
+        category: "Shrubs",
+        population: 4000,
+        rainfall: 500,
+      }),
+      new Feature({
+        geometry: new Point([11293214.772411833, 53536.545708957245]),
         name: "Pekanbaru",
         category: "Secondary Forest",
         population: 4000,
         rainfall: 500,
       }),
       new Feature({
-        geometry: new Point([11586429.66, -8.459556]),
-        name: "Kepulauan Riau",
-        category: "Shrubs",
+        geometry: new Point([12702275.599202517, 19263.569483857485]),
+        name: "Kalimantan Tengah",
+        category: "Oil Palm",
         population: 4000,
         rainfall: 500,
       }),
-      // new Feature({
-      //   geometry: new Point([10686429.85, -6.168329]),
-      //   name: "Kepulauan Mentawai",
-      //   population: 4000,
-      //   rainfall: 500,
-      // }),
     ];
+    
+    const featureStyleFunction = (feature: any) => {
+      const category = feature.get("category");
+      let iconSrc = "";
+      // Tentukan ikon berdasarkan kategori
+      switch (category) {
+        case "Oil Palm":
+          iconSrc = "/icons/icon-palm-tree.png";
+          break;
+        case "Secondary Forest":
+          iconSrc = "/icons/icon-forest.png";
+          break;
+        default:
+          iconSrc = "/icons/icon-shrub.png";
+          break;
+      }
+      console.log(iconSrc, 'icon')
+
+      return new Style({
+        image: new Icon({
+          anchor: [0.5, 1],
+          src: iconSrc,
+          scale: 0.6,
+        }),
+      });
+    };
+
 
     iconFeature.forEach((feature) => {
-      feature.setStyle(iconStyle);
+      const newIcon = featureStyleFunction(feature)
+      feature.setStyle(newIcon);
     });
-    // iconFeature.setStyle(iconStyle);
 
     const vectorSource = new VectorSource({
       features: iconFeature,
@@ -93,6 +123,7 @@ const MapComponent: React.FC = () => {
 
     const vectorLayer = new VectorLayer({
       source: vectorSource,
+      // style: featureStyleFunction,
     });
 
     map.addLayer(vectorLayer);
@@ -153,7 +184,7 @@ const MapComponent: React.FC = () => {
         {overlayContent}
       </div> */}
 
-      <div ref={popupRef} id="popup" className="ol-popup flex flex-col gap-2">
+      <div ref={popupRef} id="popup" className="ol-popup flex flex-col gap-2 transform duration-300 animate-appearance-in">
         {/* <a href="#" id="popup-closer" className="ol-popup-closer"></a> */}
         <div id="popup-content">
           <h3>{overlayContent?.name}</h3>
