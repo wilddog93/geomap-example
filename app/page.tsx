@@ -54,8 +54,7 @@ export default function Home() {
           <div className="gap-4">
             <Tabs variant="underlined" aria-label="Tabs variants">
               <Tab key="photos" title={<div>
-                <p>lala</p>
-                <p>pero</p>
+                <p>Photos</p>
               </div>}>
                 <div>
                   this is page photo  
