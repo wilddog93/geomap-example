@@ -36,7 +36,7 @@ export default function LoginPage({ children }: { children: React.ReactNode }) {
             <CardBody>
               <p className="text-white text-lg drop-shadow-md">
                 Mewujudkan Indonesia yang lestari, menjaga keseimbangan antara
-                kebutuhan manusiadan kelestarian alam unutk generasi sekarang
+                kebutuhan manusia dan kelestarian alam untuk generasi sekarang
                 dan yang akan datang.
               </p>
             </CardBody>
