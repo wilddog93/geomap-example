@@ -42,7 +42,10 @@ import {
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
 import { useDisclosure } from "@nextui-org/modal";
+import { Image } from "@nextui-org/react";
 // import { ThemeSwitch } from "./theme-switch";
+
+import ImageLogo from "@/public/image/logo-image.png"
 
 export const Navbar = () => {
   const router = useRouter();
@@ -80,10 +83,7 @@ export const Navbar = () => {
             className="flex text-default-500 justify-start items-center gap-1"
             href="/"
           >
-            <Logo />
-            <p className="font-bold text-default-500">
-              Konservasi Alam Nusantara
-            </p>
+            <Image alt="logo" src="/image/logo-image.png" width={150} />
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
