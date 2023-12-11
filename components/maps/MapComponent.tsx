@@ -12,11 +12,16 @@ import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import VectorLayer from "ol/layer/Vector";
 import { XYZ } from "ol/source";
+import { convertDMS } from "@/utils/useFunction";
 
 const MapComponent: React.FC = () => {
   const overlayRef = useRef<Overlay | null>(null);
   const [overlayContent, setOverlayContent] = useState<string | any>("");
   const popupRef = useRef<HTMLDivElement>(null);
+
+  const coordinates = convertDMS("0°22'05.7\"N", "109°07'07.2\"E");
+
+  console.log(coordinates, 'convert coordinates')
 
   useEffect(() => {
     // Initialize the map
