@@ -260,7 +260,7 @@ const MapComponent = ({ items, setItems }: Props) => {
             setOverlayContent(items);
           }
         } else {
-          setOverlayContent("");
+          setOverlayContent(null);
           popup.setPosition(undefined);
         }
       });
@@ -273,7 +273,7 @@ const MapComponent = ({ items, setItems }: Props) => {
   }, [iconFeatures]); // Empty dependency array ensures useEffect runs once after the initial render
 
   useEffect(() => {
-    if(!overlayContent) {
+    if(overlayContent !== null) {
       setItems(overlayContent)
     } else {
       setItems(null)
