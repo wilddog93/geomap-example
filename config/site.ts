@@ -12,10 +12,10 @@ export const siteConfig = {
       label: "Table",
       href: "/table",
     },
-    {
-      label: "Reports",
-      href: "/reports",
-    },
+    // {
+    //   label: "Reports",
+    //   href: "/reports",
+    // },
   ],
   navMenuItems: [
     {
@@ -30,10 +30,10 @@ export const siteConfig = {
       label: "Table",
       href: "/projects",
     },
-    {
-      label: "Reports",
-      href: "/reports",
-    },
+    // {
+    //   label: "Reports",
+    //   href: "/reports",
+    // },
     {
       label: "Settings",
       href: "/settings",
