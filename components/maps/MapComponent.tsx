@@ -260,7 +260,7 @@ const MapComponent = ({ items, setItems }: Props) => {
             setOverlayContent(items);
           }
         } else {
-          setOverlayContent(null);
+          setOverlayContent("");
           popup.setPosition(undefined);
         }
       });
@@ -273,7 +273,7 @@ const MapComponent = ({ items, setItems }: Props) => {
   }, [iconFeatures]); // Empty dependency array ensures useEffect runs once after the initial render
 
   useEffect(() => {
-    if(overlayContent !== null) {
+    if(!overlayContent) {
       setItems(overlayContent)
     } else {
       setItems(null)
@@ -402,7 +402,7 @@ const MapComponent = ({ items, setItems }: Props) => {
           <div className="w-full pl-5 p-2 flex flex-wrap gap-1 items-start">
             <ul className="list-disc">
               {overlayContent?.description?.map((item: any) => {
-                return <li className="text-xs">{item}</li>;
+                return <li key={item} className="text-xs">{item}</li>;
               })}
             </ul>
           </div>
