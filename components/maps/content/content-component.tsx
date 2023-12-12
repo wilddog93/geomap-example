@@ -116,7 +116,7 @@ function ContentComponent() {
         <Select
           radius="full"
           label=""
-          className="w-full lg:w-1/3 shadow-xl rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          className="w-full lg:w-1/3 shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           labelPlacement="outside"
           variant="bordered"
           listboxProps={{
@@ -169,7 +169,7 @@ function ContentComponent() {
             ],
             innerWrapper: "bg-transparent py-1.5",
             inputWrapper: [
-              "shadow-xl",
+              "shadow-sm",
               "bg-default-200/50",
               "dark:bg-default/60",
               "backdrop-blur-xl",

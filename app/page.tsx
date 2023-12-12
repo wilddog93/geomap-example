@@ -41,7 +41,6 @@ export default function Home() {
     if (items !== null) {
       setSidebar(true);
     } else {
-      setSidebar(false);
       setItems(null)
     }
   }, [items]);
@@ -102,7 +101,7 @@ export default function Home() {
                   <Select
                     radius="full"
                     label=""
-                    className="w-full shadow-xl rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                    className="w-full shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
                     labelPlacement="outside"
                     variant="bordered"
                     listboxProps={{
