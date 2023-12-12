@@ -29,7 +29,7 @@ import {
 } from "@/components/icons";
 
 // icons
-import { MdCamera, MdSettings } from "react-icons/md";
+import { MdCamera, MdOutlineUpload, MdSettings } from "react-icons/md";
 
 import { Logo } from "@/components/icons";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -45,7 +45,7 @@ import { useDisclosure } from "@nextui-org/modal";
 import { Image } from "@nextui-org/react";
 // import { ThemeSwitch } from "./theme-switch";
 
-import ImageLogo from "@/public/image/logo-image.png"
+import ImageLogo from "@/public/image/logo-image.png";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -126,7 +126,20 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <User
+        <div className="w-full max-w-[12rem] relative flex items-center">
+          <Button
+            type="button"
+            variant="solid"
+            color="primary"
+            className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
+          >
+            Import Data
+            <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-500 group-hover:translate-x-full -right-2">
+              <MdOutlineUpload className="w-10 h-10 bg-green-400 rounded-full p-1 text-white duration-300 group-hover:rotate-90" />
+            </div>
+          </Button>
+        </div>
+        {/* <User
           name={<span className="hidden sm:flex">John Doe</span>}
           description={<span className="hidden sm:flex">Administrator</span>}
           avatarProps={{
@@ -159,7 +172,7 @@ export const Navbar = () => {
               Log Out
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
       </NavbarContent>
 
       {/* <NavbarContent
@@ -194,7 +207,7 @@ export const Navbar = () => {
 			</NavbarContent> */}
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Dropdown placement="bottom-end">
+        {/* <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <button className="focus:outline-none">
               <Avatar
@@ -229,12 +242,25 @@ export const Navbar = () => {
               Log Out
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
-        {searchInput}
+        {/* {searchInput} */}
+        <div className="w-full max-w-[12rem] relative flex items-center mx-auto">
+          <Button
+            type="button"
+            variant="solid"
+            color="primary"
+            className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
+          >
+            Import Data
+            <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-500 group-hover:translate-x-full -right-2">
+              <MdOutlineUpload className="w-10 h-10 bg-green-400 rounded-full p-1 text-white duration-300 group-hover:rotate-90" />
+            </div>
+          </Button>
+        </div>
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>

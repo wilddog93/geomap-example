@@ -260,6 +260,7 @@ const MapComponent = ({ items, setItems }: Props) => {
             setOverlayContent(items);
           }
         } else {
+          setOverlayContent(null);
           popup.setPosition(undefined);
         }
       });
@@ -289,7 +290,7 @@ const MapComponent = ({ items, setItems }: Props) => {
     <Fragment>
       <div id="map" style={{ width: "100%", height: "100%" }}></div>
       <div className="absolute z-10 right-10 top-10"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
-      <div className="w-full lg:w-2/3 flex items-center gap-1 absolute z-10 top-5 inset-x-20">
+      <div className="w-full lg:w-2/3 flex flex-col lg:flex-row items-center gap-1 absolute z-10 top-14 lg:top-5 lg:inset-x-20 p-4">
         <Select
           radius="full"
           label="" 
@@ -369,7 +370,7 @@ const MapComponent = ({ items, setItems }: Props) => {
       <div
         ref={popupRef}
         id="popup"
-        className="ol-popup w-96 flex flex-col gap-2 transform duration-300 animate-appearance-in"
+        className="ol-popup lg:w-96 flex flex-col gap-2 transform duration-300 animate-appearance-in"
       >
         {/* <a href="#" id="popup-closer" className="ol-popup-closer"></a> */}
         <div id="popup-content">

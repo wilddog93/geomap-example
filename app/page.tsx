@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import {
   MdChevronLeft,
@@ -18,7 +18,7 @@ import ContentComponent from "@/components/maps/content/content-component";
 export default function Home() {
   const [sidebar, setSidebar] = useState(true);
   const [items, setItems] = useState<any>(null);
-  const [isSelected, setIsSelected] = useState<string | any>("yearly")
+  const [isSelected, setIsSelected] = useState<string | any>("yearly");
 
   const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setIsSelected(e.target.value);
@@ -36,6 +36,15 @@ export default function Home() {
     { label: "Weekly", value: "weekly" },
     { label: "Daily", value: "daily" },
   ];
+
+  useEffect(() => {
+    if (items !== null) {
+      setSidebar(true);
+    } else {
+      setSidebar(false);
+      setItems(null)
+    }
+  }, [items]);
 
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
@@ -57,98 +66,100 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative duration-300 ${
-            sidebar ? "w-full max-w-md p-4" : "w-0"
+          className={`bg-white absolute lg:static z-10 duration-300 lg:translate-x-0 ${
+            sidebar ? "w-full max-w-md p-4" : "w-full lg:w-0 translate-x-full"
           }`}
         >
-          <button
-            type="button"
-            className={`static lg:absolute z-10 -left-[1.5rem] top-6 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none ${
-              !sidebar ? "" : ""
-            }`}
-            onClick={sideFunction}
-          >
-            {sidebar ? (
-              <MdChevronRight className="w-4 h-4" />
-            ) : (
-              <MdChevronLeft className="w-4 h-4" />
-            )}
-          </button>
-          <ScrollShadow hideScrollBar className="w-full h-full">
-            <div className="w-full flex items-center px-4 mb-5">
-              <div className="w-full flex flex-col gap-3 lg:1/2">
-                <h3 className="font-bold text-xl">
-                  {items?.locationName || ""}
-                </h3>
-                <ul className="list-disc text-sm">
-                  {items?.description || items?.description?.length > 0
-                    ? items?.description?.map((desc: any) => {
-                        return <li key={desc}>{desc}</li>;
-                      })
-                    : null}
-                </ul>
+          <div className="relative">
+            <button
+              type="button"
+              className={`static lg:absolute z-10 top-6 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none ${
+                !sidebar ? "-left-[1.5rem]" : "-left-[2.5rem]"
+              }`}
+              onClick={sideFunction}
+            >
+              {sidebar ? (
+                <MdChevronRight className="w-4 h-4" />
+              ) : (
+                <MdChevronLeft className="w-4 h-4" />
+              )}
+            </button>
+            <ScrollShadow hideScrollBar className="w-full h-full">
+              <div className="w-full flex items-center px-4 mb-5">
+                <div className="w-full flex flex-col gap-3 lg:1/2">
+                  <h3 className="font-bold text-xl">
+                    {items?.locationName || ""}
+                  </h3>
+                  <ul className="list-disc text-sm">
+                    {items?.description || items?.description?.length > 0
+                      ? items?.description?.map((desc: any) => {
+                          return <li key={desc}>{desc}</li>;
+                        })
+                      : null}
+                  </ul>
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <Select
+                    radius="full"
+                    label=""
+                    className="w-full shadow-xl rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    listboxProps={{
+                      itemClasses: {
+                        base: [
+                          "text-default-500",
+                          "transition-opacity",
+                          "data-[hover=true]:text-foreground",
+                          "data-[hover=true]:bg-default-100",
+                          "dark:data-[hover=true]:bg-default-50",
+                          "data-[selectable=true]:focus:bg-default-50",
+                          "data-[pressed=true]:opacity-70",
+                          "data-[focus-visible=true]:ring-default-500",
+                        ],
+                      },
+                    }}
+                    color="primary"
+                    selectedKeys={[isSelected]}
+                    onChange={handleSelectionChange}
+                  >
+                    {dataSelects.map((data) => (
+                      <SelectItem key={data.value} value={data.value}>
+                        {data.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
               </div>
-              <div className="w-full lg:w-1/2">
-                <Select
-                  radius="full"
-                  label=""
-                  className="w-full shadow-xl rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                  labelPlacement="outside"
-                  variant="bordered"
-                  listboxProps={{
-                    itemClasses: {
-                      base: [
-                        "text-default-500",
-                        "transition-opacity",
-                        "data-[hover=true]:text-foreground",
-                        "data-[hover=true]:bg-default-100",
-                        "dark:data-[hover=true]:bg-default-50",
-                        "data-[selectable=true]:focus:bg-default-50",
-                        "data-[pressed=true]:opacity-70",
-                        "data-[focus-visible=true]:ring-default-500",
-                      ],
-                    },
-                  }}
-                  color="primary"
-                  selectedKeys={[isSelected]}
-                  onChange={handleSelectionChange}
-                >
-                  {dataSelects.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-            </div>
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 1</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 1</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
+
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 2</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
+
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 3</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
+
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 4</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
               </div>
 
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 2</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 3</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 4</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-            </div>
-
-            <ContentComponent />
-          </ScrollShadow>
+              <ContentComponent />
+            </ScrollShadow>
+          </div>
         </div>
       </section>
     </main>
