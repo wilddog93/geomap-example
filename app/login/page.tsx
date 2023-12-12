@@ -17,7 +17,7 @@ import {
   MdVisibilityOff,
 } from "react-icons/md";
 
-export default function LoginPage({ children }: { children: React.ReactNode }) {
+export default function LoginPage() {
   const [isHidden, setIsHidden] = useState<boolean>(true);
 
   const isFunctionHidden = () => {
