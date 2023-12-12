@@ -64,8 +64,8 @@ export default function Home() {
           <div className="relative">
             <button
               type="button"
-              className={`static lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none -left-[2.5rem] group group-hover:bg-white 
-              ${!sidebar ? "left-0 top-0 rounded-r-lg" : "top-6"}
+              className={`fixed lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none -left-[2.5rem] group group-hover:bg-white 
+              ${!sidebar ? "left-5 lg:left-0 top-20 lg:top-0 rounded-r-lg" : "top-6"}
               `}
               onClick={sideFunction}
             >
