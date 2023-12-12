@@ -186,7 +186,8 @@ function ContentComponent() {
       </div>
 
       {/* accordion */}
-      <Accordion defaultExpandedKeys={["parameter-1"]}>
+      {/* <Accordion defaultExpandedKeys={["parameter-1"]}> */}
+      <Accordion>
         <AccordionItem
           key="parameter-0"
           aria-label="parameter-0"
