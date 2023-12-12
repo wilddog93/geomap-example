@@ -79,7 +79,7 @@ export default function Home() {
               )}
             </button>
             <ScrollShadow hideScrollBar className="w-full h-full">
-              <div className="w-full flex items-center px-4 mb-5 mt-10">
+              <div className={`w-full flex items-center px-4 mb-5 ${!sidebar ? "mt-10" : "mt-5" }`}>
                 <div className="w-full flex flex-col gap-3 lg:1/2">
                   <h3 className="font-bold text-xl">
                     {items?.locationName || ""}
