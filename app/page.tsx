@@ -37,20 +37,14 @@ export default function Home() {
     { label: "Daily", value: "daily" },
   ];
 
-  useEffect(() => {
-    if (items !== null) {
-      setSidebar(true);
-    } else {
-      setItems(null)
-    }
-  }, [items]);
-
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
       <Navbar />
       <section className="relative overflow-y-auto w-full h-full flex">
         <div
-          className={`absolute inset-y-0 w-full h-full left-0 z-10 flex  flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0`}
+          className={`absolute inset-y-0 h-full left-0 z-10 flex w-full flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0 ${
+            sidebar ? "translate-x-0 lg:w-1/2" : "-translate-x-full w-0"
+          }`}
         >
           <ScrollShadow hideScrollBar className="w-full h-full">
             <button
@@ -65,26 +59,27 @@ export default function Home() {
         </div>
 
         <div
-          className={`bg-white absolute lg:static z-10 duration-300 lg:translate-x-0 ${
-            sidebar ? "w-full max-w-md p-4" : "w-full lg:w-0 translate-x-full"
-          }`}
+          className={`relative w-full p-4 border-l-2 border-stroke ${sidebar ? "lg:w-1/2" : ""}`}
         >
           <div className="relative">
             <button
               type="button"
-              className={`static lg:absolute z-10 top-6 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none ${
-                !sidebar ? "-left-[1.5rem]" : "-left-[2.5rem]"
-              }`}
+              className={`static lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none -left-[2.5rem] group group-hover:bg-white 
+              ${!sidebar ? "left-0 top-0 rounded-r-lg" : "top-6"}
+              `}
               onClick={sideFunction}
             >
-              {sidebar ? (
-                <MdChevronRight className="w-4 h-4" />
+              {!sidebar ? (
+                <div className="w-full max-w-max flex items-center gap-1">
+                  <span className="duration-300 text-sm text-default-500">Map</span>
+                  <MdChevronRight className="w-4 h-4" />
+                </div>
               ) : (
                 <MdChevronLeft className="w-4 h-4" />
               )}
             </button>
             <ScrollShadow hideScrollBar className="w-full h-full">
-              <div className="w-full flex items-center px-4 mb-5">
+              <div className="w-full flex items-center px-4 mb-5 mt-10">
                 <div className="w-full flex flex-col gap-3 lg:1/2">
                   <h3 className="font-bold text-xl">
                     {items?.locationName || ""}
