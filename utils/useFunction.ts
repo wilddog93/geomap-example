@@ -13,7 +13,7 @@ const dmsToDecimal = (degrees: number, minutes: number, seconds: number, directi
   return decimalDegrees;
 }
 
-export const convertDMS = (latDMS: string, lonDMS: string): { latitude: number, longitude: number } => {
+export const convertDMS = (latDMS: string, lonDMS: string): { latitude: any, longitude: any } => {
   const latMatch = latDMS.match(/(\d+)°(\d+)'(\d+\.\d+)"([NS])/);
   const lonMatch = lonDMS.match(/(\d+)°(\d+)'(\d+\.\d+)"([EW])/);
 

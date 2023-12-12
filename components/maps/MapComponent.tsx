@@ -1,5 +1,5 @@
 // components/MapContainer.tsx
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import "ol/ol.css";
 import WebGLPointsLayer from "ol/layer/WebGLPoints";
 import TileLayer from "ol/layer/Tile";
@@ -9,19 +9,123 @@ import VectorSource from "ol/source/Vector";
 import MVT from "ol/format/MVT";
 import { Icon, Style } from "ol/style";
 import { Point } from "ol/geom";
-import { fromLonLat } from "ol/proj";
+// import { fromLonLat } from "ol/proj";
 import VectorLayer from "ol/layer/Vector";
 import { XYZ } from "ol/source";
 import { convertDMS } from "@/utils/useFunction";
+import { fromLonLat } from "ol/proj";
+import { Image, Input, Select, SelectItem } from "@nextui-org/react";
+import { MdLocationPin, MdSearch } from "react-icons/md";
 
-const MapComponent: React.FC = () => {
+const dataMaps = [
+  {
+    lat: "00°22'05.67840000\"N",
+    long: "109°07'07.18320000\"E",
+    project: "Bezos Earth Fund – Peatland Playbook",
+    locationName: "Anjungan Dalam Village",
+    villages: "Mempawah",
+    category: "Oil Palm Plantation",
+    description: [
+      "GHG Fluxes",
+      "Carbon Stock",
+      "Environmental variables",
+      "Soil physical chemistry",
+      "Weather data",
+    ],
+  },
+  {
+    lat: "00°22'05.67840000\"N",
+    long: "109°07'07.18320000\"E",
+    project: "Bezos Earth Fund – Peatland Playbook",
+    locationName: "Anjungan Dalam Village",
+    villages: "Mempawah",
+    category: "Secondary Forest",
+    description: [
+      "GHG Fluxes",
+      "Carbon Stock",
+      "Environmental variables",
+      "Soil physical chemistry",
+      "Weather data",
+    ],
+  },
+  // {
+  //   lat: "00°22'20.45640000\"N",
+  //   long: "109°06'35.39880000\"E",
+  //   project: "Bezos Earth Fund – Peatland Playbook",
+  //   villages: "Mempawah",
+  //   locationName: "Antibar Village",
+  //   category: "Shrubs",
+  //   description: ["GHG Fluxes", "Carbon Stock"],
+  // },
+  {
+    lat: "00°16'17.35000106\"S",
+    long: "109°26'03.11999747\"E",
+    project: "Bezos Earth Fund – Peatland Playbook",
+    villages: "Kubu Raya",
+    locationName: "Rasau Jaya Village",
+    category: "Oil Palm Plantation",
+    description: [
+      "GHG Fluxes",
+      "Environmental variables",
+      "Soil physical chemistry",
+    ],
+  },
+];
+
+type Props = {
+  items: any;
+  setItems: Dispatch<SetStateAction<any | null>>;
+};
+
+const MapComponent = ({ items, setItems }: Props) => {
   const overlayRef = useRef<Overlay | null>(null);
-  const [overlayContent, setOverlayContent] = useState<string | any>("");
+  const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const [selectedKeys, setSelectedKeys] = useState<string | any>("oil-palm-plantation")
+
+  const [itemMaps, setItemMaps] = useState<Feature<Point>[]>([]);
 
   const coordinates = convertDMS("0°22'05.7\"N", "109°07'07.2\"E");
 
-  console.log(coordinates, 'convert coordinates')
+  const iconFeatures = useMemo(() => {
+    let newArr: Feature<Point>[] = [];
+    if (dataMaps?.length > 0) {
+      dataMaps?.map((item) => {
+        const coordinate = convertDMS(item.lat, item.long);
+        const coordinates = fromLonLat([
+          coordinate.longitude,
+          coordinate.latitude,
+        ]);
+        newArr.push(
+          new Feature({
+            // geometry: new Point([coordinates?.latitude, coordinates?.longitude]),fromLonLat
+            ...item,
+            geometry: new Point(coordinates),
+          })
+        );
+      });
+    }
+    return newArr;
+  }, [dataMaps]);
+
+  const iconPopups = (feature: any) => {
+    const category = feature;
+    let iconSrc = "";
+    // Tentukan ikon berdasarkan kategori
+    switch (category) {
+      case "Oil Palm Plantation":
+        iconSrc = "/icons/oil-palm.png";
+        break;
+      case "Secondary Forest":
+        iconSrc = "/icons/forest.png";
+        break;
+      default:
+        iconSrc = "/icons/icon-shrub.png";
+        break;
+    }
+
+    return iconSrc;
+  };
 
   useEffect(() => {
     // Initialize the map
@@ -43,10 +147,9 @@ const MapComponent: React.FC = () => {
         }),
       ],
       view: new View({
-        // extent: [13164840.120333597, -191866.6366120975],
-        center: [13164840.120333597, -191866.6366120975],
-        zoom: 4,
-        maxZoom: 10,
+        center: fromLonLat([109.4342, -0.271486]),
+        // center: [13164840.120333597, -191866.6366120975],
+        zoom: 8,
         minZoom: 4,
         constrainOnlyCenter: true,
       }),
@@ -89,23 +192,23 @@ const MapComponent: React.FC = () => {
         rainfall: 500,
       }),
     ];
-    
+
     const featureStyleFunction = (feature: any) => {
       const category = feature.get("category");
       let iconSrc = "";
       // Tentukan ikon berdasarkan kategori
       switch (category) {
-        case "Oil Palm":
-          iconSrc = "/icons/icon-palm-tree.png";
+        case "Oil Palm Plantation":
+          iconSrc = "/icons/oil-palm.png";
           break;
         case "Secondary Forest":
-          iconSrc = "/icons/icon-forest.png";
+          iconSrc = "/icons/forest.png";
           break;
         default:
           iconSrc = "/icons/icon-shrub.png";
           break;
       }
-      console.log(iconSrc, 'icon')
+      console.log(iconSrc, "icon");
 
       return new Style({
         image: new Icon({
@@ -116,14 +219,13 @@ const MapComponent: React.FC = () => {
       });
     };
 
-
-    iconFeature.forEach((feature) => {
-      const newIcon = featureStyleFunction(feature)
+    iconFeatures?.forEach((feature) => {
+      const newIcon = featureStyleFunction(feature);
       feature.setStyle(newIcon);
     });
 
     const vectorSource = new VectorSource({
-      features: iconFeature,
+      features: iconFeatures,
     });
 
     const vectorLayer = new VectorLayer({
@@ -167,40 +269,146 @@ const MapComponent: React.FC = () => {
       // Cleanup when the component unmounts
       map.setTarget(undefined);
     };
-  }, []); // Empty dependency array ensures useEffect runs once after the initial render
+  }, [iconFeatures]); // Empty dependency array ensures useEffect runs once after the initial render
 
-  console.log(overlayContent, "pop-ref");
+  useEffect(() => {
+    if(overlayContent !== null) {
+      setItems(overlayContent)
+    } else {
+      setItems(null)
+    }
+  }, [overlayContent])
+
+  const dataSelectMap = [
+    { label: "Oil Palm Plantation", value: "oil-palm-plantation" },
+    { label: "Second Forest", value: "second-forest" },
+    { label: "Shrubs", value: "shrubs" },
+  ];
 
   return (
     <Fragment>
       <div id="map" style={{ width: "100%", height: "100%" }}></div>
-
-      <div className="search">
-        <input
-          className="absolute z-10 top-5 inset-x-1/3 px-1 py-1.5 rounded-md"
-          id="geocode-input"
+      <div className="absolute z-10 right-10 top-10"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
+      <div className="w-full lg:w-2/3 flex items-center gap-1 absolute z-10 top-5 inset-x-20">
+        <Select
+          radius="full"
+          label="" 
+          className="max-w-xs shadow-xl rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          labelPlacement="outside"
+          variant="bordered"
+          listboxProps={{
+            itemClasses: {
+              base: [
+                "text-default-500",
+                "transition-opacity",
+                "data-[hover=true]:text-foreground",
+                "data-[hover=true]:bg-default-100",
+                "dark:data-[hover=true]:bg-default-50",
+                "data-[selectable=true]:focus:bg-default-50",
+                "data-[pressed=true]:opacity-70",
+                "data-[focus-visible=true]:ring-default-500",
+              ],
+            },
+          }}
+          color="primary"
+          selectedKeys={[selectedKeys]}
+          onChange={({target}:any) => setSelectedKeys(target?.value)}
+          >
+          {dataSelectMap.map((data) => (
+            <SelectItem key={data.value} value={data.value}>
+              {data.label}
+            </SelectItem>
+          ))}
+        </Select>
+        <Input
+          color="primary"
+          placeholder="Search"
+          radius="full"
+          labelPlacement="outside"
+          variant="bordered"
+          endContent={
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={() => console.log("search")}
+            >
+              <MdSearch className="w-5 h-5 text-default-400 pointer-events-none" />
+            </button>
+          }
           type="text"
-          placeholder="Enter an address or place e.g. 1 York St"
+          className="w-full max-w-md"
+          classNames={{
+            label: "text-black/50 dark:text-white/90",
+            input: [
+              "bg-transparent",
+              "text-black/90 dark:text-white/90",
+              "placeholder:text-default-700/50 dark:placeholder:text-white/60 py-2",
+            ],
+            innerWrapper: "bg-transparent py-1.5",
+            inputWrapper: [
+              "shadow-xl",
+              "bg-default-200/50",
+              "dark:bg-default/60",
+              "backdrop-blur-xl",
+              "backdrop-saturate-200",
+              "hover:bg-default-200/70",
+              "dark:hover:bg-default/70",
+              "group-data-[focused=true]:bg-default-200/50",
+              "dark:group-data-[focused=true]:bg-default/60",
+              "!cursor-text",
+              "py-4 bg-white",
+            ],
+          }}
         />
-        <button id="geocode-button">Geocode</button>
       </div>
 
       {/* <div ref={overlayRef} id="overlay" style={{ display: overlayContent ? 'block' : 'none' }}>
         {overlayContent}
       </div> */}
 
-      <div ref={popupRef} id="popup" className="ol-popup flex flex-col gap-2 transform duration-300 animate-appearance-in">
+      <div
+        ref={popupRef}
+        id="popup"
+        className="ol-popup w-96 flex flex-col gap-2 transform duration-300 animate-appearance-in"
+      >
         {/* <a href="#" id="popup-closer" className="ol-popup-closer"></a> */}
         <div id="popup-content">
-          <h3>{overlayContent?.name}</h3>
-          <div className="border border-b-2 border-gray-5 w-full"></div>
-          <div className="flex flex-wrap gap-1 items-center">
-            <p>Populasi : </p>
-            <span>{overlayContent?.population}</span>
+          <div className="w-full flex items-center gap-2 p-3">
+            <Image
+              src={iconPopups(overlayContent?.category)}
+              className="shadow-sm bg-gray-2"
+            />
+            <div className="w-full flex flex-col">
+              <h3 className="text-md font-bold">
+                {overlayContent?.locationName}
+              </h3>
+              <div className="flex items-center justify-between gap-1 text-xs">
+                <div className="flex items-center gap-1">
+                  <span>
+                    <MdLocationPin className="w-4 h-4" />
+                  </span>
+                  <p className="font-bold">{overlayContent?.villages}</p>
+                </div>
+                <div>
+                  <p>{overlayContent?.long}</p>
+                  <p>{overlayContent?.lat}</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1 items-center">
-            <p>Curah Hujan : </p>
-            <span>{overlayContent?.rainfall}</span>
+
+          <div className="border border-b border-gray w-full"></div>
+          <div className="w-full pl-5 p-2 flex flex-wrap gap-1 items-start">
+            <ul className="list-disc">
+              {overlayContent?.description?.map((item: any) => {
+                return <li className="text-xs">{item}</li>;
+              })}
+            </ul>
+          </div>
+          <div className="text-xs flex flex-col p-2">
+            <p className="w-full border border-gray-4 bg-gray p-1">
+              {overlayContent?.project}
+            </p>
           </div>
         </div>
       </div>
