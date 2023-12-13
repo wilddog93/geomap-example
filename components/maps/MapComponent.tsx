@@ -78,10 +78,9 @@ type Props = {
 };
 
 const MapComponent = ({ items, setItems }: Props) => {
-  const mapRef = useRef<HTMLDivElement | null>(null);
   const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string | any>("oil-palm-plantation")
+  const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux")
 
   const [itemMaps, setItemMaps] = useState<Feature<Point>[]>([]);
 
@@ -280,28 +279,21 @@ const MapComponent = ({ items, setItems }: Props) => {
   }, [overlayContent])
 
   const dataSelectMap = [
-    { label: "Oil Palm Plantation", value: "oil-palm-plantation" },
-    { label: "Second Forest", value: "second-forest" },
-    { label: "Shrubs", value: "shrubs" },
+    { value: "carbon-stocks", label: "Carbon Stocks" },
+    { value: "environmental-data", label: "Environmental Data" },
+    { value: "ghg-flux", label: "GHG Flux" },
+    { value: "soil-physical", label: "Soil Physical" },
   ];
-
-
-
-  useEffect(() => {
-    if(mapRef.current) {
-      console.log(window.innerHeight, 'window', mapRef.current.clientHeight)
-    }
-  }, [])
 
   return (
     <Fragment>
-      <div ref={mapRef} id="map" className="" style={{ width: "100%", height: "100%" }}></div>
-      <div className="absolute z-10 right-10 top-10"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
-      <div className="w-full lg:w-2/3 flex flex-col lg:flex-row items-center gap-1 absolute z-10 top-14 lg:top-5 lg:inset-x-20 p-4">
+      <div id="map" className="" style={{ width: "100%", height: "100%" }}></div>
+      <div className="absolute z-10 right-1 top-16"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 items-center gap-1 absolute z-10 top-5 lg:top-5 px-10">
         <Select
           radius="full"
           label="" 
-          className="max-w-xs shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          className="w-full shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           labelPlacement="outside"
           variant="bordered"
           listboxProps={{
@@ -344,7 +336,7 @@ const MapComponent = ({ items, setItems }: Props) => {
             </button>
           }
           type="text"
-          className="w-full max-w-md"
+          className="w-full lg:col-span-2"
           classNames={{
             label: "text-black/50 dark:text-white/90",
             input: [

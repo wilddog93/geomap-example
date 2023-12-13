@@ -32,10 +32,10 @@ export default function Home() {
   console.log(items, "items");
 
   const dataSelects = [
-    { label: "Yearly", value: "yearly" },
-    { label: "Monthly", value: "monthly" },
-    { label: "Weekly", value: "weekly" },
     { label: "Daily", value: "daily" },
+    { label: "Weekly", value: "weekly" },
+    { label: "Monthly", value: "monthly" },
+    { label: "Yearly", value: "yearly" },
   ];
 
   return (
