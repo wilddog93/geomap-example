@@ -65,17 +65,17 @@ export default function LoginPage() {
                 src="/image/login-logo.png"
                 alt="Barrier Logo"
               />
-              <div className="w-full px-10 mb-5">
-                <h3 className="font-bold text-3xl lg:text-4xl text-center">
+              <div className="w-full px-20 mb-5">
+                <h3 className="font-bold text-xl lg:text-2xl text-center">
                   Internal Geospatial Dashboard
                 </h3>
-                <p className="text-center">
+                <p className="text-center text-sm">
                   NCS Peatland Restoration Science -
                 </p>
               </div>
 
-              <div className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-10">
-                <label htmlFor="sandi" className="text-md text-gray-5">
+              <div className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-20">
+                <label htmlFor="sandi" className="text-sm text-gray-5">
                   Kata sandi
                 </label>
                 <Input
@@ -108,7 +108,7 @@ export default function LoginPage() {
                     inputWrapper: [
                       "px-0 pr-3 bg-transparent border border-stroke",
                     ],
-                    mainWrapper: ["text-center mb-5"],
+                    mainWrapper: ["text-center mb-5 text-sm"],
                   }}
                 />
 
