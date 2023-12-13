@@ -26,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative overflow-hidden w-full h-screen lg:h-full flex items-center bg-white shadow-default">
-      <div className="relative w-full lg:w-2/3 h-full">
+      <div className="relative w-full lg:w-2/3 h-full hidden lg:flex">
         <div className="w-full h-full flex flex-col justify-between p-10 absolute z-30">
           <h1 className="text-white drop-shadow-md text-8xl font-bold">
             Melindungi Alam, Melestarikan Kehidupan
@@ -61,12 +61,12 @@ export default function LoginPage() {
             <div className="w-full flex flex-col gap-4 justify-center items-center">
               <Image
                 radius="none"
-                className="mx-auto object-cover object-center w-80"
+                className="mx-auto object-cover object-center w-60 lg:w-80"
                 src="/image/login-logo.png"
                 alt="Barrier Logo"
               />
               <div className="w-full px-10 mb-5">
-                <h3 className="font-bold text-4xl text-center">
+                <h3 className="font-bold text-3xl lg:text-4xl text-center">
                   Internal Geospatial Dashboard
                 </h3>
                 <p className="text-center">

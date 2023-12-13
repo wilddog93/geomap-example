@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { title } from "@/components/primitives";
 import Tables from "@/components/tables/table-component";
@@ -13,6 +14,7 @@ export default function BlogPage() {
           <Tables />
         </div>
       </section>
+      <Footer />
     </Fragment>
   );
 }

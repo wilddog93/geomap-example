@@ -14,6 +14,7 @@ import { Navbar } from "@/components/navbar";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Input } from "@nextui-org/input";
 import ContentComponent from "@/components/maps/content/content-component";
+import Footer from "@/components/footer";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState(true);
@@ -166,6 +167,7 @@ export default function Home() {
           </ScrollShadow>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }
