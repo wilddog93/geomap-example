@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { title } from "@/components/primitives";
 import { Fragment } from "react";
@@ -11,6 +12,7 @@ export default function AboutPage() {
           <h1 className={title()}>About</h1>
         </div>
       </section>
+      <Footer />
     </Fragment>
   );
 }
