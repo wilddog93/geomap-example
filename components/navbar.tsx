@@ -84,14 +84,35 @@ export const Navbar = () => {
   },[])
 
   return (
-    <NextUINavbar ref={navRef} className="shadow-sm" maxWidth="xl" position="sticky">
+    <NextUINavbar
+      ref={navRef} 
+      maxWidth="2xl" 
+      position="sticky"
+      className=""
+      classNames={{
+        item: [
+          "flex",
+          "relative",
+          "h-full",
+          "items-center",
+          "data-[active=true]:after:content-['']",
+          "data-[active=true]:after:absolute",
+          "data-[active=true]:after:-top-1",
+          "data-[active=true]:after:left-3",
+          "data-[active=true]:after:right-3",
+          "data-[active=true]:after:h-[4px]",
+          "data-[active=true]:after:rounded-[2px]",
+          "data-[active=true]:after:bg-primary",
+        ],
+      }}
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink
             className="flex text-default-500 justify-start items-center gap-1"
             href="/"
           >
-            <Image alt="logo" src="/image/logo-image.png" width={150} />
+            <Image alt="logo" src="/image/logo-nav.png" width={150} />
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
@@ -101,8 +122,8 @@ export const Navbar = () => {
                 <NavbarItem isActive key={item.href}>
                   <NextLink
                     className={clsx(
-                      linkStyles({ color: "primary" }),
-                      "data-[active=true]:text-primary data-[active=true]:font-medium"
+                      linkStyles({ color: "secondary" }),
+                      "data-[active=true]:font-medium"
                     )}
                     color="primary"
                     href={item.href}

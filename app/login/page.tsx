@@ -61,7 +61,7 @@ export default function LoginPage() {
             <div className="w-full flex flex-col gap-4 justify-center items-center">
               <Image
                 radius="none"
-                className="mx-auto object-cover object-center w-60 lg:w-80"
+                className="mx-auto object-cover object-center px-5 w-60 lg:w-80"
                 src="/image/login-logo.png"
                 alt="Barrier Logo"
               />

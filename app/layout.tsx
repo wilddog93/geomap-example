@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { dmSans, fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/navbar";
 import { Link } from "@nextui-org/link";
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 		{ media: "(prefers-color-scheme: dark)", color: "black" },
 	],
 	icons: {
-		icon: "/favicon.ico",
-		shortcut: "/favicon-16x16.png",
-		apple: "/apple-touch-icon.png",
+		icon: "/image/logo.png",
+		shortcut: "/image/logo.png",
+		apple: "/image/logo.png",
 	},
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({
 			<body
 				className={clsx(
 					"min-h-screen bg-background font-sans antialiased",
-					fontSans.variable
+					dmSans.variable
 				)}
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>

@@ -163,7 +163,7 @@ export default function Home() {
               </div>
             </div>
 
-            <ContentComponent />
+            <ContentComponent sidebar={sidebar} />
           </ScrollShadow>
         </div>
       </section>

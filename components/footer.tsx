@@ -13,7 +13,7 @@ import { Link } from "@nextui-org/link";
 
 function Footer() {
   return (
-    <footer className="w-full bg-gradient-to-r from-green-500 to-blue-400 flex flex-col lg:flex-row items-center p-4 sticky bottom-0 z-20 justify-center lg:justify-end">
+    <footer className="w-full bg-gradient-to-r from-green-500 to-primary flex flex-col lg:flex-row items-center p-4 sticky bottom-0 z-20 justify-center lg:justify-end">
       <div className="flex flex-col lg:flex-row items-center lg:divide-x-2 divide-white text-xs">
         <div className="flex items-center gap-1 px-2">
           <Link
