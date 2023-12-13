@@ -116,7 +116,7 @@ function ContentComponent() {
         <Select
           radius="full"
           label=""
-          className="w-full lg:w-1/3 shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          className="w-full max-w-xs shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           labelPlacement="outside"
           variant="bordered"
           listboxProps={{
@@ -159,7 +159,7 @@ function ContentComponent() {
             </button>
           }
           type="text"
-          className="w-full lg:w-2/3"
+          className="w-full max-w-md"
           classNames={{
             label: "text-black/50 dark:text-white/90",
             input: [
@@ -187,6 +187,7 @@ function ContentComponent() {
 
       {/* accordion */}
       {/* <Accordion defaultExpandedKeys={["parameter-1"]}> */}
+      <div className={`w-full `}></div>
       <Accordion>
         <AccordionItem
           key="parameter-0"

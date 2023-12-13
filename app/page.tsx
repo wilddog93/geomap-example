@@ -42,8 +42,8 @@ export default function Home() {
       <Navbar />
       <section className="relative overflow-y-auto w-full h-full flex">
         <div
-          className={`absolute inset-y-0 h-full left-0 z-10 flex w-full flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0 ${
-            sidebar ? "translate-x-0 lg:w-1/2" : "-translate-x-full w-0"
+          className={`absolute inset-y-0 h-full left-0 z-10 flex flex-col overflow-y-hidden bg-gray-4 duration-300 ease-in-out lg:static lg:translate-x-0 ${
+            sidebar ? "translate-x-0  w-full lg:w-1/2" : "-translate-x-full w-0"
           }`}
         >
           <ScrollShadow hideScrollBar className="w-full h-full max-h-[700px]">
@@ -65,11 +65,11 @@ export default function Home() {
         >
           <button
             type="button"
-            className={`fixed lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow rounded-r-none group group-hover:bg-white 
+            className={`fixed lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow group group-hover:bg-white 
               ${
                 !sidebar
                   ? "left-5 top-20 lg:top-5 rounded-r-lg"
-                  : "-left-[1.6rem] top-6"
+                  : "-left-[1.6rem] top-6 rounded-r-none"
               }
               `}
             onClick={sideFunction}
