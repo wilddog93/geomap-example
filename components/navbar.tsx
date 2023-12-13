@@ -46,8 +46,10 @@ import { Image } from "@nextui-org/react";
 // import { ThemeSwitch } from "./theme-switch";
 
 import ImageLogo from "@/public/image/logo-image.png";
+import { useEffect, useRef } from "react";
 
 export const Navbar = () => {
+  let navRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const searchInput = (
@@ -75,8 +77,14 @@ export const Navbar = () => {
 
   console.log(router, "params");
 
+  useEffect(() => {
+    if(navRef.current) {
+      console.log(window.innerHeight, 'windoww-nav', navRef.current.clientHeight)
+    }
+  },[])
+
   return (
-    <NextUINavbar className="shadow-sm" maxWidth="xl" position="sticky">
+    <NextUINavbar ref={navRef} className="shadow-sm" maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink

@@ -78,7 +78,7 @@ type Props = {
 };
 
 const MapComponent = ({ items, setItems }: Props) => {
-  const overlayRef = useRef<Overlay | null>(null);
+  const mapRef = useRef<HTMLDivElement | null>(null);
   const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [selectedKeys, setSelectedKeys] = useState<string | any>("oil-palm-plantation")
@@ -285,9 +285,17 @@ const MapComponent = ({ items, setItems }: Props) => {
     { label: "Shrubs", value: "shrubs" },
   ];
 
+
+
+  useEffect(() => {
+    if(mapRef.current) {
+      console.log(window.innerHeight, 'window', mapRef.current.clientHeight)
+    }
+  }, [])
+
   return (
     <Fragment>
-      <div id="map" style={{ width: "100%", height: "100%" }}></div>
+      <div ref={mapRef} id="map" className="" style={{ width: "100%", height: "100%" }}></div>
       <div className="absolute z-10 right-10 top-10"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
       <div className="w-full lg:w-2/3 flex flex-col lg:flex-row items-center gap-1 absolute z-10 top-14 lg:top-5 lg:inset-x-20 p-4">
         <Select

@@ -8,7 +8,7 @@ export default function BlogPage() {
   return (
     <Fragment>
       <Navbar />
-      <section className="w-full flex flex-col items-center justify-center gap-4 py-2 md:py-4">
+      <section className="relative overflow-y-auto w-full h-full flex flex-col items-center gap-4 py-2 md:py-4">
         <div className="w-full px-4">
           <h1 className={title()}>Table</h1>
           <Tables />

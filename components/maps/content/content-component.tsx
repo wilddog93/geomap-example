@@ -10,7 +10,11 @@ const dataSelectContent = [
     { label: "Location", value: "location" },
   ];
 
-function ContentComponent() {
+  type Props = {
+    sidebar?: boolean,
+  }
+
+function ContentComponent({ sidebar }: Props) {
   const [value, setValue] = useState<string>("sublocation");
 
   const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -112,7 +116,7 @@ function ContentComponent() {
 
   return (
     <div className="w-full flex flex-col gap-3 mt-5">
-      <div className="w-full flex items-center gap-1">
+      <div className={`w-full items-center gap-1 grid grid-cols-1 ${sidebar ? "lg:grid-cols-3" : "lg:grid-cols-5"}`}>
         <Select
           radius="full"
           label=""
@@ -159,7 +163,7 @@ function ContentComponent() {
             </button>
           }
           type="text"
-          className="w-full max-w-md"
+          className="w-full lg:col-span-2"
           classNames={{
             label: "text-black/50 dark:text-white/90",
             input: [

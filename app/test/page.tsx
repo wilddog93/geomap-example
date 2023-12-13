@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useAuth } from '@/stores/auth';
 import useGHGFluxApi from "@/api/ghg-flux.api";
 
@@ -11,6 +11,10 @@ export default function TestPage() {
   const getUsers = async () => {
     await fetch({ params: { limit: 10 } })
   }
+
+  useEffect(() => {
+    fetch()
+  }, [])
   return (
     <Fragment>
       <div>
