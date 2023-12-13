@@ -47,7 +47,7 @@ export default function Home() {
             sidebar ? "translate-x-0  w-full lg:w-1/2" : "-translate-x-full w-0"
           }`}
         >
-          <ScrollShadow hideScrollBar className="w-full h-full max-h-[700px]">
+          <ScrollShadow hideScrollBar className="w-full h-full">
             <button
               type="button"
               className="inline-flex lg:hidden absolute z-10 right-1 mt-1 p-1 rounded-sm bg-white shadow"
@@ -60,7 +60,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full p-4 border-l-2 border-stroke ${
+          className={`relative w-full p-4 shadow ${
             sidebar ? "lg:w-1/2" : ""
           }`}
         >
@@ -86,7 +86,7 @@ export default function Home() {
               <MdChevronLeft className="w-4 h-4" />
             )}
           </button>
-          <ScrollShadow hideScrollBar className="w-full h-full max-h-[700px]">
+          <ScrollShadow hideScrollBar className="w-full h-full">
             <div
               className={`w-full flex items-center px-4 mb-5 ${
                 !sidebar ? "mt-10" : "mt-5"
