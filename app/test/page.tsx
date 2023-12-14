@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/stores/auth";
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import { format, subMonths, subWeeks, subYears } from "date-fns";
@@ -30,7 +30,7 @@ export default function TestPage() {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
-  const fetchData = useCallback(async() => {
+  const fetchData = async () => {
     await fetch({ params: { limit: 10, page } });
     if (data?.length > 0) {
       setItems((prevData) => [...prevData, ...data]);
@@ -38,21 +38,31 @@ export default function TestPage() {
     } else {
       setHasMore(false);
     }
-  },[data])
+  };
+
+  const filterItems = useMemo(() => {
+    const filteredArray = Array.from(new Set(items.map(item => item.id))).map(id => items.find(item => item.id === id));
+
+    return filteredArray
+  }, [items])
+
+  useEffect(() => {
+    fetch({ params: { limit: 10 } });
+  }, []);
 
   useEffect(() => {
     const intervalId = setTimeout(() => {
-      if (hasMore) {
+      if (hasMore && data?.length > 0) {
         fetchData();
       } else {
         clearTimeout(intervalId);
       }
-    }, 0);
+    }, 100);
     // fetchData()
     return () => {
       clearTimeout(intervalId);
-    }
-  }, [hasMore]);
+    };
+  }, [hasMore, data]);
 
   console.log({ page, meta: meta.page, items, data }, "page");
 
@@ -61,12 +71,12 @@ export default function TestPage() {
       <div>
         <div>
           Count: {meta.count} Page: {meta.page} Page Count: {meta.pageCount}{" "}
-          Total: {meta.total} total data: {items?.length}
+          Total: {meta.total} total data: {filterItems?.length}
         </div>
         <ul>
-          {items.map((d, i) => (
+          {filterItems.map((d, i) => (
             <li key={i} className="text-gray-800">
-              {d.landCover}
+              {d?.landCover}
             </li>
           ))}
         </ul>
