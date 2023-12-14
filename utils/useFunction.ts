@@ -36,3 +36,11 @@ export const convertDMS = (latDMS: string, lonDMS: string): { latitude: any, lon
 
   return { latitude, longitude };
 }
+
+// hitung per 1 thn kebelakang
+const getYearly = (date: Date, year: number): Date => {
+  const yearsAgo = date.getFullYear() - year;
+  const dateResult = new Date(date);
+  dateResult.setFullYear(yearsAgo);
+  return dateResult;
+};
