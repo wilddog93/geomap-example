@@ -1,5 +1,13 @@
 // components/MapContainer.tsx
-import React, { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "ol/ol.css";
 import WebGLPointsLayer from "ol/layer/WebGLPoints";
 import TileLayer from "ol/layer/Tile";
@@ -80,7 +88,7 @@ type Props = {
 const MapComponent = ({ items, setItems }: Props) => {
   const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux")
+  const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux");
 
   const [itemMaps, setItemMaps] = useState<Feature<Point>[]>([]);
 
@@ -271,12 +279,12 @@ const MapComponent = ({ items, setItems }: Props) => {
   }, [iconFeatures]); // Empty dependency array ensures useEffect runs once after the initial render
 
   useEffect(() => {
-    if(overlayContent !== null) {
-      setItems(overlayContent)
+    if (overlayContent !== null) {
+      setItems(overlayContent);
     } else {
-      setItems(null)
+      setItems(null);
     }
-  }, [overlayContent])
+  }, [overlayContent]);
 
   const dataSelectMap = [
     { value: "carbon-stocks", label: "Carbon Stocks" },
@@ -287,12 +295,18 @@ const MapComponent = ({ items, setItems }: Props) => {
 
   return (
     <Fragment>
-      <div id="map" className="" style={{ width: "100%", height: "100%" }}></div>
-      <div className="absolute z-10 right-1 top-16"><Image alt="kompas" src="image/kompas.png" className="w-10 h-10" /></div>
-      <div className="w-full grid grid-cols-1 lg:grid-cols-3 items-center gap-1 absolute z-10 top-5 lg:top-5 px-10">
+      <div
+        id="map"
+        className=""
+        style={{ width: "100%", height: "100%" }}
+      ></div>
+      <div className="absolute z-10 right-1 top-24 lg:top-16">
+        <Image alt="kompas" src="image/kompas.png" className="w-10 h-10" />
+      </div>
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 items-center gap-1 absolute z-10 top-5 px-10 inset-x-2">
         <Select
           radius="full"
-          label="" 
+          label=""
           className="w-full shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           labelPlacement="outside"
           variant="bordered"
@@ -312,8 +326,8 @@ const MapComponent = ({ items, setItems }: Props) => {
           }}
           color="primary"
           selectedKeys={[selectedKeys]}
-          onChange={({target}:any) => setSelectedKeys(target?.value)}
-          >
+          onChange={({ target }: any) => setSelectedKeys(target?.value)}
+        >
           {dataSelectMap.map((data) => (
             <SelectItem key={data.value} value={data.value}>
               {data.label}
@@ -401,7 +415,11 @@ const MapComponent = ({ items, setItems }: Props) => {
           <div className="w-full pl-5 p-2 flex flex-wrap gap-1 items-start">
             <ul className="list-disc">
               {overlayContent?.description?.map((item: any) => {
-                return <li key={item} className="text-xs">{item}</li>;
+                return (
+                  <li key={item} className="text-xs">
+                    {item}
+                  </li>
+                );
               })}
             </ul>
           </div>

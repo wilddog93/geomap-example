@@ -19,24 +19,13 @@ import Footer from "@/components/footer";
 export default function Home() {
   const [sidebar, setSidebar] = useState(true);
   const [items, setItems] = useState<any>(null);
-  const [isSelected, setIsSelected] = useState<string | any>("yearly");
-
-  const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setIsSelected(e.target.value);
-  };
+  
 
   const sideFunction = () => {
     setSidebar((state) => !state);
   };
 
   console.log(items, "items");
-
-  const dataSelects = [
-    { label: "Daily", value: "daily" },
-    { label: "Weekly", value: "weekly" },
-    { label: "Monthly", value: "monthly" },
-    { label: "Yearly", value: "yearly" },
-  ];
 
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
@@ -86,85 +75,8 @@ export default function Home() {
               <MdChevronLeft className="w-4 h-4" />
             )}
           </button>
-          <ScrollShadow hideScrollBar className="w-full h-full">
-            <div
-              className={`w-full flex items-center px-4 mb-5 ${
-                !sidebar ? "mt-10" : "mt-5"
-              }`}
-            >
-              <div className="w-full flex flex-col gap-3 lg:1/2">
-                <h3 className="font-bold text-xl">
-                  {items?.locationName || ""}
-                </h3>
-                <ul className="list-disc text-sm">
-                  {items?.description || items?.description?.length > 0
-                    ? items?.description?.map((desc: any) => {
-                        return <li key={desc}>{desc}</li>;
-                      })
-                    : null}
-                </ul>
-              </div>
-              <div className="w-full lg:w-1/2">
-                <Select
-                  radius="full"
-                  label=""
-                  className="w-full shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                  labelPlacement="outside"
-                  variant="bordered"
-                  listboxProps={{
-                    itemClasses: {
-                      base: [
-                        "text-default-500",
-                        "transition-opacity",
-                        "data-[hover=true]:text-foreground",
-                        "data-[hover=true]:bg-default-100",
-                        "dark:data-[hover=true]:bg-default-50",
-                        "data-[selectable=true]:focus:bg-default-50",
-                        "data-[pressed=true]:opacity-70",
-                        "data-[focus-visible=true]:ring-default-500",
-                      ],
-                    },
-                  }}
-                  color="primary"
-                  selectedKeys={[isSelected]}
-                  onChange={handleSelectionChange}
-                >
-                  {dataSelects.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-            </div>
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 1</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 2</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 3</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 4</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
-            </div>
-
-            <ContentComponent sidebar={sidebar} />
-          </ScrollShadow>
+          
+            <ContentComponent data={items} sidebar={sidebar} />
         </div>
       </section>
       <Footer />

@@ -1,3 +1,5 @@
+import { addMonths, format, subYears } from "date-fns";
+
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -38,9 +40,18 @@ export const convertDMS = (latDMS: string, lonDMS: string): { latitude: any, lon
 }
 
 // hitung per 1 thn kebelakang
-const getYearly = (date: Date, year: number): Date => {
-  const yearsAgo = date.getFullYear() - year;
-  const dateResult = new Date(date);
-  dateResult.setFullYear(yearsAgo);
-  return dateResult;
+export const getYearly = (date: Date, year: number) => {
+  const oneYearAgo = subYears(date, year);
+
+  // Array untuk menyimpan tanggal-tanggal hasil
+  const resultArray: string[] = [];
+
+  // Loop melalui setiap bulan dalam satu tahun ke belakang
+  for (let i = 0; i < 12; i++) {
+    const currentDateForMonth = addMonths(oneYearAgo, i);
+    const formattedDate = format(currentDateForMonth, "yyyy-MM-dd");
+    resultArray.push(formattedDate);
+  }
+
+  return resultArray;
 };
