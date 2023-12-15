@@ -113,8 +113,8 @@ function ContentComponent({ sidebar, data }: Props) {
     ],
   };
 
-  console.log("Tanggal-tanggal setiap bulan 1 tahun yang lalu:", getYearly(new Date(), 1));
-  console.log("monthly by week:", subWeeks(new Date(), 2));
+  console.log("year get by month:", getYearly(new Date(), 1));
+  console.log("monthly by week:", `${subWeeks(new Date(), 2)} to ${new Date()}`);
 
   return (
     <Fragment>
