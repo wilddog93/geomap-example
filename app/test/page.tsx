@@ -51,13 +51,13 @@ export default function TestPage() {
   }, []);
 
   useEffect(() => {
-    const intervalId = setTimeout(() => {
+    const intervalId = setTimeout(async() => {
       if (hasMore && data?.length > 0) {
-        fetchData();
+        await fetchData();
       } else {
         clearTimeout(intervalId);
       }
-    }, 100);
+    }, 0);
     // fetchData()
     return () => {
       clearTimeout(intervalId);
