@@ -35,17 +35,17 @@ const itemTabs = [
 export default function BlogPage(props: any) {
   const [selected, setSelected] = useState("ghg-flux");
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(5);
   const [search, setSearch] = useState<string | any>("")
   let router = useRouter();
 
   const handleChange = (key: Key) => {
     setSelected(key as any);
     setPage(1)
-    setLimit(10)
+    setLimit(5)
   };
 
-  console.log(selected, "data-selected");
+  // console.log(selected, "data-selected");
   return (
     <Fragment>
       <Navbar />
@@ -87,7 +87,7 @@ export default function BlogPage(props: any) {
             </div>
           </div>
 
-          <div className={`w-full p-4 ${selected == "ghg-flux" ? "" : "hidden"}`}>
+          <div className={`w-full mt-5 p-4 ${selected == "ghg-flux" ? "" : "hidden"}`}>
             <FluxTables 
               params={props?.searchParams}
               page={page}

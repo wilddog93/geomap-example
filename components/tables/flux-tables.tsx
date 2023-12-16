@@ -60,7 +60,10 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const landCoverOptions: SelectTypes[] = [
   { label: "Secondary Forest", value: "secondary forest" },
-  { label: "RewettedOil Palm", value: "rewettedoil palm" },
+  { label: "Rewetted Oil Palm", value: "rewettedoil palm" },
+  { label: "Rewetted Shrub", value: "rewettedshrub" },
+  { label: "Drained Oil Palm", value: "drainedoil palm" },
+  { label: "Drained Shrub", value: "drainedoil" },
 ];
 
 const columns: ColumnProps[] = [
@@ -194,7 +197,7 @@ export default function FluxTables({
     };
 
     if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
-    if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 10);
+    if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
 
     qb.search(search);
     qb.sortBy({
@@ -384,7 +387,7 @@ export default function FluxTables({
 
   const topContent = useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-5">
         <div className="flex flex-col lg:flex-row justify-between gap-3 items-end">
           <Input
             isClearable
@@ -561,7 +564,6 @@ export default function FluxTables({
     <Table
       isStriped
       removeWrapper
-      isCompact
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
@@ -594,7 +596,7 @@ export default function FluxTables({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell className="bg-white">
+              <TableCell className="bg-white py-3">
                 {renderCell(item, columnKey)}
               </TableCell>
             )}
