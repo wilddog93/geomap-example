@@ -28,13 +28,9 @@ import {
 
 import { Input } from "@nextui-org/input";
 
-import { User } from "@nextui-org/user";
-
 import { Chip, ChipProps } from "@nextui-org/chip";
 
 import {
-  Autocomplete,
-  AutocompleteItem,
   Select,
   SelectItem,
   Selection,
@@ -45,20 +41,16 @@ import { Pagination } from "@nextui-org/pagination";
 
 import { Button } from "@nextui-org/button";
 
-import {
-  columns,
-  users,
-  statusOptions,
-} from "@/components/tables/component/data";
 import { MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import {
-  useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
+import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
+import { RequestQueryBuilder } from "@nestjsx/crud-request";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -66,9 +58,39 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   inactive: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const landCoverOptions: SelectTypes[] = [
+  { label: "Secondary Forest", value: "secondary forest" },
+  { label: "RewettedOil Palm", value: "rewettedoil palm" },
+];
 
-type User = (typeof users)[0];
+const columns: ColumnProps[] = [
+  { name: "NO", uid: "no", sortable: true },
+  { name: "ID", uid: "id", sortable: true },
+  { name: "DATE", uid: "date", sortable: true },
+  { name: "PLOT", uid: "plot", sortable: true },
+  { name: "LAND COVER", uid: "landCover", sortable: true },
+  { name: "TYPE", uid: "type", sortable: true },
+  { name: "AIR TEMPERATURE", uid: "airTemperature" },
+  { name: "SOIL TEMPERATURE", uid: "soilTemperature" },
+  { name: "SOIL MOISTURE", uid: "soilMoisture" },
+  { name: "WATER TABLE", uid: "waterTable" },
+  { name: "CH4", uid: "ch4" },
+  { name: "CO2", uid: "co2" },
+];
+
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "date",
+  "plot",
+  "landCover",
+  "type",
+  "airTemprature",
+  "soilTemperature",
+  "soilMoisture",
+  "waterTable",
+  "ch4",
+  "co2",
+];
 
 type TableProps = {
   params?: any;
@@ -80,26 +102,36 @@ type TableProps = {
   setFilterValue: Dispatch<SetStateAction<string>>;
 };
 
-export default function FluxTables({ params, page, setPage, limit, setLimit, filterValue, setFilterValue }: TableProps) {
+export default function FluxTables({
+  params,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  filterValue,
+  setFilterValue,
+}: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
+
+  // data-table-with-api
+  const { fetch, data, meta, fetching } = useGHGFluxApi();
+  const [dataTables, setdataTables] = useState<GhgFluxTypes[]>([]);
+
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
+  const [landCoverFilter, setLandCoverFilter] = useState<Selection>("all");
   // const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "age",
+    column: "date",
     direction: "ascending",
   });
 
-  const [value, setValue] = useState<string>("");
   const [selectedKey, setSelectedKey] = useState<Key | null>(null);
-
-  // data-table-with-api
-  const { fetch, data, meta, fetching } = useGHGFluxApi();
-  const [dataTables, setdataTables] = useState<any[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  // page-count
+  // const [pages, setPages] = useState(0)
 
   let router = useRouter();
   let pathname = usePathname();
@@ -109,7 +141,85 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
     setSelectedKey(key);
   };
 
-  // const [page, setPage] = useState(1);
+  // query-prams
+  useEffect(() => {
+    let isSearch = search.has("search");
+    let isPage = search.has("page");
+    let isLimit = search.has("limit");
+
+    let newSearch = search.get("search");
+    let newPage = search.get("page");
+    let newLimit = search.get("limit");
+
+    if (isPage) setPage(Number(newPage));
+    if (isLimit) setLimit(Number(newLimit));
+    if (isSearch) setFilterValue(newSearch as string);
+  }, [search]);
+
+  const landCoverFilterred = useMemo(() => {
+    let filterItems: any[] = [];
+    if (landCoverFilter == "all") {
+      filterItems = landCoverOptions.map((e) => e.value);
+    } else {
+      filterItems = [...landCoverFilter];
+    }
+    return filterItems;
+  }, [landCoverFilter, landCoverOptions]);
+
+  const getQuery = useMemo(() => {
+    let query: any = {
+      page,
+      limit,
+    };
+    if (filterValue) query = { ...query, search: filterValue };
+    if (landCoverFilter) query = { ...query, landCover: "" };
+    return query;
+  }, [page, limit, filterValue, landCoverFilter]);
+
+  const filterParams = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search = {
+      $and: [
+        { landCover: { $inL: landCoverFilterred } },
+        {
+          $or: [
+            { type: { $contL: getQuery?.search } },
+            { landCover: { $contL: getQuery?.search } },
+            { plot: { $contL: getQuery?.search } },
+            { location: { $contL: getQuery?.search } },
+          ],
+        },
+      ],
+    };
+
+    if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
+    if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 10);
+
+    qb.search(search);
+    qb.sortBy({
+      field: `id`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery, landCoverFilterred]);
+
+
+  useEffect(() => {
+    router.replace(
+      `${pathname}${getQuery ? `?${objectToQueryString(getQuery)}` : ""}`,
+      { scroll: false }
+    );
+    console.log(objectToQueryString(getQuery), "query");
+  }, [getQuery]);
+  // query-params end
+
+  // get-data
+  useEffect(() => {
+    fetch({ params: filterParams.queryObject });
+  }, [filterParams]);
+  // end get-data
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -121,80 +231,99 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
     );
   }, [visibleColumns]);
 
-  const filteredItems = useMemo(() => {
-    let filteredUsers = [...users];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
-      );
-    }
-
-    return filteredUsers;
-  }, [users, filterValue, statusFilter, hasSearchFilter]);
-
-  const pages = Math.ceil(filteredItems.length / limit);
+  const pages = meta.pageCount;
 
   const items = useMemo(() => {
-    const start = (page - 1) * limit;
-    const end = start + limit;
+    let arr: any[] = [];
+    data.map((item, i) => {
+      arr.push({
+        ...item,
+        no: 1 + i,
+      });
+    });
 
-    console.log({ start, end }, "items-sort");
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, limit]);
+    return arr;
+  }, [data]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: GhgFluxTypes, b: GhgFluxTypes) => {
+      const first = a[sortDescriptor.column as keyof GhgFluxTypes] as number;
+      const second = b[sortDescriptor.column as keyof GhgFluxTypes] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: User, columnKey: Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = useCallback((item: GhgFluxTypes, columnKey: Key) => {
+    const cellValue = item[columnKey as keyof GhgFluxTypes];
 
     switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
+      case "id":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
           </div>
         );
-      case "status":
+      case "date":
         return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "plot":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "landCover":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "type":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "airTemprature":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "soilTemprature":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "soilMoisture":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "waterTable":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "ch4":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
+        );
+      case "co2":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
         );
       case "actions":
         return (
@@ -275,13 +404,14 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
               <Select
                 labelPlacement="outside"
                 radius="full"
+                disallowEmptySelection
                 selectionMode="multiple"
-                placeholder="Select an animal"
-                selectedKeys={statusFilter}
+                placeholder="Select a land cover"
+                selectedKeys={landCoverFilter}
                 variant="faded"
                 color="primary"
                 className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                onSelectionChange={setStatusFilter}
+                onSelectionChange={setLandCoverFilter}
                 startContent={<MdPlace className="w-4 h-4" />}
                 listboxProps={{
                   itemClasses: {
@@ -297,15 +427,15 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
                   },
                 }}
               >
-                {statusOptions.map((status) => (
-                  <SelectItem key={status.uid} value={status.uid}>
-                    {status.name}
+                {landCoverOptions.map((land) => (
+                  <SelectItem key={land.value} value={land.value}>
+                    {land.label}
                   </SelectItem>
                 ))}
               </Select>
             </div>
 
-            <div className="flex w-full max-w-xs flex-col gap-2">
+            {/* <div className="flex w-full max-w-xs flex-col gap-2">
               <Select
                 labelPlacement="outside"
                 radius="full"
@@ -313,7 +443,6 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
                 placeholder="Select an column"
                 selectedKeys={visibleColumns}
                 onSelectionChange={setVisibleColumns}
-                // endContent={<MdSort className="w-4 h-4" />}
                 disallowEmptySelection
                 aria-label="Table Columns"
                 variant="faded"
@@ -339,7 +468,7 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
                   </SelectItem>
                 ))}
               </Select>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -350,8 +479,8 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
     hasSearchFilter,
+    landCoverFilter,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -414,8 +543,8 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
 
   const getSelect = useMemo(() => {
     console.log(Array.from(selectedKeys).includes("3"), "filter-check");
-    if (selectedKeys == "all") return filteredItems;
-    return filteredItems.filter((column) =>
+    if (selectedKeys == "all") return items;
+    return items.filter((column) =>
       Array.from(selectedKeys).includes(column.id.toString())
     );
   }, [selectedKeys]);
@@ -424,40 +553,9 @@ export default function FluxTables({ params, page, setPage, limit, setLimit, fil
   // console.log({ page, rowsPerPage, pages, items }, "pagination");
   // console.log({ sortedItems, headerColumns }, "final-data");
 
-  console.log(params, "params");
+  // console.log(params, "params");
 
-  useEffect(() => {
-    let isSearch = search.has("search");
-    let isPage = search.has("page");
-    let isLimit = search.has("limit");
-
-    let newSearch = search.get("search");
-    let newPage = search.get("page");
-    let newLimit = search.get("limit");
-
-    if (isPage) setPage(Number(newPage));
-    if (isLimit) setLimit(Number(newLimit));
-    if (isSearch) setFilterValue(newSearch as string);
-  }, [search]);
-
-  const getQuery = useMemo(() => {
-    let query: any = {
-      page,
-      limit,
-    };
-    if (filterValue) query = { ...query, search: filterValue };
-    return query;
-  }, [page, limit, filterValue]);
-
-  useEffect(() => {
-    router.replace(
-      `/table${getQuery ? `?${objectToQueryString(getQuery)}` : ""}`,
-      { scroll: false }
-    );
-    console.log(objectToQueryString(getQuery), "query");
-  }, [getQuery]);
-
-  console.log({ page, limit }, 'paginate')
+  console.log({ page, limit, pages }, "paginate");
 
   return (
     <Table

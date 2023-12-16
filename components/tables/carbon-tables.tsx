@@ -81,6 +81,16 @@ type TableProps = {
 };
 
 export default function CarbonTables({ params, page, setPage, limit, setLimit, filterValue, setFilterValue }: TableProps) {
+
+    // data-table-with-api
+  const { fetch, data, meta, fetching } = useGHGFluxApi();
+  const [dataTables, setdataTables] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  let router = useRouter();
+  let pathname = usePathname();
+  let search = useSearchParams();
+  
   // const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -95,15 +105,6 @@ export default function CarbonTables({ params, page, setPage, limit, setLimit, f
 
   const [value, setValue] = useState<string>("");
   const [selectedKey, setSelectedKey] = useState<Key | null>(null);
-
-  // data-table-with-api
-  const { fetch, data, meta, fetching } = useGHGFluxApi();
-  const [dataTables, setdataTables] = useState<any[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-
-  let router = useRouter();
-  let pathname = usePathname();
-  let search = useSearchParams();
 
   const onSelectionChange = (key: Key) => {
     setSelectedKey(key);

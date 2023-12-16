@@ -35,14 +35,14 @@ const itemTabs = [
 export default function BlogPage(props: any) {
   const [selected, setSelected] = useState("ghg-flux");
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string | any>("")
   let router = useRouter();
 
   const handleChange = (key: Key) => {
     setSelected(key as any);
     setPage(1)
-    setLimit(5)
+    setLimit(10)
   };
 
   console.log(selected, "data-selected");
