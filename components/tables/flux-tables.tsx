@@ -31,10 +31,13 @@ import { Input } from "@nextui-org/input";
 import { Chip, ChipProps } from "@nextui-org/chip";
 
 import {
+  Autocomplete,
+  AutocompleteItem,
   Select,
   SelectItem,
   Selection,
   SortDescriptor,
+  Spinner,
 } from "@nextui-org/react";
 
 import { Pagination } from "@nextui-org/pagination";
@@ -43,11 +46,7 @@ import { Button } from "@nextui-org/button";
 
 import { MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
 import useGHGFluxApi from "@/api/ghg-flux.api";
-import {
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
@@ -58,13 +57,13 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   inactive: "warning",
 };
 
-const landCoverOptions: SelectTypes[] = [
-  { label: "Secondary Forest", value: "secondary forest" },
-  { label: "Rewetted Oil Palm", value: "rewettedoil palm" },
-  { label: "Rewetted Shrub", value: "rewettedshrub" },
-  { label: "Drained Oil Palm", value: "drainedoil palm" },
-  { label: "Drained Shrub", value: "drainedoil" },
-];
+// const landCoverOptions: SelectTypes[] = [
+//   { label: "Secondary Forest", value: "secondary forest" },
+//   { label: "Rewetted Oil Palm", value: "rewettedoil palm" },
+//   { label: "Rewetted Shrub", value: "rewettedshrub" },
+//   { label: "Drained Oil Palm", value: "drainedoil palm" },
+//   { label: "Drained Shrub", value: "drainedoil" },
+// ];
 
 const columns: ColumnProps[] = [
   { name: "NO", uid: "no", sortable: true },
@@ -103,6 +102,8 @@ type TableProps = {
   setLimit: Dispatch<SetStateAction<number>>;
   filterValue: string;
   setFilterValue: Dispatch<SetStateAction<string>>;
+  landCoverOptions?: SelectTypes[] | any[]
+  locationKey?: Key | null
 };
 
 export default function FluxTables({
@@ -113,9 +114,10 @@ export default function FluxTables({
   setLimit,
   filterValue,
   setFilterValue,
+  landCoverOptions,
+  locationKey
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
-
   // data-table-with-api
   const { fetch, data, meta, fetching } = useGHGFluxApi();
   const [dataTables, setdataTables] = useState<GhgFluxTypes[]>([]);
@@ -125,14 +127,15 @@ export default function FluxTables({
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
-  const [landCoverFilter, setLandCoverFilter] = useState<Selection>("all");
+  
   // const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "date",
     direction: "ascending",
   });
 
-  const [selectedKey, setSelectedKey] = useState<Key | null>(null);
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("Secondary Forest");
+  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
   // page-count
   // const [pages, setPages] = useState(0)
 
@@ -140,8 +143,12 @@ export default function FluxTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
-  const onSelectionChange = (key: Key) => {
-    setSelectedKey(key);
+  const onSelectionLandCoverChange = (key: Key) => {
+    setLandCoverKey(key);
+  };
+
+  const onInputLandCoverChange = (value: string) => {
+    setLandCoverFilter(value);
   };
 
   // query-prams
@@ -159,32 +166,24 @@ export default function FluxTables({
     if (isSearch) setFilterValue(newSearch as string);
   }, [search]);
 
-  const landCoverFilterred = useMemo(() => {
-    let filterItems: any[] = [];
-    if (landCoverFilter == "all") {
-      filterItems = landCoverOptions.map((e) => e.value);
-    } else {
-      filterItems = [...landCoverFilter];
-    }
-    return filterItems;
-  }, [landCoverFilter, landCoverOptions]);
-
   const getQuery = useMemo(() => {
     let query: any = {
       page,
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    if (landCoverFilter) query = { ...query, landCover: "" };
+    if (locationKey) query = { ...query, location: locationKey };
+    if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
-  }, [page, limit, filterValue, landCoverFilter]);
+  }, [page, limit, filterValue, locationKey, landCoverKey]);
 
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
     const search = {
       $and: [
-        { landCover: { $inL: landCoverFilterred } },
+        { location: { $cont: getQuery?.location } },
+        { landCover: { $cont: getQuery?.landCover } },
         {
           $or: [
             { type: { $contL: getQuery?.search } },
@@ -206,8 +205,7 @@ export default function FluxTables({
     });
     qb.query();
     return qb;
-  }, [getQuery, landCoverFilterred]);
-
+  }, [getQuery]);
 
   useEffect(() => {
     router.replace(
@@ -218,9 +216,16 @@ export default function FluxTables({
   }, [getQuery]);
   // query-params end
 
+console.log(locationKey, 'key-location')
+
   // get-data
+  const getGHGFlux = async (params: any) => {
+    await fetch({ params: params?.queryObject });
+  };
   useEffect(() => {
-    fetch({ params: filterParams.queryObject });
+    if (filterParams) {
+      getGHGFlux(filterParams);
+    }
   }, [filterParams]);
   // end get-data
 
@@ -404,13 +409,13 @@ export default function FluxTables({
           />
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex w-full max-w-xs flex-col gap-2">
-              <Select
+              {/* <Select
                 labelPlacement="outside"
                 radius="full"
                 disallowEmptySelection
-                selectionMode="multiple"
+                selectionMode="single"
                 placeholder="Select a land cover"
-                selectedKeys={landCoverFilter}
+                defaultSelectedKeys={landCoverFilter}
                 variant="faded"
                 color="primary"
                 className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -435,7 +440,29 @@ export default function FluxTables({
                     {land.label}
                   </SelectItem>
                 ))}
-              </Select>
+              </Select> */}
+
+              <Autocomplete
+                radius="full"
+                labelPlacement="outside"
+                placeholder="Search location"
+                defaultItems={landCoverOptions}
+                defaultSelectedKey="Secondary Forest"
+                variant="faded"
+                color="primary"
+                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                allowsCustomValue={true}
+                onSelectionChange={onSelectionLandCoverChange}
+                onInputChange={onInputLandCoverChange}
+              >
+                {(item) => (
+                  <AutocompleteItem
+                    key={item.value}
+                  >
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
             </div>
 
             {/* <div className="flex w-full max-w-xs flex-col gap-2">
@@ -484,6 +511,9 @@ export default function FluxTables({
     onRowsPerPageChange,
     hasSearchFilter,
     landCoverFilter,
+    landCoverOptions,
+    onSelectionLandCoverChange,
+    onInputLandCoverChange
   ]);
 
   const bottomContent = useMemo(() => {
@@ -545,7 +575,7 @@ export default function FluxTables({
   ]);
 
   const getSelect = useMemo(() => {
-    console.log(Array.from(selectedKeys).includes("3"), "filter-check");
+    // console.log(Array.from(selectedKeys).includes("3"), "filter-check");
     if (selectedKeys == "all") return items;
     return items.filter((column) =>
       Array.from(selectedKeys).includes(column.id.toString())
@@ -558,7 +588,7 @@ export default function FluxTables({
 
   // console.log(params, "params");
 
-  console.log({ page, limit, pages }, "paginate");
+  // console.log({ page, limit, pages }, "paginate");
 
   return (
     <Table
@@ -592,7 +622,12 @@ export default function FluxTables({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No items found"} items={sortedItems}>
+      <TableBody
+        emptyContent={"No items found"}
+        items={sortedItems}
+        isLoading={fetching}
+        loadingContent={<Spinner label="Loading..." />}
+      >
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
