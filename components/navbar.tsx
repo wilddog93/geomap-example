@@ -75,8 +75,6 @@ export const Navbar = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  console.log(router, "params");
-
   useEffect(() => {
     if(navRef.current) {
       console.log(window.innerHeight, 'windoww-nav', navRef.current.clientHeight)

@@ -4,6 +4,8 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/stores/auth";
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import { format, subMonths, subWeeks, subYears } from "date-fns";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function TestPage() {
   const auth = useAuth();

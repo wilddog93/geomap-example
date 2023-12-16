@@ -3,6 +3,7 @@ import React, {
   Dispatch,
   Fragment,
   SetStateAction,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -23,7 +24,7 @@ import { XYZ } from "ol/source";
 import { convertDMS } from "@/utils/useFunction";
 import { fromLonLat } from "ol/proj";
 import { Image, Input, Select, SelectItem } from "@nextui-org/react";
-import { MdLocationPin, MdSearch } from "react-icons/md";
+import { MdLocationPin, MdOutlineSearch, MdSearch } from "react-icons/md";
 
 const dataMaps = [
   {
@@ -86,9 +87,12 @@ type Props = {
 };
 
 const MapComponent = ({ items, setItems }: Props) => {
+  // search
+  const [filterValue, setFilterValue] = useState("");
+  const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux");
+
   const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux");
 
   const [itemMaps, setItemMaps] = useState<Feature<Point>[]>([]);
 
@@ -288,10 +292,22 @@ const MapComponent = ({ items, setItems }: Props) => {
 
   const dataSelectMap = [
     { value: "carbon-stocks", label: "Carbon Stocks" },
-    { value: "environmental-data", label: "Environmental Data" },
     { value: "ghg-flux", label: "GHG Flux" },
-    { value: "soil-physical", label: "Soil Physical" },
+    { value: "soil-psycochemical", label: "Soil Psycochemical" },
+    { value: "weater-data", label: "Weather Data" },
   ];
+
+  const onSearchChange = useCallback((value?: string) => {
+    if (value) {
+      setFilterValue(value);
+    } else {
+      setFilterValue("");
+    }
+  }, []);
+
+  const onClear = useCallback(() => {
+    setFilterValue("");
+  }, []);
 
   return (
     <Fragment>
@@ -335,21 +351,16 @@ const MapComponent = ({ items, setItems }: Props) => {
           ))}
         </Select>
         <Input
+          isClearable
           color="primary"
-          placeholder="Search"
           radius="full"
+          placeholder="Search"
           labelPlacement="outside"
           variant="bordered"
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={() => console.log("search")}
-            >
-              <MdSearch className="w-5 h-5 text-default-400 pointer-events-none" />
-            </button>
-          }
-          type="text"
+          startContent={<MdOutlineSearch className="w-4 h-4" />}
+          value={filterValue}
+          onClear={() => onClear()}
+          onValueChange={onSearchChange}
           className="w-full lg:col-span-2"
           classNames={{
             label: "text-black/50 dark:text-white/90",
@@ -370,7 +381,7 @@ const MapComponent = ({ items, setItems }: Props) => {
               "group-data-[focused=true]:bg-default-200/50",
               "dark:group-data-[focused=true]:bg-default/60",
               "!cursor-text",
-              "py-4 bg-white",
+              "bg-white",
             ],
           }}
         />

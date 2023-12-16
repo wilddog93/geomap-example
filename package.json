@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@arcgis/core": "^4.28.10",
+    "@nestjsx/crud-request": "^5.0.0-alpha.3",
     "@nextui-org/avatar": "^2.0.24",
     "@nextui-org/button": "2.0.26",
     "@nextui-org/chip": "^2.0.25",

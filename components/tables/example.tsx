@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
 import React, {
   ChangeEvent,
   Key,
-  SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -30,7 +30,14 @@ import { User } from "@nextui-org/user";
 
 import { Chip, ChipProps } from "@nextui-org/chip";
 
-import { Selection, SortDescriptor } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Select,
+  SelectItem,
+  Selection,
+  SortDescriptor,
+} from "@nextui-org/react";
 
 import { Pagination } from "@nextui-org/pagination";
 
@@ -41,13 +48,9 @@ import {
   users,
   statusOptions,
 } from "@/components/tables/component/data";
-import {
-  MdAdd,
-  MdArrowDropDown,
-  MdMoreVert,
-  MdOutlineSearch,
-} from "react-icons/md";
-import { capitalize } from "@/utils/useFunction";
+import { MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
+import useGHGFluxApi from "@/api/ghg-flux.api";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -59,7 +62,11 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
 
 type User = (typeof users)[0];
 
-export default function Tables() {
+type TableProps = {
+  params?: any;
+};
+
+export default function FluxTables({ params }: TableProps) {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -71,6 +78,22 @@ export default function Tables() {
     column: "age",
     direction: "ascending",
   });
+
+  const [value, setValue] = useState<string>("");
+  const [selectedKey, setSelectedKey] = useState<Key | null>(null);
+
+  // data-table-with-api
+  const { fetch, data, meta, fetching } = useGHGFluxApi();
+  const [dataTables, setdataTables] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  let router = useRouter();
+  let pathname = usePathname();
+  let search = useSearchParams();
+
+  const onSelectionChange = (key: Key) => {
+    setSelectedKey(key);
+  };
 
   const [page, setPage] = useState(1);
 
@@ -218,91 +241,91 @@ export default function Tables() {
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex flex-col lg:flex-row justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            radius="full"
+            placeholder="Search..."
+            labelPlacement="outside"
             startContent={<MdOutlineSearch className="w-4 h-4" />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
+            variant="faded"
+            color="primary"
+            className="w-full sm:max-w-[44%] rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<MdArrowDropDown className="text-small" />}
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                color="primary"
-                className="text-black"
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
+          <div className="flex flex-col lg:flex-row gap-3">
+            <div className="flex w-full max-w-xs flex-col gap-2">
+              <Select
+                labelPlacement="outside"
+                radius="full"
                 selectionMode="multiple"
+                placeholder="Select an animal"
+                selectedKeys={statusFilter}
+                variant="faded"
+                color="primary"
+                className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
                 onSelectionChange={setStatusFilter}
+                startContent={<MdPlace className="w-4 h-4" />}
+                listboxProps={{
+                  itemClasses: {
+                    base: [
+                      "data-[hover=true]:text-white",
+                      "data-[selectable=true]:focus:text-white",
+                      "transition-opacity",
+                      "data-[hover=true]:bg-primary",
+                      "data-[selectable=true]:focus:bg-primary",
+                      "data-[pressed=true]:opacity-70",
+                      "data-[focus-visible=true]:ring-primary",
+                    ],
+                  },
+                }}
               >
                 {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
+                  <SelectItem key={status.uid} value={status.uid}>
+                    {status.name}
+                  </SelectItem>
                 ))}
-              </DropdownMenu>
-            </Dropdown>
+              </Select>
+            </div>
 
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<MdArrowDropDown className="text-small" />}
-                  variant="flat"
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                color="primary"
-                className="text-black"
+            <div className="flex w-full max-w-xs flex-col gap-2">
+              <Select
+                labelPlacement="outside"
+                radius="full"
+                selectionMode="multiple"
+                placeholder="Select an column"
+                selectedKeys={visibleColumns}
+                onSelectionChange={setVisibleColumns}
+                // endContent={<MdSort className="w-4 h-4" />}
                 disallowEmptySelection
                 aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
+                variant="faded"
+                color="primary"
+                className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                listboxProps={{
+                  itemClasses: {
+                    base: [
+                      "data-[hover=true]:text-white",
+                      "data-[selectable=true]:focus:text-white",
+                      "transition-opacity",
+                      "data-[hover=true]:bg-primary",
+                      "data-[selectable=true]:focus:bg-primary",
+                      "data-[pressed=true]:opacity-70",
+                      "data-[focus-visible=true]:ring-primary",
+                    ],
+                  },
+                }}
               >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
+                {columns.map((col) => (
+                  <SelectItem key={col.uid} value={col.uid}>
+                    {col.name}
+                  </SelectItem>
                 ))}
-              </DropdownMenu>
-            </Dropdown>
-
-            <Button color="primary" endContent={<MdAdd />}>
-              Add New
-            </Button>
+              </Select>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {users.length} users
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     );
@@ -319,11 +342,22 @@ export default function Tables() {
   const bottomContent = useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
+        <div className="w-[30%] flex justify-between items-center">
+          <label className="flex items-center text-default-400 text-small">
+            Rows per page:
+            <select
+              className="bg-transparent outline-none text-default-400 text-small"
+              value={rowsPerPage}
+              onChange={onRowsPerPageChange}
+            >
+              {[5, 10, 20, 30].map((pageSize, idx) => (
+                <option key={idx} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <Pagination
           isCompact
           showControls
@@ -353,7 +387,15 @@ export default function Tables() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [
+    selectedKeys,
+    items.length,
+    page,
+    pages,
+    hasSearchFilter,
+    onRowsPerPageChange,
+    rowsPerPage,
+  ]);
 
   const getSelect = useMemo(() => {
     console.log(Array.from(selectedKeys).includes("3"), "filter-check");
@@ -367,9 +409,29 @@ export default function Tables() {
   console.log({ page, rowsPerPage, pages, items }, "pagination");
   console.log({ sortedItems, headerColumns }, "final-data");
 
+  console.log(params, "params");
+
+  useEffect(() => {
+    let isSearch = search.has("search");
+    let isPage = search.has("page");
+    let isLimit = search.has("limit");
+
+    let newSearch = search.get("search");
+    let newPage = search.get("page");
+    let newLimit = search.get("limit");
+
+    if (isPage) setPage(Number(newPage));
+    if (isLimit) setRowsPerPage(Number(newLimit));
+    if (isSearch) setFilterValue(newSearch as string);
+  }, [search]);
+  
+
   return (
     <Table
       isStriped
+      removeWrapper
+      isCompact
+      color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
@@ -391,6 +453,7 @@ export default function Tables() {
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
             allowsSorting={column.sortable}
+            // className="bg-primary/20"
           >
             {column.name}
           </TableColumn>
@@ -400,7 +463,9 @@ export default function Tables() {
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell className="bg-white">
+                {renderCell(item, columnKey)}
+              </TableCell>
             )}
           </TableRow>
         )}

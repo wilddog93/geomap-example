@@ -55,3 +55,10 @@ export const getYearly = (date: Date, year: number) => {
 
   return resultArray;
 };
+
+export const objectToQueryString = (obj:any) => {
+  if(!obj) return;
+  return Object.keys(obj)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+    .join('&');
+}
