@@ -2,6 +2,7 @@
 import React, {
   Dispatch,
   Fragment,
+  Key,
   SetStateAction,
   useCallback,
   useEffect,
@@ -23,8 +24,22 @@ import VectorLayer from "ol/layer/Vector";
 import { XYZ } from "ol/source";
 import { convertDMS } from "@/utils/useFunction";
 import { fromLonLat } from "ol/proj";
-import { Image, Input, Select, SelectItem } from "@nextui-org/react";
-import { MdLocationPin, MdOutlineSearch, MdSearch } from "react-icons/md";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Image,
+  Input,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
+import {
+  MdLocationPin,
+  MdOutlineSearch,
+  MdPlace,
+  MdSearch,
+} from "react-icons/md";
+import { SelectTypes } from "@/utils/propTypes";
+import { SearchIcon } from "../icons";
 
 const dataMaps = [
   {
@@ -81,12 +96,43 @@ const dataMaps = [
   },
 ];
 
+const dataSelectMap: SelectTypes[] = [
+  { value: "carbon stock", label: "Carbon Stock" },
+  { value: "ghg flux", label: "GHG Flux" },
+  { value: "soil psycochemical", label: "Soil Psycochemical" },
+  { value: "weater data", label: "Weather Data" },
+];
+
 type Props = {
   items: any;
   setItems: Dispatch<SetStateAction<any | null>>;
+  locationOptions?: SelectTypes[] | any[];
 };
 
-const MapComponent = ({ items, setItems }: Props) => {
+const MapComponent = ({ items, setItems, locationOptions }: Props) => {
+  const [location, setLocation] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [selectedKey, setSelectedKey] = useState<React.Key | null>("Mempawah");
+  const [categoryKey, setCategoryKey] = useState<React.Key | null>("ghg flux");
+
+  // location-search
+  const onSelectionChange = (key: React.Key) => {
+    setSelectedKey(key);
+  };
+
+  const onInputChange = (value: string) => {
+    setLocation(value);
+  };
+
+  // select ghg
+  const onSelectionCategoryChange = (key: Key) => {
+    setCategoryKey(key);
+  };
+
+  const onInputCategoryChange = (value: string) => {
+    setCategoryFilter(value);
+  };
+
   // search
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<string | any>("ghg-flux");
@@ -290,13 +336,6 @@ const MapComponent = ({ items, setItems }: Props) => {
     }
   }, [overlayContent]);
 
-  const dataSelectMap = [
-    { value: "carbon-stocks", label: "Carbon Stocks" },
-    { value: "ghg-flux", label: "GHG Flux" },
-    { value: "soil-psycochemical", label: "Soil Psycochemical" },
-    { value: "weater-data", label: "Weather Data" },
-  ];
-
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
       setFilterValue(value);
@@ -320,71 +359,47 @@ const MapComponent = ({ items, setItems }: Props) => {
         <Image alt="kompas" src="image/kompas.png" className="w-10 h-10" />
       </div>
       <div className="w-full grid grid-cols-1 lg:grid-cols-3 items-center gap-1 absolute z-10 top-5 px-10 inset-x-2">
-        <Select
+        <Autocomplete
           radius="full"
-          label=""
-          className="w-full shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           labelPlacement="outside"
-          variant="bordered"
-          listboxProps={{
-            itemClasses: {
-              base: [
-                "text-default-500",
-                "transition-opacity",
-                "data-[hover=true]:text-foreground",
-                "data-[hover=true]:bg-default-100",
-                "dark:data-[hover=true]:bg-default-50",
-                "data-[selectable=true]:focus:bg-default-50",
-                "data-[pressed=true]:opacity-70",
-                "data-[focus-visible=true]:ring-default-500",
-              ],
-            },
-          }}
+          placeholder="Category"
+          defaultItems={dataSelectMap}
+          defaultSelectedKey="ghg flux"
+          variant="faded"
           color="primary"
-          selectedKeys={[selectedKeys]}
-          onChange={({ target }: any) => setSelectedKeys(target?.value)}
+          className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          allowsCustomValue={true}
+          onSelectionChange={onSelectionCategoryChange}
+          onInputChange={onInputCategoryChange}
         >
-          {dataSelectMap.map((data) => (
-            <SelectItem key={data.value} value={data.value}>
-              {data.label}
-            </SelectItem>
-          ))}
-        </Select>
-        <Input
-          isClearable
-          color="primary"
+          {(item) => (
+            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
+          )}
+        </Autocomplete>
+
+        <Autocomplete
           radius="full"
-          placeholder="Search"
           labelPlacement="outside"
-          variant="bordered"
-          startContent={<MdOutlineSearch className="w-4 h-4" />}
-          value={filterValue}
-          onClear={() => onClear()}
-          onValueChange={onSearchChange}
-          className="w-full lg:col-span-2"
-          classNames={{
-            label: "text-black/50 dark:text-white/90",
-            input: [
-              "bg-transparent",
-              "text-black/90 dark:text-white/90",
-              "placeholder:text-default-700/50 dark:placeholder:text-white/60 py-2",
-            ],
-            innerWrapper: "bg-transparent py-1.5",
-            inputWrapper: [
-              "shadow-sm",
-              "bg-default-200/50",
-              "dark:bg-default/60",
-              "backdrop-blur-xl",
-              "backdrop-saturate-200",
-              "hover:bg-default-200/70",
-              "dark:hover:bg-default/70",
-              "group-data-[focused=true]:bg-default-200/50",
-              "dark:group-data-[focused=true]:bg-default/60",
-              "!cursor-text",
-              "bg-white",
-            ],
-          }}
-        />
+          placeholder="Search location"
+          defaultItems={locationOptions}
+          startContent={<SearchIcon className="text-xl" />}
+          defaultSelectedKey="Mempawah"
+          variant="faded"
+          color="primary"
+          className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          allowsCustomValue={false}
+          onSelectionChange={onSelectionChange}
+          onInputChange={onInputChange}
+        >
+          {(item) => (
+            <AutocompleteItem
+              startContent={<MdPlace className="w-4 h-4 text-default-500" />}
+              key={item.value}
+            >
+              {item.label}
+            </AutocompleteItem>
+          )}
+        </Autocomplete>
       </div>
 
       {/* <div ref={overlayRef} id="overlay" style={{ display: overlayContent ? 'block' : 'none' }}>

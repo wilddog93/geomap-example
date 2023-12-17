@@ -1,11 +1,25 @@
 import AreaCharts from "@/components/chart/AreaCharts";
+import { SelectTypes } from "@/utils/propTypes";
 import { getYearly } from "@/utils/useFunction";
 import { Input } from "@nextui-org/input";
-import { Accordion, AccordionItem, ScrollShadow } from "@nextui-org/react";
+import {
+  Accordion,
+  AccordionItem,
+  Autocomplete,
+  AutocompleteItem,
+  ScrollShadow,
+} from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
-import { subWeeks } from "date-fns";
-import React, { ChangeEvent, Fragment, useState } from "react";
-import { MdInfo, MdSearch } from "react-icons/md";
+import {
+  endOfMonth,
+  endOfYear,
+  format,
+  startOfMonth,
+  startOfYear,
+  subWeeks,
+} from "date-fns";
+import React, { ChangeEvent, Fragment, Key, useMemo, useState } from "react";
+import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
 
 const dataSelectContent = [
   { label: "Sublocation", value: "sublocation" },
@@ -15,16 +29,23 @@ const dataSelectContent = [
 type Props = {
   sidebar?: boolean;
   data?: any[] | any;
+  landCoverOptions?: SelectTypes[] | any[];
 };
 
-const dataSelectPeriode = [
+const periodeOptions = [
   { label: "Yearly", value: "yearly" },
   { label: "Monthly", value: "montly" },
 ];
 
-function ContentComponent({ sidebar, data }: Props) {
+function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
   const [isSelected, setIsSelected] = useState<string | any>("yearly");
   const [value, setValue] = useState<string>("sublocation");
+  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
+  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
+    "Secondary Forest"
+  );
+  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
 
   const handleSelectionChangePeriode = (e: ChangeEvent<HTMLSelectElement>) => {
     setIsSelected(e.target.value);
@@ -33,6 +54,45 @@ function ContentComponent({ sidebar, data }: Props) {
   const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setValue(e.target.value);
   };
+
+  // function-dropdown
+  const onSelectionPeriodeChange = (key: Key) => {
+    setPeriodeKey(key);
+  };
+
+  const onInputPeriodeChange = (value: string) => {
+    setPeriodeFilter(value);
+  };
+
+  const onSelectionLandCoverChange = (key: Key) => {
+    setLandCoverKey(key);
+  };
+
+  const onInputLandCoverChange = (value: string) => {
+    setLandCoverFilter(value);
+  };
+  // end function dropdown key
+
+  // filter periode
+  const periodeFilterred = useMemo(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const today = new Date();
+    let start: string | null | any = "";
+    let end: string | null | any = "";
+    if (periodeKey == "Monthly") {
+      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
+      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
+    } else {
+      start = format(startOfYear(currentDate), "yyyy-MM-dd");
+      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+    }
+
+    // console.log({start, end}, "periode")
+
+    return { start, end };
+  }, [periodeKey]);
+  // filter perioded end
 
   const options = {
     responsive: true,
@@ -114,7 +174,10 @@ function ContentComponent({ sidebar, data }: Props) {
   };
 
   console.log("year get by month:", getYearly(new Date(), 1));
-  console.log("monthly by week:", `${subWeeks(new Date(), 2)} to ${new Date()}`);
+  console.log(
+    "monthly by week:",
+    `${subWeeks(new Date(), 2)} to ${new Date()}`
+  );
 
   return (
     <Fragment>
@@ -140,73 +203,52 @@ function ContentComponent({ sidebar, data }: Props) {
 
             <div className="w-full flex flex-col lg:flex-row items-center justify-end gap-2">
               <div
-                className={`w-full items-center gap-1 ${
+                className={`w-full max-w-[12rem] items-center gap-1 ${
                   sidebar ? "hidden" : ""
                 }`}
               >
-                <Select
+                <Autocomplete
                   radius="full"
-                  label=""
-                  className="w-full max-w-xs shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
                   labelPlacement="outside"
-                  variant="bordered"
-                  listboxProps={{
-                    itemClasses: {
-                      base: [
-                        "text-default-500",
-                        "transition-opacity",
-                        "data-[hover=true]:text-foreground",
-                        "data-[hover=true]:bg-default-100",
-                        "dark:data-[hover=true]:bg-default-50",
-                        "data-[selectable=true]:focus:bg-default-50",
-                        "data-[pressed=true]:opacity-70",
-                        "data-[focus-visible=true]:ring-default-500",
-                      ],
-                    },
-                  }}
+                  placeholder="Select land cover"
+                  defaultItems={landCoverOptions}
+                  defaultSelectedKey="Secondary Forest"
+                  variant="faded"
                   color="primary"
-                  selectedKeys={[value]}
-                  onChange={handleSelectionChangePeriode}
+                  className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                  allowsCustomValue={true}
+                  onSelectionChange={onSelectionLandCoverChange}
+                  onInputChange={onInputLandCoverChange}
                 >
-                  {dataSelectContent.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </Select>
+                  {(item) => (
+                    <AutocompleteItem key={item.value}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
               </div>
 
-              <div className={`w-full ${sidebar ? "justify-end" : ""}`}>
-                <Select
+              <div className={`w-full max-w-[12rem] justify-end`}>
+                <Autocomplete
                   radius="full"
-                  label=""
-                  className="w-full max-w-xs shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
                   labelPlacement="outside"
-                  variant="bordered"
-                  listboxProps={{
-                    itemClasses: {
-                      base: [
-                        "text-default-500",
-                        "transition-opacity",
-                        "data-[hover=true]:text-foreground",
-                        "data-[hover=true]:bg-default-100",
-                        "dark:data-[hover=true]:bg-default-50",
-                        "data-[selectable=true]:focus:bg-default-50",
-                        "data-[pressed=true]:opacity-70",
-                        "data-[focus-visible=true]:ring-default-500",
-                      ],
-                    },
-                  }}
+                  placeholder="Select periode"
+                  defaultItems={periodeOptions}
+                  defaultSelectedKey="Yearly"
+                  variant="faded"
                   color="primary"
-                  selectedKeys={[isSelected]}
-                  onChange={handleSelectionChange}
+                  className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                  allowsCustomValue={true}
+                  onSelectionChange={onSelectionPeriodeChange}
+                  onInputChange={onInputPeriodeChange}
+                  startContent={<MdCalendarToday className="w-5 h-5" />}
                 >
-                  {dataSelectPeriode.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </Select>
+                  {(item) => (
+                    <AutocompleteItem key={item.value}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
               </div>
             </div>
           </div>
@@ -242,76 +284,25 @@ function ContentComponent({ sidebar, data }: Props) {
               sidebar ? "lg:grid-cols-3" : "lg:grid-cols-5 hidden"
             }`}
           >
-            <Select
+            <Autocomplete
               radius="full"
-              label=""
-              className="w-full max-w-xs shadow-sm rounded-full bg-white dark:bg-default/60 backdrop-blur-xl backdrop-saturate-200 hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
               labelPlacement="outside"
-              variant="bordered"
-              listboxProps={{
-                itemClasses: {
-                  base: [
-                    "text-default-500",
-                    "transition-opacity",
-                    "data-[hover=true]:text-foreground",
-                    "data-[hover=true]:bg-default-100",
-                    "dark:data-[hover=true]:bg-default-50",
-                    "data-[selectable=true]:focus:bg-default-50",
-                    "data-[pressed=true]:opacity-70",
-                    "data-[focus-visible=true]:ring-default-500",
-                  ],
-                },
-              }}
+              placeholder="Select land cover"
+              defaultItems={landCoverOptions}
+              defaultSelectedKey="Secondary Forest"
+              variant="faded"
               color="primary"
-              selectedKeys={[value]}
-              onChange={handleSelectionChangePeriode}
+              className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+              allowsCustomValue={true}
+              onSelectionChange={onSelectionLandCoverChange}
+              onInputChange={onInputLandCoverChange}
             >
-              {dataSelectContent.map((data) => (
-                <SelectItem key={data.value} value={data.value}>
-                  {data.label}
-                </SelectItem>
-              ))}
-            </Select>
-            {/* <Input
-              color="primary"
-              placeholder="Search"
-              radius="full"
-              labelPlacement="outside"
-              variant="bordered"
-              endContent={
-                <button
-                  className="focus:outline-none"
-                  type="button"
-                  onClick={() => console.log("search")}
-                >
-                  <MdSearch className="w-5 h-5 text-default-400 pointer-events-none" />
-                </button>
-              }
-              type="text"
-              className="w-full lg:col-span-2"
-              classNames={{
-                label: "text-black/50 dark:text-white/90",
-                input: [
-                  "bg-transparent",
-                  "text-black/90 dark:text-white/90",
-                  "placeholder:text-default-700/50 dark:placeholder:text-white/60 py-2",
-                ],
-                innerWrapper: "bg-transparent py-1.5",
-                inputWrapper: [
-                  "shadow-sm",
-                  "bg-default-200/50",
-                  "dark:bg-default/60",
-                  "backdrop-blur-xl",
-                  "backdrop-saturate-200",
-                  "hover:bg-default-200/70",
-                  "dark:hover:bg-default/70",
-                  "group-data-[focused=true]:bg-default-200/50",
-                  "dark:group-data-[focused=true]:bg-default/60",
-                  "!cursor-text",
-                  "py-4 bg-white",
-                ],
-              }}
-            /> */}
+              {(item) => (
+                <AutocompleteItem key={item.value}>
+                  {item.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
           </div>
 
           <div className={`w-full ${sidebar ? "" : "hidden"}`}>

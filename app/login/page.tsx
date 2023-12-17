@@ -61,11 +61,11 @@ export default function LoginPage() {
             <div className="w-full flex flex-col gap-4 justify-center items-center">
               <Image
                 radius="none"
-                className="mx-auto object-cover object-center px-5 w-60 lg:w-80"
-                src="/image/login-logo.png"
+                className="mx-auto object-cover object-center px-5 w-96 my-10 lg:my-14"
+                src="/image/logo-nav.png"
                 alt="Barrier Logo"
               />
-              <div className="w-full px-20 mb-5">
+              <div className="w-full px-14 mb-5">
                 <h3 className="font-bold text-xl lg:text-2xl text-center">
                   Internal Geospatial Dashboard
                 </h3>
@@ -74,7 +74,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <div className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-20">
+              <div className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-14">
                 <label htmlFor="sandi" className="text-sm text-gray-5">
                   Kata sandi
                 </label>

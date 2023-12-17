@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import {
   MdChevronLeft,
@@ -15,15 +15,66 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { Input } from "@nextui-org/input";
 import ContentComponent from "@/components/maps/content/content-component";
 import Footer from "@/components/footer";
+import { RequestQueryBuilder } from "@nestjsx/crud-request";
+import useLocationApi from "@/api/location-properties.api";
+import { SelectTypes } from "@/utils/propTypes";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState(true);
   const [items, setItems] = useState<any>(null);
-  
 
   const sideFunction = () => {
     setSidebar((state) => !state);
   };
+
+  // data-location
+  const { fetch, data, meta, fetching } = useLocationApi();
+
+  const filterLocation = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search = {
+      $and: [],
+    };
+
+    qb.search(search);
+    qb.sortBy({
+      field: `name`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, []);
+
+  const getLocation = async (params: any) => {
+    await fetch({ params: params.queryObject });
+  };
+
+  useEffect(() => {
+    if (filterLocation) getLocation(filterLocation);
+  }, [filterLocation]);
+
+  const optionsSelect = useMemo(() => {
+    let location: SelectTypes[] | any[] = [];
+    let landCover: SelectTypes[] | any[] = [];
+    if (data?.length > 0) {
+      location = data
+        ?.filter((e) => e.type == "location")
+        .map((x) => ({
+          ...x,
+          label: x.name,
+          value: x.name,
+        }));
+      landCover = data
+        ?.filter((e) => e.type == "landCover")
+        .map((x) => ({
+          ...x,
+          label: x.name,
+          value: x.name,
+        }));
+    }
+    return { location, landCover };
+  }, [data]);
 
   console.log(items, "items");
 
@@ -44,7 +95,11 @@ export default function Home() {
             >
               <MdClose className="w-4 h-4" />
             </button>
-            <MapComponent items={items} setItems={setItems} />
+            <MapComponent 
+              items={items} 
+              setItems={setItems} 
+              locationOptions={optionsSelect.location}
+            />
           </ScrollShadow>
         </div>
 
@@ -76,7 +131,7 @@ export default function Home() {
             )}
           </button>
           
-            <ContentComponent data={items} sidebar={sidebar} />
+            <ContentComponent data={items} sidebar={sidebar} landCoverOptions={optionsSelect.landCover} />
         </div>
       </section>
       <Footer />
