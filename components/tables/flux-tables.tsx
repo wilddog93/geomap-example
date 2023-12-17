@@ -44,7 +44,14 @@ import { Pagination } from "@nextui-org/pagination";
 
 import { Button } from "@nextui-org/button";
 
-import { MdCalendarMonth, MdCalendarToday, MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
+import {
+  MdCalendarMonth,
+  MdCalendarToday,
+  MdMoreVert,
+  MdOutlineSearch,
+  MdPlace,
+  MdSort,
+} from "react-icons/md";
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
@@ -69,6 +76,14 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const periodeOptions: SelectTypes[] = [
   { label: "Yearly", value: "Yearly" },
   { label: "Monthly", value: "Monthly" },
+];
+
+const sortOptions: SelectTypes[] = [
+  { label: "ID", value: "id" },
+  { label: "DATE", value: "date" },
+  { label: "PLOT", value: "plot" },
+  { label: "LAND COVER", value: "landCover" },
+  { label: "TYPE", value: "type" },
 ];
 
 const columns: ColumnProps[] = [
@@ -147,6 +162,8 @@ export default function FluxTables({
   const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
+  const [sortKey, setSortKey] = useState<Key | null>("id");
+  const [sortFilter, setSortFilter] = useState("id");
 
   // page-count
   // const [pages, setPages] = useState(0)
@@ -162,6 +179,7 @@ export default function FluxTables({
 
   const onInputLandCoverChange = (value: string) => {
     setLandCoverFilter(value);
+    setPage(1)
   };
 
   const onSelectionPeriodeChange = (key: Key) => {
@@ -170,6 +188,16 @@ export default function FluxTables({
 
   const onInputPeriodeChange = (value: string) => {
     setPeriodeFilter(value);
+    setPage(1)
+  };
+
+  const onSelectionSortChange = (key: Key) => {
+    setSortKey(key);
+  };
+
+  const onInputSortChange = (value: string) => {
+    setSortFilter(value);
+    setPage(1)
   };
   // end function dropdown
 
@@ -248,13 +276,20 @@ export default function FluxTables({
     if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
 
     qb.search(search);
-    qb.sortBy({
-      field: `id`,
-      order: "ASC",
-    });
+    if (sortKey) {
+      qb.sortBy({
+        field: `${sortKey}`,
+        order: "ASC",
+      });
+    } else {
+      qb.sortBy({
+        field: `id`,
+        order: "ASC",
+      });
+    }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred]);
+  }, [getQuery, periodeFilterred, sortKey]);
 
   useEffect(() => {
     router.replace(
@@ -461,40 +496,7 @@ export default function FluxTables({
             className="w-full sm:max-w-[44%] rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           />
           <div className="flex flex-col lg:flex-row gap-3">
-            <div className="flex w-full max-w-xs flex-col gap-2">
-              {/* <Select
-                labelPlacement="outside"
-                radius="full"
-                disallowEmptySelection
-                selectionMode="single"
-                placeholder="Select a land cover"
-                defaultSelectedKeys={landCoverFilter}
-                variant="faded"
-                color="primary"
-                className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                onSelectionChange={setLandCoverFilter}
-                startContent={<MdPlace className="w-4 h-4" />}
-                listboxProps={{
-                  itemClasses: {
-                    base: [
-                      "data-[hover=true]:text-white",
-                      "data-[selectable=true]:focus:text-white",
-                      "transition-opacity",
-                      "data-[hover=true]:bg-primary",
-                      "data-[selectable=true]:focus:bg-primary",
-                      "data-[pressed=true]:opacity-70",
-                      "data-[focus-visible=true]:ring-primary",
-                    ],
-                  },
-                }}
-              >
-                {landCoverOptions.map((land) => (
-                  <SelectItem key={land.value} value={land.value}>
-                    {land.label}
-                  </SelectItem>
-                ))}
-              </Select> */}
-
+            <div className="flex w-full max-w-[12rem] flex-col gap-2">
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
@@ -516,7 +518,30 @@ export default function FluxTables({
               </Autocomplete>
             </div>
 
-            <div className="w-full max-w-xs flex flex-col gap-2">
+            <div className="w-full max-w-[12rem] flex flex-col gap-2">
+              <Autocomplete
+                radius="full"
+                labelPlacement="outside"
+                placeholder="Sort By"
+                defaultItems={sortOptions}
+                defaultSelectedKey="id"
+                variant="faded"
+                color="primary"
+                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                allowsCustomValue={true}
+                onSelectionChange={onSelectionSortChange}
+                onInputChange={onInputSortChange}
+                endContent={<MdSort className="w-5 h-5" />}
+              >
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+            </div>
+
+            <div className="w-full max-w-[12rem] flex flex-col gap-2">
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
