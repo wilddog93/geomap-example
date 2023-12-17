@@ -50,6 +50,15 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
+import {
+  subMonths,
+  subYears,
+  format,
+  startOfMonth,
+  endOfMonth,
+  startOfYear,
+  endOfYear,
+} from "date-fns";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -57,13 +66,10 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   inactive: "warning",
 };
 
-// const landCoverOptions: SelectTypes[] = [
-//   { label: "Secondary Forest", value: "secondary forest" },
-//   { label: "Rewetted Oil Palm", value: "rewettedoil palm" },
-//   { label: "Rewetted Shrub", value: "rewettedshrub" },
-//   { label: "Drained Oil Palm", value: "drainedoil palm" },
-//   { label: "Drained Shrub", value: "drainedoil" },
-// ];
+const periodeOptions: SelectTypes[] = [
+  { label: "Yearly", value: "Yearly" },
+  { label: "Monthly", value: "Monthly" },
+];
 
 const columns: ColumnProps[] = [
   { name: "NO", uid: "no", sortable: true },
@@ -102,8 +108,8 @@ type TableProps = {
   setLimit: Dispatch<SetStateAction<number>>;
   filterValue: string;
   setFilterValue: Dispatch<SetStateAction<string>>;
-  landCoverOptions?: SelectTypes[] | any[]
-  locationKey?: Key | null
+  landCoverOptions?: SelectTypes[] | any[];
+  locationKey?: Key | null;
 };
 
 export default function FluxTables({
@@ -115,7 +121,7 @@ export default function FluxTables({
   filterValue,
   setFilterValue,
   landCoverOptions,
-  locationKey
+  locationKey,
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -127,15 +133,21 @@ export default function FluxTables({
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
-  
+
   // const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "date",
     direction: "ascending",
   });
 
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>("Secondary Forest");
+  // dropdown
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
+    "Secondary Forest"
+  );
   const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
+  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
+
   // page-count
   // const [pages, setPages] = useState(0)
 
@@ -143,6 +155,7 @@ export default function FluxTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
+  // function dropdown
   const onSelectionLandCoverChange = (key: Key) => {
     setLandCoverKey(key);
   };
@@ -150,6 +163,36 @@ export default function FluxTables({
   const onInputLandCoverChange = (value: string) => {
     setLandCoverFilter(value);
   };
+
+  const onSelectionPeriodeChange = (key: Key) => {
+    setPeriodeKey(key);
+  };
+
+  const onInputPeriodeChange = (value: string) => {
+    setPeriodeFilter(value);
+  };
+  // end function dropdown
+
+  // filter periode
+  const periodeFilterred = useMemo(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const today = new Date();
+    let start: string | null | any = "";
+    let end: string | null | any = "";
+    if (periodeKey == "Yearly") {
+      start = format(startOfYear(currentDate), "yyyy-MM-dd");
+      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+    } else if (periodeKey == "Monthly") {
+      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
+      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
+    }
+
+    // console.log({start, end}, "periode")
+
+    return { start, end };
+  }, [periodeKey]);
+  // filter perioded end
 
   // query-prams
   useEffect(() => {
@@ -182,6 +225,12 @@ export default function FluxTables({
 
     const search = {
       $and: [
+        {
+          date: {
+            $gte: periodeFilterred.start,
+            $lte: periodeFilterred.end,
+          },
+        },
         { location: { $cont: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
         {
@@ -205,7 +254,7 @@ export default function FluxTables({
     });
     qb.query();
     return qb;
-  }, [getQuery]);
+  }, [getQuery, periodeFilterred]);
 
   useEffect(() => {
     router.replace(
@@ -215,8 +264,6 @@ export default function FluxTables({
     console.log(objectToQueryString(getQuery), "query");
   }, [getQuery]);
   // query-params end
-
-console.log(locationKey, 'key-location')
 
   // get-data
   const getGHGFlux = async (params: any) => {
@@ -239,7 +286,13 @@ console.log(locationKey, 'key-location')
     );
   }, [visibleColumns]);
 
-  const pages = meta.pageCount;
+  const pages = useMemo(() => {
+    let pages = 0;
+    if (meta.pageCount) pages = meta.pageCount;
+    return pages;
+  }, [meta]);
+
+  // const pages = meta.pageCount;
 
   const items = useMemo(() => {
     let arr: any[] = [];
@@ -445,7 +498,7 @@ console.log(locationKey, 'key-location')
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
-                placeholder="Search location"
+                placeholder="Select land cover"
                 defaultItems={landCoverOptions}
                 defaultSelectedKey="Secondary Forest"
                 variant="faded"
@@ -456,49 +509,34 @@ console.log(locationKey, 'key-location')
                 onInputChange={onInputLandCoverChange}
               >
                 {(item) => (
-                  <AutocompleteItem
-                    key={item.value}
-                  >
+                  <AutocompleteItem key={item.value}>
                     {item.label}
                   </AutocompleteItem>
                 )}
               </Autocomplete>
             </div>
 
-            {/* <div className="flex w-full max-w-xs flex-col gap-2">
-              <Select
-                labelPlacement="outside"
+            <div className="w-full max-w-xs flex flex-col gap-2">
+              <Autocomplete
                 radius="full"
-                selectionMode="multiple"
-                placeholder="Select an column"
-                selectedKeys={visibleColumns}
-                onSelectionChange={setVisibleColumns}
-                disallowEmptySelection
-                aria-label="Table Columns"
+                labelPlacement="outside"
+                placeholder="Select periode"
+                defaultItems={periodeOptions}
+                defaultSelectedKey="Yearly"
                 variant="faded"
                 color="primary"
-                className="w-full rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                listboxProps={{
-                  itemClasses: {
-                    base: [
-                      "data-[hover=true]:text-white",
-                      "data-[selectable=true]:focus:text-white",
-                      "transition-opacity",
-                      "data-[hover=true]:bg-primary",
-                      "data-[selectable=true]:focus:bg-primary",
-                      "data-[pressed=true]:opacity-70",
-                      "data-[focus-visible=true]:ring-primary",
-                    ],
-                  },
-                }}
+                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                allowsCustomValue={true}
+                onSelectionChange={onSelectionPeriodeChange}
+                onInputChange={onInputPeriodeChange}
               >
-                {columns.map((col) => (
-                  <SelectItem key={col.uid} value={col.uid}>
-                    {col.name}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div> */}
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+            </div>
           </div>
         </div>
       </div>
@@ -513,7 +551,7 @@ console.log(locationKey, 'key-location')
     landCoverFilter,
     landCoverOptions,
     onSelectionLandCoverChange,
-    onInputLandCoverChange
+    onInputLandCoverChange,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -581,14 +619,6 @@ console.log(locationKey, 'key-location')
       Array.from(selectedKeys).includes(column.id.toString())
     );
   }, [selectedKeys]);
-
-  // console.log({ selectedKeys, getSelect }, "filter-selection");
-  // console.log({ page, rowsPerPage, pages, items }, "pagination");
-  // console.log({ sortedItems, headerColumns }, "final-data");
-
-  // console.log(params, "params");
-
-  // console.log({ page, limit, pages }, "paginate");
 
   return (
     <Table

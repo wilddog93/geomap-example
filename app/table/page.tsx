@@ -56,7 +56,6 @@ export default function TablePage(props: any) {
   const handleChange = (key: Key) => {
     setSelected(key as any);
     setPage(1);
-    setLimit(5);
   };
 
   const [location, setLocation] = useState<string>("");
