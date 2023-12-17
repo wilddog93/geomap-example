@@ -6,6 +6,7 @@ import { SearchIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
 import CarbonTables from "@/components/tables/carbon-tables";
 import FluxTables from "@/components/tables/flux-tables";
+import WeatherTables from "@/components/tables/weather-tables";
 import { SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
@@ -22,7 +23,7 @@ import { MdPlace } from "react-icons/md";
 
 const itemTabs = [
   {
-    id: "ghg-flux",
+    id: "ghg",
     label: "GHG Flux",
     value: "ghg-flux",
   },
@@ -47,7 +48,7 @@ export default function TablePage(props: any) {
   // data-location
   const { fetch, data, meta, fetching } = useLocationApi();
 
-  const [selected, setSelected] = useState("ghg-flux");
+  const [selected, setSelected] = useState("ghg");
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [search, setSearch] = useState<string | any>("");
@@ -186,7 +187,7 @@ export default function TablePage(props: any) {
 
           <div
             className={`w-full mt-5 p-4 ${
-              selected == "ghg-flux" ? "" : "hidden"
+              selected == "ghg" ? "" : "hidden"
             }`}
           >
             <FluxTables
@@ -202,7 +203,7 @@ export default function TablePage(props: any) {
             />
           </div>
 
-          <div className={`w-full p-4 ${selected == "carbon" ? "" : "hidden"}`}>
+          <div className={`w-full mt-5 p-4 ${selected == "carbon" ? "" : "hidden"}`}>
             <CarbonTables
               params={props?.searchParams}
               page={page}
@@ -211,6 +212,36 @@ export default function TablePage(props: any) {
               setLimit={setLimit}
               filterValue={search}
               setFilterValue={setSearch}
+              landCoverOptions={optionsSelect.landCover}
+              locationKey={selectedKey}
+            />
+          </div>
+
+          <div className={`w-full mt-5 p-4 ${selected == "weather" ? "" : "hidden"}`}>
+            <WeatherTables
+              params={props?.searchParams}
+              page={page}
+              setPage={setPage}
+              limit={limit}
+              setLimit={setLimit}
+              filterValue={search}
+              setFilterValue={setSearch}
+              landCoverOptions={optionsSelect.landCover}
+              locationKey={selectedKey}
+            />
+          </div>
+
+          <div className={`w-full mt-5 p-4 ${selected == "soil" ? "" : "hidden"}`}>
+            <WeatherTables
+              params={props?.searchParams}
+              page={page}
+              setPage={setPage}
+              limit={limit}
+              setLimit={setLimit}
+              filterValue={search}
+              setFilterValue={setSearch}
+              landCoverOptions={optionsSelect.landCover}
+              locationKey={selectedKey}
             />
           </div>
         </div>

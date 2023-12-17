@@ -127,7 +127,7 @@ type TableProps = {
   locationKey?: Key | null;
 };
 
-export default function CarbonTables({
+export default function SoilTables({
   params,
   page,
   setPage,
