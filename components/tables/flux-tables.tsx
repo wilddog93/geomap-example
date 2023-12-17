@@ -180,12 +180,12 @@ export default function FluxTables({
     const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
-    if (periodeKey == "Yearly") {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
-    } else if (periodeKey == "Monthly") {
+    if (periodeKey == "Monthly") {
       start = format(startOfMonth(currentDate), "yyyy-MM-dd");
       end = format(endOfMonth(currentDate), "yyyy-MM-dd");
+    } else {
+      start = format(startOfYear(currentDate), "yyyy-MM-dd");
+      end = format(endOfYear(currentDate), "yyyy-MM-dd");
     }
 
     // console.log({start, end}, "periode")
