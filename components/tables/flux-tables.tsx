@@ -44,7 +44,7 @@ import { Pagination } from "@nextui-org/pagination";
 
 import { Button } from "@nextui-org/button";
 
-import { MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
+import { MdCalendarMonth, MdCalendarToday, MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
@@ -529,6 +529,7 @@ export default function FluxTables({
                 allowsCustomValue={true}
                 onSelectionChange={onSelectionPeriodeChange}
                 onInputChange={onInputPeriodeChange}
+                startContent={<MdCalendarToday className="w-5 h-5" />}
               >
                 {(item) => (
                   <AutocompleteItem key={item.value}>
