@@ -47,6 +47,8 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
   );
   const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
 
+  // console.log(data, 'data-component')
+
   const handleSelectionChangePeriode = (e: ChangeEvent<HTMLSelectElement>) => {
     setIsSelected(e.target.value);
   };
@@ -173,11 +175,11 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
     ],
   };
 
-  console.log("year get by month:", getYearly(new Date(), 1));
-  console.log(
-    "monthly by week:",
-    `${subWeeks(new Date(), 2)} to ${new Date()}`
-  );
+  // console.log("year get by month:", getYearly(new Date(), 1));
+  // console.log(
+  //   "monthly by week:",
+  //   `${subWeeks(new Date(), 2)} to ${new Date()}`
+  // );
 
   return (
     <Fragment>
@@ -191,7 +193,7 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
             }`}
           >
             <div className="w-full flex flex-col gap-3">
-              <h3 className="font-bold text-xl">{data?.locationName || ""}</h3>
+              <h3 className="font-bold text-xl">{data?.location || ""}</h3>
               <ul className="list-disc text-sm">
                 {data?.description || data?.description?.length > 0
                   ? data?.description?.map((desc: any) => {

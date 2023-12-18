@@ -163,7 +163,7 @@ const MapComponent = ({
     let iconSrc = "";
     // Tentukan ikon berdasarkan kategori
     switch (category) {
-      case "GHG Fluxes  ":
+      case "GHG Fluxes":
         iconSrc = "/icons/forest.png";
         break;
       case "Carbon Stock":
