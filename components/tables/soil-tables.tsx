@@ -66,6 +66,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
+import useSoilsApi, { SoilsType } from "@/api/soils.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -93,12 +94,10 @@ const columns: ColumnProps[] = [
   { name: "PLOT", uid: "plot", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "TYPE", uid: "type", sortable: true },
-  { name: "AIR TEMPERATURE", uid: "airTemperature" },
-  { name: "SOIL TEMPERATURE", uid: "soilTemperature" },
-  { name: "SOIL MOISTURE", uid: "soilMoisture" },
-  { name: "WATER TABLE", uid: "waterTable" },
-  { name: "CH4", uid: "ch4" },
-  { name: "CO2", uid: "co2" },
+  { name: "SAMPLE CODE", uid: "sampleCode", sortable: true },
+  { name: "GRAVIMETRIC WATER CONTENT", uid: "gravimetricWaterContent" },
+  { name: "BULK DENSITY", uid: "bulkDensity" },
+  { name: "VOLUMETRIC WATER CONTENT", uid: "volumetricWaterContent" },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -107,12 +106,10 @@ const INITIAL_VISIBLE_COLUMNS = [
   "plot",
   "landCover",
   "type",
-  "airTemprature",
-  "soilTemperature",
-  "soilMoisture",
-  "waterTable",
-  "ch4",
-  "co2",
+  "sampleCode",
+  "gravimetricWaterContent",
+  "bulkDensity",
+  "volumetricWaterContent",
 ];
 
 type TableProps = {
@@ -140,8 +137,8 @@ export default function SoilTables({
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
-  const { fetch, data, meta, fetching } = useGHGFluxApi();
-  const [dataTables, setdataTables] = useState<GhgFluxTypes[]>([]);
+  const { fetch, data, meta, fetching } = useSoilsApi();
+  const [dataTables, setdataTables] = useState<SoilsType[] | any[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -267,6 +264,7 @@ export default function SoilTables({
             { landCover: { $contL: getQuery?.search } },
             { plot: { $contL: getQuery?.search } },
             { location: { $contL: getQuery?.search } },
+            { "values.sampleCode": { $contL: getQuery?.search } },
           ],
         },
       ],
@@ -301,12 +299,12 @@ export default function SoilTables({
   // query-params end
 
   // get-data
-  const getGHGFlux = async (params: any) => {
+  const getSoilData = async (params: any) => {
     await fetch({ params: params?.queryObject });
   };
   useEffect(() => {
     if (filterParams) {
-      getGHGFlux(filterParams);
+      getSoilData(filterParams);
     }
   }, [filterParams]);
   // end get-data
@@ -335,6 +333,10 @@ export default function SoilTables({
       arr.push({
         ...item,
         no: 1 + i,
+        sampleCode: item.values.sampleCode,
+        gravimetricWaterContent: item.values.gravimetricWaterContent,
+        bulkDensity: item.values.bulkDensity,
+        volumetricWaterContent: item.values.volumetricWaterContent
       });
     });
 
@@ -351,8 +353,10 @@ export default function SoilTables({
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((item: GhgFluxTypes, columnKey: Key) => {
-    const cellValue = item[columnKey as keyof GhgFluxTypes];
+  console.log(sortedItems, 'sortedItems')
+
+  const renderCell = useCallback((item: SoilsType, columnKey: Key) => {
+    const cellValue = item[columnKey as keyof SoilsType];
 
     switch (columnKey) {
       case "id":
@@ -385,37 +389,25 @@ export default function SoilTables({
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "airTemprature":
+      case "sampleCode":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "soilTemprature":
+      case "gravimetricWaterContent":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "soilMoisture":
+      case "bulkDensity":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "waterTable":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-          </div>
-        );
-      case "ch4":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-          </div>
-        );
-      case "co2":
+      case "volumetricWaterContent":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
@@ -657,6 +649,7 @@ export default function SoilTables({
       bottomContentPlacement="outside"
       classNames={{
         wrapper: "max-h-[382px]",
+        base: "overflow-x-auto overflow-y-hidden py-5"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

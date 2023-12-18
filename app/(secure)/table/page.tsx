@@ -6,6 +6,7 @@ import { SearchIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
 import CarbonTables from "@/components/tables/carbon-tables";
 import FluxTables from "@/components/tables/flux-tables";
+import SoilTables from "@/components/tables/soil-tables";
 import WeatherTables from "@/components/tables/weather-tables";
 import { SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
@@ -232,7 +233,7 @@ export default function TablePage(props: any) {
           </div>
 
           <div className={`w-full mt-5 p-4 ${selected == "soil" ? "" : "hidden"}`}>
-            <WeatherTables
+            <SoilTables
               params={props?.searchParams}
               page={page}
               setPage={setPage}

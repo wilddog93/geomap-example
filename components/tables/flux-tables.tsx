@@ -658,6 +658,7 @@ export default function FluxTables({
       bottomContentPlacement="outside"
       classNames={{
         wrapper: "max-h-[382px]",
+        base: "overflow-x-auto overflow-y-hidden py-5"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
