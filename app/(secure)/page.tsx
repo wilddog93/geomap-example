@@ -18,10 +18,16 @@ import Footer from "@/components/footer";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import useLocationApi from "@/api/location-properties.api";
 import { SelectTypes } from "@/utils/propTypes";
+import { useAuth } from "@/stores/auth";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState(true);
   const [items, setItems] = useState<any>(null);
+
+  const auth = useAuth();
+
+  console.log(auth.isAuth, "auth");
 
   const sideFunction = () => {
     setSidebar((state) => !state);
@@ -78,6 +84,13 @@ export default function Home() {
 
   console.log(items, "items");
 
+  const isLogin = true
+
+  if (!isLogin) {
+    // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
+    redirect(`/login`);
+  }
+
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
       <Navbar />
@@ -95,18 +108,16 @@ export default function Home() {
             >
               <MdClose className="w-4 h-4" />
             </button>
-            <MapComponent 
-              items={items} 
-              setItems={setItems} 
+            <MapComponent
+              items={items}
+              setItems={setItems}
               locationOptions={optionsSelect.location}
             />
           </ScrollShadow>
         </div>
 
         <div
-          className={`relative w-full p-4 shadow ${
-            sidebar ? "lg:w-1/2" : ""
-          }`}
+          className={`relative w-full p-4 shadow ${sidebar ? "lg:w-1/2" : ""}`}
         >
           <button
             type="button"
@@ -130,8 +141,12 @@ export default function Home() {
               <MdChevronLeft className="w-4 h-4" />
             )}
           </button>
-          
-            <ContentComponent data={items} sidebar={sidebar} landCoverOptions={optionsSelect.landCover} />
+
+          <ContentComponent
+            data={items}
+            sidebar={sidebar}
+            landCoverOptions={optionsSelect.landCover}
+          />
         </div>
       </section>
       <Footer />

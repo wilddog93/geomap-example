@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/stores/auth";
 import {
   Button,
   Card,
@@ -9,6 +10,7 @@ import {
   Input,
   ScrollShadow,
 } from "@nextui-org/react";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   MdArrowForward,
@@ -18,11 +20,28 @@ import {
 } from "react-icons/md";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isHidden, setIsHidden] = useState<boolean>(true);
+
+  const auth = useAuth();
+
+  console.log(auth, 'auth')
+  
+  const login = () => {
+    auth.setAuth(true)
+    router.push("/")
+  }
 
   const isFunctionHidden = () => {
     setIsHidden((t) => !t);
   };
+
+  const isLogin = true
+
+  if (isLogin) {
+    // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
+    redirect(`/`);
+  }
 
   return (
     <div className="relative overflow-hidden w-full h-screen lg:h-full flex items-center bg-white shadow-default">
@@ -118,6 +137,7 @@ export default function LoginPage() {
                     variant="solid"
                     color="primary"
                     className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
+                    onClick={login}
                   >
                     Login
                     <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-300 group-hover:translate-x-full -right-2">

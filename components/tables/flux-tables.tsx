@@ -631,6 +631,7 @@ export default function FluxTables({
   }, [
     selectedKeys,
     items.length,
+    setPage,
     page,
     pages,
     hasSearchFilter,
