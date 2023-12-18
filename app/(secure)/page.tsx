@@ -32,6 +32,12 @@ export default function Home() {
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [locationKey, setLocationKey] = useState<Key | null>("Mempawah");
   const [categoryKey, setCategoryKey] = useState<Key | null>("ghg fluxes");
+  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
+  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
+    "Secondary Forest"
+  );
+  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
 
   // function
   // location-search
@@ -50,6 +56,22 @@ export default function Home() {
 
   const onInputCategoryChange = (value: string) => {
     setCategoryFilter(value);
+  };
+
+  const onSelectionPeriodeChange = (key: Key) => {
+    setPeriodeKey(key);
+  };
+
+  const onInputPeriodeChange = (value: string) => {
+    setPeriodeFilter(value);
+  };
+
+  const onSelectionLandCoverChange = (key: Key) => {
+    setLandCoverKey(key);
+  };
+
+  const onInputLandCoverChange = (value: string) => {
+    setLandCoverFilter(value);
   };
   // filter-map-end
 
@@ -178,6 +200,12 @@ export default function Home() {
             data={items}
             sidebar={sidebar}
             landCoverOptions={optionsSelect.landCover}
+            landCoverKey={landCoverKey}
+            periodeKey={periodeKey}
+            onInputLandCoverChange={onInputLandCoverChange}
+            onSelectionPeriodeChange={onSelectionPeriodeChange}
+            onInputPeriodeChange={onInputPeriodeChange}
+            onSelectionLandCoverChange={onSelectionLandCoverChange}
           />
         </div>
       </section>

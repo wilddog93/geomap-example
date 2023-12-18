@@ -30,50 +30,30 @@ type Props = {
   sidebar?: boolean;
   data?: any[] | any;
   landCoverOptions?: SelectTypes[] | any[];
+  periodeKey: Key | null;
+  onSelectionPeriodeChange: (key: Key) => void;
+  onInputPeriodeChange: (value: string) => void;
+  landCoverKey: Key | null;
+  onSelectionLandCoverChange: (key: Key) => void;
+  onInputLandCoverChange: (value: string) => void;
 };
 
 const periodeOptions = [
-  { label: "Yearly", value: "yearly" },
-  { label: "Monthly", value: "montly" },
+  { label: "Yearly", value: "Yearly" },
+  { label: "Monthly", value: "Montly" },
 ];
 
-function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
-  const [isSelected, setIsSelected] = useState<string | any>("yearly");
-  const [value, setValue] = useState<string>("sublocation");
-  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
-  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
-
-  // console.log(data, 'data-component')
-
-  const handleSelectionChangePeriode = (e: ChangeEvent<HTMLSelectElement>) => {
-    setIsSelected(e.target.value);
-  };
-
-  const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setValue(e.target.value);
-  };
-
-  // function-dropdown
-  const onSelectionPeriodeChange = (key: Key) => {
-    setPeriodeKey(key);
-  };
-
-  const onInputPeriodeChange = (value: string) => {
-    setPeriodeFilter(value);
-  };
-
-  const onSelectionLandCoverChange = (key: Key) => {
-    setLandCoverKey(key);
-  };
-
-  const onInputLandCoverChange = (value: string) => {
-    setLandCoverFilter(value);
-  };
-  // end function dropdown key
+function ContentComponent({ 
+  sidebar, 
+  data, 
+  landCoverOptions,
+  periodeKey,
+  landCoverKey,
+  onInputPeriodeChange,
+  onSelectionPeriodeChange,
+  onInputLandCoverChange,
+  onSelectionLandCoverChange
+}: Props) {
 
   // filter periode
   const periodeFilterred = useMemo(() => {
@@ -214,7 +194,7 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
                   labelPlacement="outside"
                   placeholder="Select land cover"
                   defaultItems={landCoverOptions}
-                  defaultSelectedKey="Secondary Forest"
+                  defaultSelectedKey={landCoverKey as Key}
                   variant="faded"
                   color="primary"
                   className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -236,7 +216,7 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
                   labelPlacement="outside"
                   placeholder="Select periode"
                   defaultItems={periodeOptions}
-                  defaultSelectedKey="Yearly"
+                  defaultSelectedKey={periodeKey as Key}
                   variant="faded"
                   color="primary"
                   className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -291,7 +271,7 @@ function ContentComponent({ sidebar, data, landCoverOptions }: Props) {
               labelPlacement="outside"
               placeholder="Select land cover"
               defaultItems={landCoverOptions}
-              defaultSelectedKey="Secondary Forest"
+              defaultSelectedKey={landCoverKey as Key}
               variant="faded"
               color="primary"
               className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
