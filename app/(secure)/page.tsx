@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, Key, useEffect, useMemo, useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import {
   MdChevronLeft,
@@ -27,7 +27,31 @@ export default function Home() {
 
   const auth = useAuth();
 
-  console.log(auth.isAuth, "auth");
+  // filter-map
+  const [location, setLocation] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [locationKey, setLocationKey] = useState<Key | null>("Mempawah");
+  const [categoryKey, setCategoryKey] = useState<Key | null>("ghg fluxes");
+
+  // function
+  // location-search
+  const onSelectionLocationChange = (key: Key) => {
+    setLocationKey(key);
+  };
+
+  const onInputLocationChange = (value: string) => {
+    setLocation(value);
+  };
+
+  // select ghg
+  const onSelectionCategoryChange = (key: Key) => {
+    setCategoryKey(key);
+  };
+
+  const onInputCategoryChange = (value: string) => {
+    setCategoryFilter(value);
+  };
+  // filter-map-end
 
   const sideFunction = () => {
     setSidebar((state) => !state);
@@ -42,6 +66,8 @@ export default function Home() {
     const search = {
       $and: [],
     };
+
+    qb.setLimit(1000)
 
     qb.search(search);
     qb.sortBy({
@@ -112,6 +138,12 @@ export default function Home() {
               items={items}
               setItems={setItems}
               locationOptions={optionsSelect.location}
+              locationKey={locationKey}
+              onInputLocationChange={onInputLocationChange}
+              onSelectionLocationChange={onSelectionLocationChange}
+              categoryKey={categoryKey}
+              onInputCategoryChange={onInputCategoryChange}
+              onSelectionCategoryChange={onSelectionCategoryChange}
             />
           </ScrollShadow>
         </div>

@@ -1,0 +1,251 @@
+{
+    "mapData" : [
+        {
+            "id": 1,
+            "latitude": "00°22'05.67840000\"N",
+            "longitude": "109°07'07.18320000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Anjungan Dalam Village",
+            "location": "Mempawah",
+            "landCover": ["Oil Palm Plantation", "Secondary Forest"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Soil physical chemistry",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 2,
+            "latitude": "00°22'05.67840000\"N",
+            "longitude": "109°07'07.18320000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Anjungan Dalam Village",
+            "location": "Mempawah",
+            "landCover": ["Oil Palm Plantation", "Secondary Forest"],
+            "category": "Carbon Stock",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Soil physical chemistry",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 3,
+            "latitude": "00°22'05.67840000\"N",
+            "longitude": "109°07'07.18320000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Anjungan Dalam Village",
+            "location": "Mempawah",
+            "landCover": ["Oil Palm Plantation", "Secondary Forest"],
+            "category": "Soil physical chemistry",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Soil physical chemistry",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 4,
+            "latitude": "00°22'05.67840000\"N",
+            "longitude": "109°07'07.18320000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Anjungan Dalam Village",
+            "location": "Mempawah",
+            "landCover": ["Oil Palm Plantation", "Secondary Forest"],
+            "category": "Weather data",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Soil physical chemistry",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 5,
+            "latitude": "00°22'20.45640000\"N",
+            "longitude": "109°06'35.39880000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Antibar Village",
+            "location": "Mempawah",
+            "landCover": ["Shrubs"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock"
+            ]
+          },
+          {
+            "id": 6,
+            "latitude": "00°22'20.45640000\"N",
+            "longitude": "109°06'35.39880000\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Antibar Village",
+            "location": "Mempawah",
+            "landCover": ["Shrubs"],
+            "category": "Carbon Stock",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock"
+            ]
+          },
+          {
+            "id": 7,
+            "latitude": "00°16'17.35000106\"S",
+            "longitude": "109°26'03.11999747\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Limbung Village",
+            "location": "Kubu Raya",
+            "landCover": ["Mixed agriculture"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes"
+            ]
+          },
+          {
+            "id": 8,
+            "latitude": "00°16'17.35000106\"S",
+            "longitude": "109°26'03.11999747\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Rasau Jaya Village",
+            "location": "Kubu Raya",
+            "landCover": ["Drained Oil Palm Plantation", "Rewetted Oil Palm Plantation"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Soil physical chemistry"
+            ]
+          },
+          {
+            "id": 9,
+            "latitude": "00°16'17.35000106\"S",
+            "longitude": "109°26'03.11999747\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Rasau Jaya Village",
+            "location": "Kubu Raya",
+            "landCover": ["Drained Oil Palm Plantation", "Rewetted Oil Palm Plantation"],
+            "category": "Soil physical chemistry",
+            "description": [
+              "GHG Fluxes",
+              "Soil physical chemistry"
+            ]
+          },
+          {
+            "id": 10,
+            "latitude": "00°21'36.66944887\"S",
+            "longitude": "109°43'49.73697778\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Permata Village",
+            "location": "Kubu Raya",
+            "landCover": ["Secondary Forest"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Soil physical chemistry"
+            ]
+          },
+          {
+            "id": 11,
+            "latitude": "00°21'36.66944887\"S",
+            "longitude": "109°43'49.73697778\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Permata Village",
+            "location": "Kubu Raya",
+            "landCover": ["Secondary Forest"],
+            "category": "Soil physical chemistry",
+            "description": [
+              "GHG Fluxes",
+              "Soil physical chemistry"
+            ]
+          },
+          {
+            "id": 12,
+            "latitude": "00°01'59.65320000\"S",
+            "longitude": "116°33'00.63000000\"E",
+            "project": "Elevated Impacts Peatlands",
+            "villages": "Muara Siran Village",
+            "location": "Kutai Kertanegara",
+            "landCover": ["Secondary Forest", "Shrubs"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 13,
+            "latitude": "00°01'59.65320000\"S",
+            "longitude": "116°33'00.63000000\"E",
+            "project": "Elevated Impacts Peatlands",
+            "villages": "Muara Siran Village",
+            "location": "Kutai Kertanegara",
+            "landCover": ["Secondary Forest", "Shrubs"],
+            "category": "Carbon Stock",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 14,
+            "latitude": "00°01'59.65320000\"S",
+            "longitude": "116°33'00.63000000\"E",
+            "project": "Elevated Impacts Peatlands",
+            "villages": "Muara Siran Village",
+            "location": "Kutai Kertanegara",
+            "landCover": ["Secondary Forest", "Shrubs"],
+            "category": "Weather data",
+            "description": [
+              "GHG Fluxes",
+              "Carbon Stock",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 15,
+            "latitude": "01°43'57.09666412\"N",
+            "longitude": "118°00'06.13811387\"E",
+            "project": "Elevated Impacts Peatlands",
+            "villages": "Tabalar Muara Village",
+            "location": "Berau",
+            "landCover": ["Secondary Mangroves", "Restored Mangroves", "Fish pond"],
+            "category": "GHG Fluxes",
+            "description": [
+              "GHG Fluxes",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 16,
+            "latitude": "01°43'57.09666412\"N",
+            "longitude": "118°00'06.13811387\"E",
+            "project": "Elevated Impacts Peatlands",
+            "villages": "Tabalar Muara Village",
+            "location": "Berau",
+            "landCover": ["Secondary Mangroves", "Restored Mangroves", "Fish pond"],
+            "category": "Weather data",
+            "description": [
+              "GHG Fluxes",
+              "Weather data"
+            ]
+          },
+          {
+            "id": 17,
+            "latitude": "00°55'09.04188174\"N",
+            "longitude": "112°23'09.99041710\"E",
+            "project": "Bezos Earth Fund – Peatland Playbook",
+            "villages": "Kapuas Hulu",
+            "location": "Kapuas Hulu",
+            "landCover": ["Secondary Forest"],
+            "category": "Carbon Stock",
+            "description": [
+              "Carbon Stock"
+            ]
+          }
+    ]
+}
