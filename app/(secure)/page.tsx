@@ -199,6 +199,8 @@ export default function Home() {
           <ContentComponent
             data={items}
             sidebar={sidebar}
+            locationKey={locationKey}
+            categoryKey={categoryKey}
             landCoverOptions={optionsSelect.landCover}
             landCoverKey={landCoverKey}
             periodeKey={periodeKey}

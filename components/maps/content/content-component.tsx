@@ -1,6 +1,8 @@
+import useGHGFluxApi from "@/api/ghg-flux.api";
 import AreaCharts from "@/components/chart/AreaCharts";
 import { SelectTypes } from "@/utils/propTypes";
 import { getYearly } from "@/utils/useFunction";
+import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import { Input } from "@nextui-org/input";
 import {
   Accordion,
@@ -18,17 +20,14 @@ import {
   startOfYear,
   subWeeks,
 } from "date-fns";
-import React, { ChangeEvent, Fragment, Key, useMemo, useState } from "react";
+import React, { ChangeEvent, Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
-
-const dataSelectContent = [
-  { label: "Sublocation", value: "sublocation" },
-  { label: "Location", value: "location" },
-];
 
 type Props = {
   sidebar?: boolean;
   data?: any[] | any;
+  locationKey: Key | null;
+  categoryKey: Key | null;
   landCoverOptions?: SelectTypes[] | any[];
   periodeKey: Key | null;
   onSelectionPeriodeChange: (key: Key) => void;
@@ -40,26 +39,27 @@ type Props = {
 
 const periodeOptions = [
   { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Montly" },
+  { label: "Monthly", value: "Monthly" },
 ];
 
-function ContentComponent({ 
-  sidebar, 
-  data, 
+function ContentComponent({
+  sidebar,
+  data,
+  locationKey,
+  categoryKey,
   landCoverOptions,
   periodeKey,
   landCoverKey,
   onInputPeriodeChange,
   onSelectionPeriodeChange,
   onInputLandCoverChange,
-  onSelectionLandCoverChange
+  onSelectionLandCoverChange,
 }: Props) {
+  const GHGFlux = useGHGFluxApi();
 
   // filter periode
   const periodeFilterred = useMemo(() => {
     const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
@@ -70,11 +70,58 @@ function ContentComponent({
       end = format(endOfYear(currentDate), "yyyy-MM-dd");
     }
 
-    // console.log({start, end}, "periode")
-
     return { start, end };
   }, [periodeKey]);
   // filter perioded end
+
+  console.log(periodeKey, 'hasil')
+
+  const getQuery = useMemo(() => {
+    let location: string | any = "";
+    let landCover: string | any = "";
+
+    if(locationKey) location = locationKey as any;
+    if(landCoverKey) landCover = landCoverKey as any;
+
+    return { location, landCover }
+
+  }, [locationKey, landCoverKey])
+
+  const filterItems = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search = {
+      $and: [
+        {
+          date: {
+            $gte: periodeFilterred.start,
+            $lte: periodeFilterred.end,
+          },
+        },
+        { location: { $cont: getQuery.location } },
+        { landCover: { $cont: getQuery.landCover } },
+      ],
+    };
+    qb.search(search);
+    qb.sortBy({
+      field: `date`,
+      order: "DESC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery, periodeFilterred]);
+
+  const getGHGFluxAPI = async (params: any) => {
+    let newParams = {
+      ...params,
+      limit: 1000
+    }
+    await GHGFlux.fetch({ params: newParams });
+  };
+
+  useEffect(() => {
+    getGHGFluxAPI(filterItems?.queryObject)
+  }, [filterItems]);
 
   const options = {
     responsive: true,
