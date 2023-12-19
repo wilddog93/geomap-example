@@ -105,7 +105,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "id",
   "date",
   "location",
-  "temprature",
+  "temperature",
   "relativeHumidity",
   "solarRadiation",
   "windSpeed",
@@ -241,10 +241,10 @@ export default function WeatherTables({
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    // if (locationKey) query = { ...query, location: locationKey };
+    if (locationKey) query = { ...query, location: locationKey };
     // if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
-  }, [page, limit, filterValue]);
+  }, [page, limit, filterValue, locationKey]);
 
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
