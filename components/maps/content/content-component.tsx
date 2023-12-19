@@ -103,12 +103,6 @@ function ContentComponent({
 
     const search: any = {
       $and: [
-        {
-          date: {
-            $gte: periodeFilterred.start,
-            $lte: periodeFilterred.end,
-          },
-        },
         { location: { $cont: getQuery.location } },
         // { landCover: { $cont: getQuery.landCover } },
       ],
@@ -116,8 +110,15 @@ function ContentComponent({
 
     // if (getQuery.location && categoryKey !== "weather data")
     //   search.$and.push({ location: { $cont: getQuery.location } });
+    if(periodeKey) search?.$and?.push({
+      date: {
+        $gte: periodeFilterred.start,
+        $lte: periodeFilterred.end,
+      },
+    })
     if (getQuery.landCover && categoryKey !== "weather data")
-      search.$and.push({ landCover: { $cont: getQuery.landCover } });
+      search?.$and?.push({ landCover: { $cont: getQuery.landCover } });
+
 
     qb.search(search);
     qb.sortBy({
@@ -126,7 +127,7 @@ function ContentComponent({
     });
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, categoryKey]);
+  }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
 
   const getGHGFluxAPI = async (params: any) => {
     let newParams = {
@@ -155,8 +156,14 @@ function ContentComponent({
   useEffect(() => {
     getGHGFluxAPI(filterItems?.queryObject);
     getSoilsAPI(filterItems?.queryObject);
-    getWeatherAPI(filterItems?.queryObject);
   }, [filterItems]);
+
+  useEffect(() => {
+    if(!landCoverKey) {
+      getWeatherAPI(filterItems?.queryObject);
+    }
+  }, [landCoverKey, filterItems])
+  
 
   const options = {
     responsive: true,

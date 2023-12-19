@@ -130,8 +130,6 @@ export default function Home() {
     return { location, landCover };
   }, [data]);
 
-  console.log(items, "items");
-
   const isLogin = true
 
   if (!isLogin) {
