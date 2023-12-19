@@ -22,7 +22,7 @@ import { useAuth } from "@/stores/auth";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState<boolean>(true);
   const [items, setItems] = useState<any>(null);
 
   const auth = useAuth();
@@ -171,7 +171,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full h-full p-4 shadow ${sidebar ? "lg:w-1/2" : ""}`}
+          className={`relative w-full h-full p-6 lg:p-8 shadow ${sidebar ? "lg:w-1/2" : ""}`}
         >
           <button
             type="button"

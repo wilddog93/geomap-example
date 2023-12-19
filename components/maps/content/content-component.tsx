@@ -302,37 +302,39 @@ function ContentComponent({
             </div>
           </div>
 
-          {categoryKey == "ghg fluxes" ? (
-            <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
-          ) : categoryKey == "soil physical chemistry" ? (
-            <HeaderSoils items={Soils?.data} sidebar={sidebar} />
-          ) : (
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 1</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
+          <div className={`w-full ${!sidebar ? "lg:border-y-2 lg:border-default-300" : ""}`}>
+            {categoryKey == "ghg fluxes" ? (
+              <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
+            ) : categoryKey == "soil physical chemistry" ? (
+              <HeaderSoils items={Soils?.data} sidebar={sidebar} />
+            ) : (
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 1</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
 
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 2</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 2</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
 
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 3</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
-              </div>
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 3</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
 
-              <div className="w-full flex flex-col">
-                <p className="text-xs mb-2">Parameter 4</p>
-                <p className="font-bold text-lg">55.92</p>
-                <p className="text-xs">Condition/status</p>
+                <div className="w-full flex flex-col">
+                  <p className="text-xs mb-2">Parameter 4</p>
+                  <p className="font-bold text-lg">55.92</p>
+                  <p className="text-xs">Condition/status</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           <div
             className={`w-full items-center gap-1 grid grid-cols-1 my-5 ${
