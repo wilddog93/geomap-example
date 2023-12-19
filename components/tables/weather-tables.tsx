@@ -170,6 +170,13 @@ export default function WeatherTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
+  // date-format
+  const dateFormat = (date:any) => {
+    let _dt = format(new Date(date), "yyyy-MM-dd");
+    if(!date) return;
+    return _dt
+  } 
+
   // function dropdown
   const onSelectionLandCoverChange = (key: Key) => {
     setLandCoverKey(key);
@@ -249,23 +256,25 @@ export default function WeatherTables({
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search = {
+    const search:any = {
       $and: [
-        {
-          date: {
-            $gte: periodeFilterred.start,
-            $lte: periodeFilterred.end,
-          },
-        },
-        { location: { $cont: getQuery?.location } },
         // {
-        //   $or: [
-        //     { location: { $contL: getQuery?.search } },
-        //   ],
+        //   date: {
+        //     $gte: periodeFilterred.start,
+        //     $lte: periodeFilterred.end,
+        //   },
         // },
+        { location: { $cont: getQuery?.location } },
       ],
     };
 
+    if(periodeKey) 
+    search.$and.push({
+      date: {
+        $gte: periodeFilterred.start,
+        $lte: periodeFilterred.end,
+      },
+    })
     if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
     if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
 
@@ -283,7 +292,7 @@ export default function WeatherTables({
     }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, sortKey]);
+  }, [getQuery, periodeFilterred, sortKey, periodeKey]);
 
   useEffect(() => {
     router.replace(
@@ -352,55 +361,55 @@ export default function WeatherTables({
       case "id":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
           </div>
         );
       case "date":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue ? dateFormat(cellValue) : "-"}</p>
           </div>
         );
       case "temperature":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "relativeHumidity":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "solarRadiation":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "windSpeed":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "gustSpeed":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "windDirection":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
         case "rain":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "actions":

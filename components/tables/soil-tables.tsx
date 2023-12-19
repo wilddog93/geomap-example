@@ -169,6 +169,13 @@ export default function SoilTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
+  // date-format
+  const dateFormat = (date: any) => {
+    let _dt = format(new Date(date), "yyyy-MM-dd");
+    if (!date) return;
+    return _dt;
+  };
+
   // function dropdown
   const onSelectionLandCoverChange = (key: Key) => {
     setLandCoverKey(key);
@@ -176,7 +183,7 @@ export default function SoilTables({
 
   const onInputLandCoverChange = (value: string) => {
     setLandCoverFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionPeriodeChange = (key: Key) => {
@@ -185,7 +192,7 @@ export default function SoilTables({
 
   const onInputPeriodeChange = (value: string) => {
     setPeriodeFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionSortChange = (key: Key) => {
@@ -194,7 +201,7 @@ export default function SoilTables({
 
   const onInputSortChange = (value: string) => {
     setSortFilter(value);
-    setPage(1)
+    setPage(1);
   };
   // end function dropdown
 
@@ -248,14 +255,14 @@ export default function SoilTables({
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search = {
+    const search:any = {
       $and: [
-        {
-          date: {
-            $gte: periodeFilterred.start,
-            $lte: periodeFilterred.end,
-          },
-        },
+        // {
+        //   date: {
+        //     $gte: periodeFilterred.start,
+        //     $lte: periodeFilterred.end,
+        //   },
+        // },
         { location: { $cont: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
         {
@@ -270,6 +277,13 @@ export default function SoilTables({
       ],
     };
 
+    if (periodeKey)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
     if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
     if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
 
@@ -287,7 +301,7 @@ export default function SoilTables({
     }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, sortKey]);
+  }, [getQuery, periodeFilterred, sortKey, periodeKey]);
 
   useEffect(() => {
     router.replace(
@@ -336,7 +350,7 @@ export default function SoilTables({
         sampleCode: item.values.sampleCode,
         gravimetricWaterContent: item.values.gravimetricWaterContent,
         bulkDensity: item.values.bulkDensity,
-        volumetricWaterContent: item.values.volumetricWaterContent
+        volumetricWaterContent: item.values.volumetricWaterContent,
       });
     });
 
@@ -353,7 +367,7 @@ export default function SoilTables({
     });
   }, [sortDescriptor, items]);
 
-  console.log(sortedItems, 'sortedItems')
+  console.log(sortedItems, "sortedItems");
 
   const renderCell = useCallback((item: SoilsType, columnKey: Key) => {
     const cellValue = item[columnKey as keyof SoilsType];
@@ -362,55 +376,67 @@ export default function SoilTables({
       case "id":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "date":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue ? dateFormat(cellValue) : "-"}
+            </p>
           </div>
         );
       case "plot":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "landCover":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "type":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "sampleCode":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "gravimetricWaterContent":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "bulkDensity":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "volumetricWaterContent":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
       case "actions":
@@ -649,7 +675,7 @@ export default function SoilTables({
       bottomContentPlacement="outside"
       classNames={{
         wrapper: "max-h-[382px]",
-        base: "overflow-x-auto overflow-y-hidden py-5"
+        base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
