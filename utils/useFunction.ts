@@ -62,3 +62,44 @@ export const objectToQueryString = (obj:any) => {
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
     .join('&');
 }
+
+// money
+export type FormatMoneyProps = {
+  amount: number | string | any;
+  decimalCount?: number;
+  decimal?: string;
+  thousands?: string;
+};
+
+export const formatMoney = ({
+  amount,
+  decimalCount = 0,
+  decimal = ".",
+  thousands = ",",
+}: FormatMoneyProps) => {
+  try {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+    const negativeSign = amount < 0 ? "-" : "";
+
+    let i: any = parseInt(
+      (amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))
+    ).toString();
+    let j = i.length > 3 ? i.length % 3 : 0;
+
+    return (
+      negativeSign +
+      (j ? i.substr(0, j) + thousands : "") +
+      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) +
+      (decimalCount
+        ? decimal +
+          Math.abs(amount - i)
+            .toFixed(decimalCount)
+            .slice(2)
+        : "")
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};

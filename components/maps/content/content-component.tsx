@@ -20,8 +20,16 @@ import {
   startOfYear,
   subWeeks,
 } from "date-fns";
-import React, { ChangeEvent, Fragment, Key, useEffect, useMemo, useState } from "react";
+import React, {
+  ChangeEvent,
+  Fragment,
+  Key,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
+import HeaderGHGFlux from "./header/header-ghg-flux";
 
 type Props = {
   sidebar?: boolean;
@@ -74,18 +82,17 @@ function ContentComponent({
   }, [periodeKey]);
   // filter perioded end
 
-  console.log(periodeKey, 'hasil')
+  console.log(periodeKey, "hasil");
 
   const getQuery = useMemo(() => {
     let location: string | any = "";
     let landCover: string | any = "";
 
-    if(locationKey) location = locationKey as any;
-    if(landCoverKey) landCover = landCoverKey as any;
+    if (locationKey) location = locationKey as any;
+    if (landCoverKey) landCover = landCoverKey as any;
 
-    return { location, landCover }
-
-  }, [locationKey, landCoverKey])
+    return { location, landCover };
+  }, [locationKey, landCoverKey]);
 
   const filterItems = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -114,13 +121,13 @@ function ContentComponent({
   const getGHGFluxAPI = async (params: any) => {
     let newParams = {
       ...params,
-      limit: 1000
-    }
+      limit: 1000,
+    };
     await GHGFlux.fetch({ params: newParams });
   };
 
   useEffect(() => {
-    getGHGFluxAPI(filterItems?.queryObject)
+    getGHGFluxAPI(filterItems?.queryObject);
   }, [filterItems]);
 
   const options = {
@@ -282,31 +289,35 @@ function ContentComponent({
             </div>
           </div>
 
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="w-full flex flex-col">
-              <p className="text-xs mb-2">Parameter 1</p>
-              <p className="font-bold text-lg">55.92</p>
-              <p className="text-xs">Condition/status</p>
-            </div>
+          {categoryKey == "ghg fluxes" ? (
+            <HeaderGHGFlux items={GHGFlux?.data} />
+          ) : (
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="w-full flex flex-col">
+                <p className="text-xs mb-2">Parameter 1</p>
+                <p className="font-bold text-lg">55.92</p>
+                <p className="text-xs">Condition/status</p>
+              </div>
 
-            <div className="w-full flex flex-col">
-              <p className="text-xs mb-2">Parameter 2</p>
-              <p className="font-bold text-lg">55.92</p>
-              <p className="text-xs">Condition/status</p>
-            </div>
+              <div className="w-full flex flex-col">
+                <p className="text-xs mb-2">Parameter 2</p>
+                <p className="font-bold text-lg">55.92</p>
+                <p className="text-xs">Condition/status</p>
+              </div>
 
-            <div className="w-full flex flex-col">
-              <p className="text-xs mb-2">Parameter 3</p>
-              <p className="font-bold text-lg">55.92</p>
-              <p className="text-xs">Condition/status</p>
-            </div>
+              <div className="w-full flex flex-col">
+                <p className="text-xs mb-2">Parameter 3</p>
+                <p className="font-bold text-lg">55.92</p>
+                <p className="text-xs">Condition/status</p>
+              </div>
 
-            <div className="w-full flex flex-col">
-              <p className="text-xs mb-2">Parameter 4</p>
-              <p className="font-bold text-lg">55.92</p>
-              <p className="text-xs">Condition/status</p>
+              <div className="w-full flex flex-col">
+                <p className="text-xs mb-2">Parameter 4</p>
+                <p className="font-bold text-lg">55.92</p>
+                <p className="text-xs">Condition/status</p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div
             className={`w-full items-center gap-1 grid grid-cols-1 my-5 ${
