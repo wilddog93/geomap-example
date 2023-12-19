@@ -3,7 +3,7 @@ import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
 interface GHGFluxProps {
-  items: GHGFlux[] | any[];
+  items: GHGFlux[];
   sidebar?: boolean;
 };
 
@@ -16,27 +16,27 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
     let ch4: number = 0;
     let co2: number = 0;
     if(items?.length > 0) {
-      airTemperature = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      airTemperature = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.airTemperature;
       }, 0);
   
-      soilTemperature = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      soilTemperature = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.soilTemperature;
       }, 0);
   
-      soilMoisture = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      soilMoisture = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.soilMoisture;
       }, 0);
   
-      waterTable = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      waterTable = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.waterTable;
       }, 0);
   
-      ch4 = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      ch4 = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.ch4;
       }, 0);
   
-      co2 = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      co2 = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.co2;
       }, 0);
     }

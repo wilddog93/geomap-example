@@ -4,7 +4,7 @@ import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
 interface SoilsProps {
-  items: SoilsType[] | any[];
+  items: SoilsType[];
   sidebar?: boolean;
 };
 
@@ -18,15 +18,15 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
     let volumetricWaterContent: number = 0;
    
     if(items?.length > 0) {
-      gravimetricWaterContent = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      gravimetricWaterContent = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.values?.gravimetricWaterContent;
       }, 0);
   
-      bulkDensity = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      bulkDensity = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.values?.bulkDensity;
       }, 0);
   
-      volumetricWaterContent = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+      volumetricWaterContent = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
         return previousValue + currentValue?.values?.volumetricWaterContent;
       }, 0);
     }
