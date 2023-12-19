@@ -55,7 +55,7 @@ import {
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
-import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
+import { ColumnProps, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
   subMonths,
@@ -66,6 +66,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
+import useWeatherApi, { WeatherTypes } from "@/api/weather.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -82,37 +83,35 @@ const sortOptions: SelectTypes[] = [
   { label: "ID", value: "id" },
   { label: "DATE", value: "date" },
   { label: "PLOT", value: "plot" },
-  { label: "LAND COVER", value: "landCover" },
-  { label: "TYPE", value: "type" },
+  // { label: "LAND COVER", value: "landCover" },
+  // { label: "TYPE", value: "type" },
 ];
 
 const columns: ColumnProps[] = [
   { name: "NO", uid: "no", sortable: true },
   { name: "ID", uid: "id", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
-  { name: "PLOT", uid: "plot", sortable: true },
-  { name: "LAND COVER", uid: "landCover", sortable: true },
-  { name: "TYPE", uid: "type", sortable: true },
-  { name: "AIR TEMPERATURE", uid: "airTemperature" },
-  { name: "SOIL TEMPERATURE", uid: "soilTemperature" },
-  { name: "SOIL MOISTURE", uid: "soilMoisture" },
-  { name: "WATER TABLE", uid: "waterTable" },
-  { name: "CH4", uid: "ch4" },
-  { name: "CO2", uid: "co2" },
+  // { name: "TYPE", uid: "type", sortable: true },
+  { name: "TEMPERATURE", uid: "temperature" },
+  { name: "RELATIVE HUMIDITY", uid: "relativeHumidity" },
+  { name: "SOLAR RADIATION", uid: "solarRadiation" },
+  { name: "WIND SPEED", uid: "windSpeed" },
+  { name: "GUST SPEED", uid: "gustSpeed" },
+  { name: "WIND DIRECTION", uid: "windDirection" },
+  { name: "RAIN", uid: "rain" },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
   "date",
-  "plot",
-  "landCover",
-  "type",
-  "airTemprature",
-  "soilTemperature",
-  "soilMoisture",
-  "waterTable",
-  "ch4",
-  "co2",
+  // "type",
+  "temprature",
+  "relativeHumidity",
+  "solarRadiation",
+  "windSpeed",
+  "gustSpeed",
+  "windDirection",
+  "rain",
 ];
 
 type TableProps = {
@@ -140,8 +139,7 @@ export default function WeatherTables({
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
-  const { fetch, data, meta, fetching } = useGHGFluxApi();
-  const [dataTables, setdataTables] = useState<GhgFluxTypes[]>([]);
+  const { fetch, data, meta, fetching } = useWeatherApi();
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -243,10 +241,10 @@ export default function WeatherTables({
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    if (locationKey) query = { ...query, location: locationKey };
-    if (landCoverKey) query = { ...query, landCover: landCoverKey };
+    // if (locationKey) query = { ...query, location: locationKey };
+    // if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
-  }, [page, limit, filterValue, locationKey, landCoverKey]);
+  }, [page, limit, filterValue]);
 
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -259,16 +257,16 @@ export default function WeatherTables({
             $lte: periodeFilterred.end,
           },
         },
-        { location: { $cont: getQuery?.location } },
-        { landCover: { $cont: getQuery?.landCover } },
-        {
-          $or: [
-            { type: { $contL: getQuery?.search } },
-            { landCover: { $contL: getQuery?.search } },
-            { plot: { $contL: getQuery?.search } },
-            { location: { $contL: getQuery?.search } },
-          ],
-        },
+        // { location: { $cont: getQuery?.location } },
+        // { landCover: { $cont: getQuery?.landCover } },
+        // {
+        //   $or: [
+        //     { type: { $contL: getQuery?.search } },
+        //     { landCover: { $contL: getQuery?.search } },
+        //     { plot: { $contL: getQuery?.search } },
+        //     { location: { $contL: getQuery?.search } },
+        //   ],
+        // },
       ],
     };
 
@@ -301,12 +299,12 @@ export default function WeatherTables({
   // query-params end
 
   // get-data
-  const getGHGFlux = async (params: any) => {
+  const getWeatherData = async (params: any) => {
     await fetch({ params: params?.queryObject });
   };
   useEffect(() => {
     if (filterParams) {
-      getGHGFlux(filterParams);
+      getWeatherData(filterParams);
     }
   }, [filterParams]);
   // end get-data
@@ -342,17 +340,17 @@ export default function WeatherTables({
   }, [data]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: GhgFluxTypes, b: GhgFluxTypes) => {
-      const first = a[sortDescriptor.column as keyof GhgFluxTypes] as number;
-      const second = b[sortDescriptor.column as keyof GhgFluxTypes] as number;
+    return [...items].sort((a: WeatherTypes, b: WeatherTypes) => {
+      const first = a[sortDescriptor.column as keyof WeatherTypes] as number;
+      const second = b[sortDescriptor.column as keyof WeatherTypes] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((item: GhgFluxTypes, columnKey: Key) => {
-    const cellValue = item[columnKey as keyof GhgFluxTypes];
+  const renderCell = useCallback((item: WeatherTypes, columnKey: Key) => {
+    const cellValue = item[columnKey as keyof WeatherTypes];
 
     switch (columnKey) {
       case "id":
@@ -367,55 +365,43 @@ export default function WeatherTables({
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "plot":
+      case "temperature":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "landCover":
+      case "relativeHumidity":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "type":
+      case "solarRadiation":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "airTemprature":
+      case "windSpeed":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "soilTemprature":
+      case "gustSpeed":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "soilMoisture":
+      case "windDirection":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
-      case "waterTable":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-          </div>
-        );
-      case "ch4":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-          </div>
-        );
-      case "co2":
+        case "rain":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
@@ -496,7 +482,7 @@ export default function WeatherTables({
             className="w-full sm:max-w-[44%] rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           />
           <div className="flex flex-col lg:flex-row gap-3">
-            <div className="flex w-full max-w-[12rem] flex-col gap-2">
+            {/* <div className="flex w-full max-w-[12rem] flex-col gap-2">
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
@@ -516,7 +502,7 @@ export default function WeatherTables({
                   </AutocompleteItem>
                 )}
               </Autocomplete>
-            </div>
+            </div> */}
 
             <div className="w-full max-w-[12rem] flex flex-col gap-2">
               <Autocomplete
