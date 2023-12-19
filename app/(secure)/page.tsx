@@ -171,7 +171,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full h-full p-6 lg:p-8 shadow ${sidebar ? "lg:w-1/2" : ""}`}
+          className={`relative w-full h-full px-6 lg:px-8 shadow ${sidebar ? "lg:w-1/2" : ""}`}
         >
           <button
             type="button"

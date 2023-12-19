@@ -203,8 +203,8 @@ const MapComponent = ({
         }),
       ],
       view: new View({
-        center: fromLonLat([109.4342, -0.271486]),
-        // center: [13164840.120333597, -191866.6366120975],
+        // center: fromLonLat([109.4342, -0.271486]),
+        center: [12663454.482782463, 75404.76996947813],
         zoom: 5,
         minZoom: 4,
         constrainOnlyCenter: true,
