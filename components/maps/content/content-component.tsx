@@ -30,6 +30,8 @@ import React, {
 } from "react";
 import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
 import HeaderGHGFlux from "./header/header-ghg-flux";
+import useSoilsApi from "@/api/soils.api";
+import HeaderSoils from "./header/header-soils";
 
 type Props = {
   sidebar?: boolean;
@@ -64,6 +66,7 @@ function ContentComponent({
   onSelectionLandCoverChange,
 }: Props) {
   const GHGFlux = useGHGFluxApi();
+  const Soils = useSoilsApi();
 
   // filter periode
   const periodeFilterred = useMemo(() => {
@@ -81,8 +84,6 @@ function ContentComponent({
     return { start, end };
   }, [periodeKey]);
   // filter perioded end
-
-  console.log(periodeKey, "hasil");
 
   const getQuery = useMemo(() => {
     let location: string | any = "";
@@ -109,6 +110,9 @@ function ContentComponent({
         { landCover: { $cont: getQuery.landCover } },
       ],
     };
+
+    if (getQuery.location)
+      search.$and.push({ location: { $cont: getQuery.location } });
     qb.search(search);
     qb.sortBy({
       field: `date`,
@@ -126,8 +130,17 @@ function ContentComponent({
     await GHGFlux.fetch({ params: newParams });
   };
 
+  const getSoilsAPI = async (params: any) => {
+    let newParams = {
+      ...params,
+      limit: 1000,
+    };
+    await Soils.fetch({ params: newParams });
+  };
+
   useEffect(() => {
     getGHGFluxAPI(filterItems?.queryObject);
+    getSoilsAPI(filterItems?.queryObject);
   }, [filterItems]);
 
   const options = {
@@ -217,7 +230,7 @@ function ContentComponent({
 
   return (
     <Fragment>
-      <div className="w-full flex flex-col gap-3 mt-5">
+      <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
         {/* accordion */}
         {/* <Accordion defaultExpandedKeys={["parameter-1"]}> */}
         <ScrollShadow hideScrollBar className="w-full h-full">
@@ -291,6 +304,8 @@ function ContentComponent({
 
           {categoryKey == "ghg fluxes" ? (
             <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
+          ) : categoryKey == "soil physical chemistry" ? (
+            <HeaderSoils items={Soils?.data} sidebar={sidebar} />
           ) : (
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="w-full flex flex-col">
