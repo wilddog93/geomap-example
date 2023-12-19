@@ -9,12 +9,12 @@ interface GHGFluxProps {
 
 export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
   const itemReduce = useMemo(() => {
-    let airTemperature: number = 0;
-    let soilTemperature: number = 0;
-    let soilMoisture: number = 0;
-    let waterTable: number = 0;
-    let ch4: number = 0;
-    let co2: number = 0;
+    let airTemperature: any = 0;
+    let soilTemperature: any = 0;
+    let soilMoisture: any = 0;
+    let waterTable: any = 0;
+    let ch4: any = 0;
+    let co2: any = 0;
     if(items?.length > 0) {
       airTemperature = items?.reduce((acc, obj) => {
         return acc + obj?.airTemperature;

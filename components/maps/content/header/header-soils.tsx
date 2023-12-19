@@ -8,11 +8,14 @@ interface SoilsProps {
   sidebar?: boolean;
 };
 
+export type MyUnionType = (callbackfn: (previousValue: any, currentValue: any) => any) => any;
+
+
 export default function HeaderSoils({ items, sidebar }: SoilsProps) {
   const itemReduce = useMemo(() => {
-    let gravimetricWaterContent: number = 0;
-    let bulkDensity: number = 0;
-    let volumetricWaterContent: number = 0;
+    let gravimetricWaterContent: any = 0;
+    let bulkDensity: any = 0;
+    let volumetricWaterContent: any = 0;
    
     if(items?.length > 0) {
       gravimetricWaterContent = items?.reduce((acc, obj) => {

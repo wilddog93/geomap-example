@@ -10,13 +10,13 @@ interface WeatherProps {
 
 export default function HeaderWeather({ items, sidebar }: WeatherProps) {
   const itemReduce = useMemo(() => {
-    let temperature: number = 0,
-      relativeHumidity: number = 0,
-      solarRadiation: number = 0,
-      windSpeed: number = 0,
-      gustSpeed: number = 0,
-      windDirection: number = 0,
-      rain: number = 0;
+    let temperature: any = 0,
+      relativeHumidity: any = 0,
+      solarRadiation: any = 0,
+      windSpeed: any = 0,
+      gustSpeed: any = 0,
+      windDirection: any = 0,
+      rain: any = 0;
     
       if(items?.length > 0) {
         temperature = items?.reduce((acc, obj) => {
