@@ -1,47 +1,72 @@
 import { GHGFlux } from "@/api/ghg-flux.api";
-import { SoilsType } from "@/api/soils.api";
+import { WeatherTypes } from "@/api/weather.api";
 import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
-interface SoilsProps {
-  items: SoilsType[] | any[];
+interface WeatherProps {
+  items: WeatherTypes[] | any[];
   sidebar?: boolean;
-};
+}
 
-export default function HeaderWeather({ items, sidebar }: SoilsProps) {
+export default function HeaderWeather({ items, sidebar }: WeatherProps) {
   const itemReduce = useMemo(() => {
-    let gravimetricWaterContent: number = 0;
-    let bulkDensity: number = 0;
-    let volumetricWaterContent: number = 0;
-    gravimetricWaterContent = items?.reduce((acc, obj) => {
-      return acc + obj?.values?.gravimetricWaterContent;
+    let temperature: number = 0,
+      relativeHumidity: number = 0,
+      solarRadiation: number = 0,
+      windSpeed: number = 0,
+      gustSpeed: number = 0,
+      windDirection: number = 0,
+      rain: number = 0;
+    temperature = items?.reduce((acc, obj) => {
+      return acc + obj?.temperature;
     }, 0);
 
-    bulkDensity = items?.reduce((acc, obj) => {
-      return acc + obj?.values?.bulkDensity;
+    relativeHumidity = items?.reduce((acc, obj) => {
+      return acc + obj?.relativeHumidity;
     }, 0);
 
-    volumetricWaterContent = items?.reduce((acc, obj) => {
-      return acc + obj?.values?.volumetricWaterContent;
+    solarRadiation = items?.reduce((acc, obj) => {
+      return acc + obj?.solarRadiation;
+    }, 0);
+
+    windSpeed = items?.reduce((acc, obj) => {
+      return acc + obj?.windSpeed;
+    }, 0);
+
+    gustSpeed = items?.reduce((acc, obj) => {
+      return acc + obj?.gustSpeed;
+    }, 0);
+
+    windDirection = items?.reduce((acc, obj) => {
+      return acc + obj?.windDirection;
+    }, 0);
+
+    rain = items?.reduce((acc, obj) => {
+      return acc + obj?.rain;
     }, 0);
 
     return {
-      gravimetricWaterContent,
-      bulkDensity,
-      volumetricWaterContent
+      temperature,
+      relativeHumidity,
+      solarRadiation,
+      windSpeed,
+      gustSpeed,
+      windDirection,
+      rain
     };
   }, [items]);
 
-
   return (
     <Fragment>
-      <div className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}>
+      <div
+        className={`w-full grid grid-cols-1 gap-4 py-3 ${sidebar ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2 lg:grid-cols-4"}`}
+      >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Air Temperature</p>
+          <p className="text-xs mb-2">Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.gravimetricWaterContent
+            {itemReduce?.temperature
               ? formatMoney({
-                  amount: itemReduce?.gravimetricWaterContent,
+                  amount: itemReduce?.temperature,
                   decimalCount: 2,
                 })
               : 0}
@@ -50,11 +75,11 @@ export default function HeaderWeather({ items, sidebar }: SoilsProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Temperature</p>
+          <p className="text-xs mb-2">Relative Humidity</p>
           <p className="font-bold text-lg">
-            {itemReduce?.bulkDensity
+            {itemReduce?.relativeHumidity
               ? formatMoney({
-                  amount: itemReduce?.bulkDensity,
+                  amount: itemReduce?.relativeHumidity,
                   decimalCount: 2,
                 })
               : 0}
@@ -63,11 +88,63 @@ export default function HeaderWeather({ items, sidebar }: SoilsProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Moisture</p>
+          <p className="text-xs mb-2">Solar Radiation</p>
           <p className="font-bold text-lg">
-            {itemReduce?.volumetricWaterContent
+            {itemReduce?.solarRadiation
               ? formatMoney({
-                  amount: itemReduce?.volumetricWaterContent,
+                  amount: itemReduce?.solarRadiation,
+                  decimalCount: 2,
+                })
+              : 0}
+          </p>
+          <p className="text-xs">Condition/status</p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Wind Speed</p>
+          <p className="font-bold text-lg">
+            {itemReduce?.windSpeed
+              ? formatMoney({
+                  amount: itemReduce?.windSpeed,
+                  decimalCount: 2,
+                })
+              : 0}
+          </p>
+          <p className="text-xs">Condition/status</p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Gust Speed</p>
+          <p className="font-bold text-lg">
+            {itemReduce?.gustSpeed
+              ? formatMoney({
+                  amount: itemReduce?.gustSpeed,
+                  decimalCount: 2,
+                })
+              : 0}
+          </p>
+          <p className="text-xs">Condition/status</p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Wind Direction</p>
+          <p className="font-bold text-lg">
+            {itemReduce?.windDirection
+              ? formatMoney({
+                  amount: itemReduce?.windDirection,
+                  decimalCount: 2,
+                })
+              : 0}
+          </p>
+          <p className="text-xs">Condition/status</p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Rain</p>
+          <p className="font-bold text-lg">
+            {itemReduce?.rain
+              ? formatMoney({
+                  amount: itemReduce?.rain,
                   decimalCount: 2,
                 })
               : 0}

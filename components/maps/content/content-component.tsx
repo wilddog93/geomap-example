@@ -159,10 +159,12 @@ function ContentComponent({
   }, [filterItems]);
 
   useEffect(() => {
-    if(!landCoverKey) {
+    if(categoryKey == "weather data") {
       getWeatherAPI(filterItems?.queryObject);
     }
-  }, [landCoverKey, filterItems])
+
+    // console.log(categoryKey, "categoryKey")
+  }, [landCoverKey, filterItems, categoryKey])
   
 
   const options = {
