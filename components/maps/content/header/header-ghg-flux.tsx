@@ -16,28 +16,28 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
     let ch4: number = 0;
     let co2: number = 0;
     if(items?.length > 0) {
-      airTemperature = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.airTemperature;
+      airTemperature = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.airTemperature;
       }, 0);
   
-      soilTemperature = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.soilTemperature;
+      soilTemperature = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.soilTemperature;
       }, 0);
   
-      soilMoisture = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.soilMoisture;
+      soilMoisture = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.soilMoisture;
       }, 0);
   
-      waterTable = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.waterTable;
+      waterTable = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.waterTable;
       }, 0);
   
-      ch4 = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.ch4;
+      ch4 = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.ch4;
       }, 0);
   
-      co2 = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.co2;
+      co2 = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.co2;
       }, 0);
     }
 

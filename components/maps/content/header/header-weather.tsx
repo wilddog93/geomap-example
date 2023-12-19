@@ -19,32 +19,32 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
       rain: number = 0;
     
       if(items?.length > 0) {
-        temperature = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.temperature;
+        temperature = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.temperature;
         }, 0);
     
-        relativeHumidity = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.relativeHumidity;
+        relativeHumidity = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.relativeHumidity;
         }, 0);
     
-        solarRadiation = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.solarRadiation;
+        solarRadiation = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.solarRadiation;
         }, 0);
     
-        windSpeed = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.windSpeed;
+        windSpeed = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.windSpeed;
         }, 0);
     
-        gustSpeed = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.gustSpeed;
+        gustSpeed = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.gustSpeed;
         }, 0);
     
-        windDirection = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.windDirection;
+        windDirection = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.windDirection;
         }, 0);
     
-        rain = items?.reduce((acc: number, obj: any) => {
-          return acc + obj?.rain;
+        rain = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+          return previousValue + currentValue?.rain;
         }, 0);
       }
 

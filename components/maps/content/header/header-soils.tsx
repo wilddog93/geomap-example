@@ -18,16 +18,16 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
     let volumetricWaterContent: number = 0;
    
     if(items?.length > 0) {
-      gravimetricWaterContent = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.values?.gravimetricWaterContent;
+      gravimetricWaterContent = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.values?.gravimetricWaterContent;
       }, 0);
   
-      bulkDensity = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.values?.bulkDensity;
+      bulkDensity = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.values?.bulkDensity;
       }, 0);
   
-      volumetricWaterContent = items?.reduce((acc: number, obj: any) => {
-        return acc + obj?.values?.volumetricWaterContent;
+      volumetricWaterContent = items?.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
+        return previousValue + currentValue?.values?.volumetricWaterContent;
       }, 0);
     }
 
