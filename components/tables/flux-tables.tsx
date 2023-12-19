@@ -107,7 +107,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "plot",
   "landCover",
   "type",
-  "airTemprature",
+  "airTemperature",
   "soilTemperature",
   "soilMoisture",
   "waterTable",

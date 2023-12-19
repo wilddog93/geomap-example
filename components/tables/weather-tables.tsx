@@ -91,7 +91,7 @@ const columns: ColumnProps[] = [
   { name: "NO", uid: "no", sortable: true },
   { name: "ID", uid: "id", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
-  // { name: "TYPE", uid: "type", sortable: true },
+  { name: "LOCATION", uid: "location", sortable: true },
   { name: "TEMPERATURE", uid: "temperature" },
   { name: "RELATIVE HUMIDITY", uid: "relativeHumidity" },
   { name: "SOLAR RADIATION", uid: "solarRadiation" },
@@ -104,7 +104,7 @@ const columns: ColumnProps[] = [
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
   "date",
-  // "type",
+  "location",
   "temprature",
   "relativeHumidity",
   "solarRadiation",
@@ -257,13 +257,9 @@ export default function WeatherTables({
             $lte: periodeFilterred.end,
           },
         },
-        // { location: { $cont: getQuery?.location } },
-        // { landCover: { $cont: getQuery?.landCover } },
+        { location: { $cont: getQuery?.location } },
         // {
         //   $or: [
-        //     { type: { $contL: getQuery?.search } },
-        //     { landCover: { $contL: getQuery?.search } },
-        //     { plot: { $contL: getQuery?.search } },
         //     { location: { $contL: getQuery?.search } },
         //   ],
         // },

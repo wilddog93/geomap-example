@@ -32,6 +32,8 @@ import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
 import HeaderGHGFlux from "./header/header-ghg-flux";
 import useSoilsApi from "@/api/soils.api";
 import HeaderSoils from "./header/header-soils";
+import useWeatherApi from "@/api/weather.api";
+import HeaderWeather from "./header/header-weather";
 
 type Props = {
   sidebar?: boolean;
@@ -67,6 +69,7 @@ function ContentComponent({
 }: Props) {
   const GHGFlux = useGHGFluxApi();
   const Soils = useSoilsApi();
+  const Weather = useWeatherApi();
 
   // filter periode
   const periodeFilterred = useMemo(() => {
@@ -98,7 +101,7 @@ function ContentComponent({
   const filterItems = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search = {
+    const search: any = {
       $and: [
         {
           date: {
@@ -107,12 +110,15 @@ function ContentComponent({
           },
         },
         { location: { $cont: getQuery.location } },
-        { landCover: { $cont: getQuery.landCover } },
+        // { landCover: { $cont: getQuery.landCover } },
       ],
     };
 
-    if (getQuery.location)
-      search.$and.push({ location: { $cont: getQuery.location } });
+    // if (getQuery.location && categoryKey !== "weather data")
+    //   search.$and.push({ location: { $cont: getQuery.location } });
+    if (getQuery.landCover && categoryKey !== "weather data")
+      search.$and.push({ landCover: { $cont: getQuery.landCover } });
+
     qb.search(search);
     qb.sortBy({
       field: `date`,
@@ -120,7 +126,7 @@ function ContentComponent({
     });
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred]);
+  }, [getQuery, periodeFilterred, categoryKey]);
 
   const getGHGFluxAPI = async (params: any) => {
     let newParams = {
@@ -138,9 +144,18 @@ function ContentComponent({
     await Soils.fetch({ params: newParams });
   };
 
+  const getWeatherAPI = async (params: any) => {
+    let newParams = {
+      ...params,
+      limit: 1000,
+    };
+    await Weather.fetch({ params: newParams });
+  };
+
   useEffect(() => {
     getGHGFluxAPI(filterItems?.queryObject);
     getSoilsAPI(filterItems?.queryObject);
+    getWeatherAPI(filterItems?.queryObject);
   }, [filterItems]);
 
   const options = {
@@ -302,11 +317,17 @@ function ContentComponent({
             </div>
           </div>
 
-          <div className={`w-full ${!sidebar ? "lg:border-y-2 lg:border-default-300" : ""}`}>
+          <div
+            className={`w-full ${
+              !sidebar ? "lg:border-y-2 lg:border-default-300" : ""
+            }`}
+          >
             {categoryKey == "ghg fluxes" ? (
               <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
             ) : categoryKey == "soil physical chemistry" ? (
               <HeaderSoils items={Soils?.data} sidebar={sidebar} />
+            ) : categoryKey == "weather data" ? (
+              <HeaderWeather items={Weather?.data} sidebar={sidebar} />
             ) : (
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="w-full flex flex-col">

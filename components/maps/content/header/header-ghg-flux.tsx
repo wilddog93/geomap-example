@@ -9,14 +9,14 @@ interface GHGFluxProps {
 
 export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
   const itemReduce = useMemo(() => {
-    let airTemprature: number = 0;
+    let airTemperature: number = 0;
     let soilTemperature: number = 0;
     let soilMoisture: number = 0;
     let waterTable: number = 0;
     let ch4: number = 0;
     let co2: number = 0;
-    airTemprature = items?.reduce((acc, obj) => {
-      return acc + obj?.airTemprature;
+    airTemperature = items?.reduce((acc, obj) => {
+      return acc + obj?.airTemperature;
     }, 0);
 
     soilTemperature = items?.reduce((acc, obj) => {
@@ -40,7 +40,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
     }, 0);
 
     return {
-      airTemprature,
+      airTemperature,
       soilTemperature,
       soilMoisture,
       waterTable,
@@ -56,9 +56,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Air Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.airTemprature
+            {itemReduce?.airTemperature
               ? formatMoney({
-                  amount: itemReduce?.airTemprature,
+                  amount: itemReduce?.airTemperature,
                   decimalCount: 2,
                 })
               : 0}
