@@ -40,8 +40,8 @@ const itemTabs = [
   },
   {
     id: "soil",
-    label: "Soil Psycochemical",
-    value: "soil-psycochemical",
+    label: "Soil Physical Chemistry",
+    value: "soil-physical-chemistry",
   },
 ];
 
