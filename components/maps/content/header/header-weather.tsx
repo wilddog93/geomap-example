@@ -17,33 +17,36 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
       gustSpeed: number = 0,
       windDirection: number = 0,
       rain: number = 0;
-    temperature = items?.reduce((acc, obj) => {
-      return acc + obj?.temperature;
-    }, 0);
-
-    relativeHumidity = items?.reduce((acc, obj) => {
-      return acc + obj?.relativeHumidity;
-    }, 0);
-
-    solarRadiation = items?.reduce((acc, obj) => {
-      return acc + obj?.solarRadiation;
-    }, 0);
-
-    windSpeed = items?.reduce((acc, obj) => {
-      return acc + obj?.windSpeed;
-    }, 0);
-
-    gustSpeed = items?.reduce((acc, obj) => {
-      return acc + obj?.gustSpeed;
-    }, 0);
-
-    windDirection = items?.reduce((acc, obj) => {
-      return acc + obj?.windDirection;
-    }, 0);
-
-    rain = items?.reduce((acc, obj) => {
-      return acc + obj?.rain;
-    }, 0);
+    
+      if(items?.length > 0) {
+        temperature = items?.reduce((acc, obj) => {
+          return acc + obj?.temperature;
+        }, 0);
+    
+        relativeHumidity = items?.reduce((acc, obj) => {
+          return acc + obj?.relativeHumidity;
+        }, 0);
+    
+        solarRadiation = items?.reduce((acc, obj) => {
+          return acc + obj?.solarRadiation;
+        }, 0);
+    
+        windSpeed = items?.reduce((acc, obj) => {
+          return acc + obj?.windSpeed;
+        }, 0);
+    
+        gustSpeed = items?.reduce((acc, obj) => {
+          return acc + obj?.gustSpeed;
+        }, 0);
+    
+        windDirection = items?.reduce((acc, obj) => {
+          return acc + obj?.windDirection;
+        }, 0);
+    
+        rain = items?.reduce((acc, obj) => {
+          return acc + obj?.rain;
+        }, 0);
+      }
 
     return {
       temperature,

@@ -15,29 +15,31 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
     let waterTable: number = 0;
     let ch4: number = 0;
     let co2: number = 0;
-    airTemperature = items?.reduce((acc, obj) => {
-      return acc + obj?.airTemperature;
-    }, 0);
-
-    soilTemperature = items?.reduce((acc, obj) => {
-      return acc + obj?.soilTemperature;
-    }, 0);
-
-    soilMoisture = items?.reduce((acc, obj) => {
-      return acc + obj?.soilMoisture;
-    }, 0);
-
-    waterTable = items?.reduce((acc, obj) => {
-      return acc + obj?.waterTable;
-    }, 0);
-
-    ch4 = items?.reduce((acc, obj) => {
-      return acc + obj?.ch4;
-    }, 0);
-
-    co2 = items?.reduce((acc, obj) => {
-      return acc + obj?.co2;
-    }, 0);
+    if(items?.length > 0) {
+      airTemperature = items?.reduce((acc, obj) => {
+        return acc + obj?.airTemperature;
+      }, 0);
+  
+      soilTemperature = items?.reduce((acc, obj) => {
+        return acc + obj?.soilTemperature;
+      }, 0);
+  
+      soilMoisture = items?.reduce((acc, obj) => {
+        return acc + obj?.soilMoisture;
+      }, 0);
+  
+      waterTable = items?.reduce((acc, obj) => {
+        return acc + obj?.waterTable;
+      }, 0);
+  
+      ch4 = items?.reduce((acc, obj) => {
+        return acc + obj?.ch4;
+      }, 0);
+  
+      co2 = items?.reduce((acc, obj) => {
+        return acc + obj?.co2;
+      }, 0);
+    }
 
     return {
       airTemperature,
