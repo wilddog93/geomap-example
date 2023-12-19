@@ -13,20 +13,20 @@ export type MyUnionType = (callbackfn: (previousValue: any, currentValue: any) =
 
 export default function HeaderSoils({ items, sidebar }: SoilsProps) {
   const itemReduce = useMemo(() => {
-    let gravimetricWaterContent: any = 0;
-    let bulkDensity: any = 0;
-    let volumetricWaterContent: any = 0;
+    let gravimetricWaterContent: number = 0;
+    let bulkDensity: number = 0;
+    let volumetricWaterContent: number = 0;
    
     if(items?.length > 0) {
-      gravimetricWaterContent = items?.reduce((acc, obj) => {
+      gravimetricWaterContent = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.values?.gravimetricWaterContent;
       }, 0);
   
-      bulkDensity = items?.reduce((acc, obj) => {
+      bulkDensity = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.values?.bulkDensity;
       }, 0);
   
-      volumetricWaterContent = items?.reduce((acc, obj) => {
+      volumetricWaterContent = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.values?.volumetricWaterContent;
       }, 0);
     }

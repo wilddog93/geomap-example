@@ -10,40 +10,40 @@ interface WeatherProps {
 
 export default function HeaderWeather({ items, sidebar }: WeatherProps) {
   const itemReduce = useMemo(() => {
-    let temperature: any = 0,
-      relativeHumidity: any = 0,
-      solarRadiation: any = 0,
-      windSpeed: any = 0,
-      gustSpeed: any = 0,
-      windDirection: any = 0,
-      rain: any = 0;
+    let temperature: number = 0,
+      relativeHumidity: number = 0,
+      solarRadiation: number = 0,
+      windSpeed: number = 0,
+      gustSpeed: number = 0,
+      windDirection: number = 0,
+      rain: number = 0;
     
       if(items?.length > 0) {
-        temperature = items?.reduce((acc, obj) => {
+        temperature = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.temperature;
         }, 0);
     
-        relativeHumidity = items?.reduce((acc, obj) => {
+        relativeHumidity = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.relativeHumidity;
         }, 0);
     
-        solarRadiation = items?.reduce((acc, obj) => {
+        solarRadiation = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.solarRadiation;
         }, 0);
     
-        windSpeed = items?.reduce((acc, obj) => {
+        windSpeed = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.windSpeed;
         }, 0);
     
-        gustSpeed = items?.reduce((acc, obj) => {
+        gustSpeed = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.gustSpeed;
         }, 0);
     
-        windDirection = items?.reduce((acc, obj) => {
+        windDirection = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.windDirection;
         }, 0);
     
-        rain = items?.reduce((acc, obj) => {
+        rain = items?.reduce((acc: number, obj: any) => {
           return acc + obj?.rain;
         }, 0);
       }

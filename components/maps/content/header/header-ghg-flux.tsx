@@ -9,34 +9,34 @@ interface GHGFluxProps {
 
 export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
   const itemReduce = useMemo(() => {
-    let airTemperature: any = 0;
-    let soilTemperature: any = 0;
-    let soilMoisture: any = 0;
-    let waterTable: any = 0;
-    let ch4: any = 0;
-    let co2: any = 0;
+    let airTemperature: number = 0;
+    let soilTemperature: number = 0;
+    let soilMoisture: number = 0;
+    let waterTable: number = 0;
+    let ch4: number = 0;
+    let co2: number = 0;
     if(items?.length > 0) {
-      airTemperature = items?.reduce((acc, obj) => {
+      airTemperature = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.airTemperature;
       }, 0);
   
-      soilTemperature = items?.reduce((acc, obj) => {
+      soilTemperature = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.soilTemperature;
       }, 0);
   
-      soilMoisture = items?.reduce((acc, obj) => {
+      soilMoisture = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.soilMoisture;
       }, 0);
   
-      waterTable = items?.reduce((acc, obj) => {
+      waterTable = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.waterTable;
       }, 0);
   
-      ch4 = items?.reduce((acc, obj) => {
+      ch4 = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.ch4;
       }, 0);
   
-      co2 = items?.reduce((acc, obj) => {
+      co2 = items?.reduce((acc: number, obj: any) => {
         return acc + obj?.co2;
       }, 0);
     }
