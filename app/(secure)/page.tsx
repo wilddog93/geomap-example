@@ -171,7 +171,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full p-4 shadow ${sidebar ? "lg:w-1/2" : ""}`}
+          className={`relative w-full h-full overflow-auto p-4 shadow ${sidebar ? "lg:w-1/2" : ""}`}
         >
           <button
             type="button"
@@ -179,7 +179,7 @@ export default function Home() {
               ${
                 !sidebar
                   ? "left-5 top-20 lg:top-5 rounded-r-lg"
-                  : "-left-[1.6rem] top-6 rounded-r-none"
+                  : "-left-[1.5rem] top-6 rounded-r-none"
               }
               `}
             onClick={sideFunction}

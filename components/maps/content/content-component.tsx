@@ -290,7 +290,7 @@ function ContentComponent({
           </div>
 
           {categoryKey == "ghg fluxes" ? (
-            <HeaderGHGFlux items={GHGFlux?.data} />
+            <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
           ) : (
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="w-full flex flex-col">
@@ -352,7 +352,7 @@ function ContentComponent({
                 aria-label="parameter-0"
                 title={
                   <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-bold">Data Group Name</h3>
+                    <h3 className="text-sm font-bold">Latest Record</h3>
                   </div>
                 }
                 indicator={<MdInfo className="w-3 h-4" />}

@@ -2,12 +2,12 @@ import { GHGFlux } from "@/api/ghg-flux.api";
 import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
-type GHGFluxProps = {
+interface GHGFluxProps {
   items: GHGFlux[] | any[];
+  sidebar?: boolean;
 };
 
-export default function HeaderGHGFlux({ items }: GHGFluxProps) {
-  console.log(items, "result");
+export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
   const itemReduce = useMemo(() => {
     let airTemprature: number = 0;
     let soilTemperature: number = 0;
@@ -49,11 +49,10 @@ export default function HeaderGHGFlux({ items }: GHGFluxProps) {
     };
   }, [items]);
 
-  console.log(itemReduce?.airTemprature, "value");
 
   return (
     <Fragment>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-3">
+      <div className={`w-full grid grid-cols-1 gap-4 py-3 ${sidebar ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-6"}`}>
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Air Temperature</p>
           <p className="font-bold text-lg">
