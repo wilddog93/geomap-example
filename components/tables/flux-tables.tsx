@@ -266,7 +266,7 @@ export default function FluxTables({
         //     $lte: periodeFilterred.end,
         //   },
         // },
-        { location: { $cont: getQuery?.location } },
+        { location: { $contL: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
         {
           $or: [
@@ -278,6 +278,13 @@ export default function FluxTables({
         },
       ],
     };
+
+    // if(getQuery.location) {
+    //   search.$and.push({
+    //     location: { $inL: [getQuery?.location] }
+    //   })
+    // }
+
     if (periodeKey)
       search?.$and?.push({
         date: {

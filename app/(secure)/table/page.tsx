@@ -1,5 +1,6 @@
 "use client";
 
+import usePropsApi from "@/api/landCover-properties.api";
 import useLocationApi, { LocationTypes } from "@/api/location-properties.api";
 import Footer from "@/components/footer";
 import { SearchIcon } from "@/components/icons";
@@ -47,7 +48,8 @@ const itemTabs = [
 
 export default function TablePage(props: any) {
   // data-location
-  const { fetch, data, meta, fetching } = useLocationApi();
+  const locationApi = useLocationApi();
+  const propertyApi = usePropsApi();
 
   const [selected, setSelected] = useState("ghg");
   const [page, setPage] = useState<number>(1);
@@ -61,21 +63,64 @@ export default function TablePage(props: any) {
   };
 
   const [location, setLocation] = useState<string>("");
-  const [selectedKey, setSelectedKey] = useState<React.Key | null>("Mempawah");
+  const [locationKey, setLocationKey] = useState<React.Key | null>("Mempawah");
 
-  const onSelectionChange = (key: React.Key) => {
-    setSelectedKey(key);
+  const onSelectionLocationChange = (key: React.Key) => {
+    setLocationKey(key);
   };
 
-  const onInputChange = (value: string) => {
-    setLocation(value);
+  const onInputLocaationChange = (value: string) => {
+    setLocationKey(value);
   };
 
   const filterLocation = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
     const search = {
-      $and: [],
+      $and: [
+        {location: { $contL: location }}
+      ],
+    };
+
+    qb.search(search);
+    qb.sortBy({
+      field: `location`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [location]);
+
+  const getLocations = async (params: any) => {
+    await locationApi.fetch({ params: params });
+  };
+
+  useEffect(() => {
+    if (filterLocation) getLocations(filterLocation.queryObject);
+  }, [filterLocation]);
+
+  const locationOptions = useMemo(() => {
+    const { data } = locationApi;
+    let location: SelectTypes[] | any[] = [];
+    if (data.length > 0) {
+      data.map(loc => {
+        location.push({
+          ...loc,
+          label: loc.location,
+          value: loc.location,
+        })
+      })
+    }
+    return location;
+  }, [locationApi?.data]);
+
+  const filterLandCover = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search = {
+      $and: [
+        {type: { $contL: "landcover" }}
+      ],
     };
 
     qb.search(search);
@@ -87,37 +132,31 @@ export default function TablePage(props: any) {
     return qb;
   }, []);
 
-  const getLocation = async (params: any) => {
-    await fetch({ params: params.queryObject });
+  const getLandCover = async (params: any) => {
+    await propertyApi.fetch({ params: params });
   };
 
   useEffect(() => {
-    if (filterLocation) getLocation(filterLocation);
-  }, [filterLocation]);
+    if (filterLandCover) getLandCover(filterLandCover.queryObject);
+  }, [filterLandCover]);
 
-  const optionsSelect = useMemo(() => {
+  const landCoverOptions = useMemo(() => {
+    const { data } = propertyApi;
     let location: SelectTypes[] | any[] = [];
     let landCover: SelectTypes[] | any[] = [];
-    if (data?.length > 0) {
-      location = data
-        ?.filter((e) => e.type == "location")
-        .map((x) => ({
-          ...x,
-          label: x.name,
-          value: x.name,
-        }));
-      landCover = data
-        ?.filter((e) => e.type == "landCover")
-        .map((x) => ({
-          ...x,
-          label: x.name,
-          value: x.name,
-        }));
+    if (data.length > 0) {
+      data.map(prop => {
+        landCover.push({
+          ...prop,
+          label: prop.name,
+          value: prop.name,
+        })
+      })
     }
-    return { location, landCover };
-  }, [data]);
+    return landCover;
+  }, [propertyApi?.data]);
 
-  console.log({location, selectedKey}, "data-selected");
+  console.log({location, locationKey, locationOptions}, "data-selected");
   return (
     <Fragment>
       <Navbar />
@@ -129,15 +168,15 @@ export default function TablePage(props: any) {
                 radius="full"
                 labelPlacement="outside"
                 placeholder="Search location"
-                defaultItems={optionsSelect.location}
+                defaultItems={locationOptions}
                 startContent={<SearchIcon className="text-xl" />}
                 defaultSelectedKey="Mempawah"
                 variant="faded"
                 color="primary"
                 className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
                 allowsCustomValue={false}
-                onSelectionChange={onSelectionChange}
-                onInputChange={onInputChange}
+                onSelectionChange={onSelectionLocationChange}
+                onInputChange={onInputLocaationChange}
               >
                 {(item) => (
                   <AutocompleteItem
@@ -199,8 +238,8 @@ export default function TablePage(props: any) {
               setLimit={setLimit}
               filterValue={search}
               setFilterValue={setSearch}
-              landCoverOptions={optionsSelect.landCover}
-              locationKey={selectedKey}
+              landCoverOptions={landCoverOptions}
+              locationKey={locationKey}
             />
           </div>
 
@@ -213,8 +252,8 @@ export default function TablePage(props: any) {
               setLimit={setLimit}
               filterValue={search}
               setFilterValue={setSearch}
-              landCoverOptions={optionsSelect.landCover}
-              locationKey={selectedKey}
+              landCoverOptions={landCoverOptions}
+              locationKey={locationKey}
             />
           </div>
 
@@ -227,8 +266,8 @@ export default function TablePage(props: any) {
               setLimit={setLimit}
               filterValue={search}
               setFilterValue={setSearch}
-              landCoverOptions={optionsSelect.landCover}
-              locationKey={selectedKey}
+              landCoverOptions={landCoverOptions}
+              locationKey={locationKey}
             />
           </div>
 
@@ -241,8 +280,8 @@ export default function TablePage(props: any) {
               setLimit={setLimit}
               filterValue={search}
               setFilterValue={setSearch}
-              landCoverOptions={optionsSelect.landCover}
-              locationKey={selectedKey}
+              landCoverOptions={landCoverOptions}
+              locationKey={locationKey}
             />
           </div>
         </div>

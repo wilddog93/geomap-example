@@ -4,23 +4,20 @@ import { useState } from "react";
 import Meta from "./meta.interface";
 import defaultMeta from "./utils";
 
-export interface LocationTypes {
+export interface PropertyTypes {
   id?: number;
-  location?: string;
-  landCover?: string;
-  project?: string;
-  long?: string | null;
-  lat?: string;
-  description?: string;
+  name?: string;
+  description?: string | null;
+  type?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export const PREFIX = "/locations";
+export const PREFIX = "/properties";
 
-export default function useLocationApi() {
+export default function usePropsApi() {
   const axios = useAxios();
-  const [data, setData] = useState<LocationTypes[]>([]);
+  const [data, setData] = useState<PropertyTypes[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
   const [error, setError] = useState<any>();
   const [meta, setMeta] = useState<Meta>(defaultMeta());
