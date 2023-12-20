@@ -20,14 +20,16 @@ import { Point } from "ol/geom";
 // import { fromLonLat } from "ol/proj";
 import VectorLayer from "ol/layer/Vector";
 import { XYZ } from "ol/source";
-import { convertDMS, replaceStringNoSpace, splitStringTobeArray } from "@/utils/useFunction";
+import {
+  convertDMS,
+  replaceStringNoSpace,
+  splitStringTobeArray,
+} from "@/utils/useFunction";
 import { fromLonLat } from "ol/proj";
 import { Autocomplete, AutocompleteItem, Image } from "@nextui-org/react";
 import { MdLocationPin, MdPlace } from "react-icons/md";
 import { SelectTypes } from "@/utils/propTypes";
 import { SearchIcon } from "../icons";
-
-import { mapData } from "@/utils/master-data.json";
 
 // const dataMaps = [
 //   {
@@ -92,6 +94,7 @@ const categoryOptions: SelectTypes[] = [
 ];
 
 type Props = {
+  mapData: any;
   items: any;
   setItems: Dispatch<SetStateAction<any | null>>;
   locationOptions?: SelectTypes[] | any[];
@@ -104,6 +107,7 @@ type Props = {
 };
 
 const MapComponent = ({
+  mapData,
   items,
   setItems,
   locationOptions,
@@ -117,8 +121,6 @@ const MapComponent = ({
   const [overlayContent, setOverlayContent] = useState<any | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  console.log(locationKey, "location-key", categoryKey);
-
   const [itemMaps, setItemMaps] = useState<Feature<Point>[]>([]);
 
   // const coordinates = convertDMS(
@@ -128,11 +130,10 @@ const MapComponent = ({
   // console.log(coordinates, "coordinate");
 
   const mapFilterred = useMemo(() => {
-    let filterred = [...mapData];
+    let filterred = [...mapData?.points];
+    console.log(filterred, "filterred");
     if (categoryKey)
-      filterred = filterred.filter(
-        (item) => item.category?.toLowerCase() === categoryKey
-      );
+      filterred = filterred.filter((item) => item.category === categoryKey);
     if (locationKey)
       filterred = filterred.filter((item) => item.location === locationKey);
 
@@ -141,15 +142,40 @@ const MapComponent = ({
 
   console.log(mapFilterred, "data-filter", categoryKey);
 
+  const mapCenter = useMemo(() => {
+    let center: any[] = fromLonLat([109.4342, -0.271486]);
+    if (mapFilterred?.length > 0 && mapFilterred?.length == 1) {
+      mapFilterred.map((item) => {
+        const coordinate =
+          item?.lat || item?.long
+            ? convertDMS(item?.lat, item?.long)
+            : undefined;
+        const coordinates =
+          coordinate?.latitude || coordinate?.longitude
+            ? fromLonLat([coordinate?.longitude, coordinate?.latitude])
+            : [0, 0];
+        center = coordinates;
+      });
+    }
+
+    
+
+    return center;
+  }, [mapFilterred]);
+
   const iconFeatures = useMemo(() => {
     let newArr: Feature<Point>[] = [];
     if (mapFilterred?.length > 0) {
       mapFilterred?.map((item) => {
-        const coordinate = convertDMS(item.latitude, item.longitude);
-        const coordinates = fromLonLat([
-          coordinate.longitude,
-          coordinate.latitude,
-        ]);
+        const coordinate =
+          item?.lat || item?.long
+            ? convertDMS(item?.lat, item?.long)
+            : undefined;
+        const coordinates =
+          coordinate?.latitude || coordinate?.longitude
+            ? fromLonLat([coordinate?.longitude, coordinate?.latitude])
+            : [0, 0];
+        console.log(coordinate, "coordinate");
         newArr.push(
           new Feature({
             // geometry: new Point([coordinates?.latitude, coordinates?.longitude]),fromLonLat
@@ -167,16 +193,16 @@ const MapComponent = ({
     let iconSrc = "";
     // Tentukan ikon berdasarkan kategori
     switch (category) {
-      case "GHG Fluxes":
+      case "GHG Fluxes & other variables":
         iconSrc = "/icons/forest.png";
         break;
       case "Carbon Stock":
         iconSrc = "/icons/carbon.png";
         break;
-      case "Soil physical chemistry":
+      case "Soil psychochemical properties":
         iconSrc = "/icons/soil.png";
         break;
-      case "Weather data":
+      case "Weather data (AWS)":
         iconSrc = "/icons/weather.png";
         break;
       default:
@@ -208,7 +234,9 @@ const MapComponent = ({
       ],
       view: new View({
         // center: fromLonLat([109.4342, -0.271486]),
-        center: [12663454.482782463, 75404.76996947813],
+        // extent: fromLonLat(mapCenter),
+        // center: [12663454.482782463, 75404.76996947813],
+        center: mapCenter,
         zoom: 5,
         minZoom: 4,
         constrainOnlyCenter: true,
@@ -258,16 +286,16 @@ const MapComponent = ({
       let iconSrc = "";
       // Tentukan ikon berdasarkan kategori
       switch (category) {
-        case "GHG Fluxes":
+        case "GHG Fluxes & other variables":
           iconSrc = "/icons/forest.png";
           break;
         case "Carbon Stock":
           iconSrc = "/icons/carbon.png";
           break;
-        case "Soil physical chemistry":
+        case "Soil psychochemical properties":
           iconSrc = "/icons/soil.png";
           break;
-        case "Weather data":
+        case "Weather data (AWS)":
           iconSrc = "/icons/weather.png";
           break;
         default:
@@ -335,7 +363,7 @@ const MapComponent = ({
       // Cleanup when the component unmounts
       map.setTarget(undefined);
     };
-  }, [iconFeatures]); // Empty dependency array ensures useEffect runs once after the initial render
+  }, [iconFeatures, mapCenter]); // Empty dependency array ensures useEffect runs once after the initial render
 
   useEffect(() => {
     if (overlayContent !== null) {
@@ -347,14 +375,14 @@ const MapComponent = ({
 
   const LocationFormatArray = useMemo(() => {
     const string = locationKey?.toString();
-    let splitFilter:string[] = [];
-    if(locationKey) {
-      splitFilter = splitStringTobeArray(string as string)
+    let splitFilter: string[] = [];
+    if (locationKey) {
+      splitFilter = splitStringTobeArray(string as string);
     }
     return splitFilter;
-  }, [locationKey])
+  }, [locationKey]);
 
-  console.log(LocationFormatArray, "LocationFormatArray")
+  console.log(mapData?.categories, "map-data");
 
   return (
     <Fragment>
@@ -371,7 +399,7 @@ const MapComponent = ({
           radius="full"
           labelPlacement="outside"
           placeholder="Category"
-          defaultItems={categoryOptions}
+          defaultItems={mapData?.categories as SelectTypes[]}
           defaultSelectedKey={categoryKey as Key}
           variant="faded"
           color="primary"
@@ -381,7 +409,7 @@ const MapComponent = ({
           onInputChange={onInputCategoryChange}
         >
           {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
+            <AutocompleteItem key={item?.value}>{item?.label}</AutocompleteItem>
           )}
         </Autocomplete>
 
@@ -427,17 +455,20 @@ const MapComponent = ({
               className="shadow-sm bg-gray-2"
             />
             <div className="w-full flex flex-col">
-              <h3 className="text-md font-bold">{overlayContent?.location}</h3>
-              <div className="flex items-center justify-between gap-1 text-xs">
+              {/* <h3 className="text-md font-bold">{overlayContent?.location || "-"}</h3> */}
+              <div className="flex items-center justify-between gap-1 text-sm">
                 <div className="flex items-center gap-1">
                   <span>
                     <MdLocationPin className="w-4 h-4" />
                   </span>
-                  <p className="font-bold">{overlayContent?.villages}</p>
+                  {/* <p className="font-bold">{overlayContent?.villages || "-"}</p> */}
+                  <h3 className="text-md font-bold">
+                    {overlayContent?.location || "-"}
+                  </h3>
                 </div>
-                <div>
-                  <p>{overlayContent?.longitude}</p>
-                  <p>{overlayContent?.latitude}</p>
+                <div className="text-xs">
+                  <p>{overlayContent?.long}</p>
+                  <p>{overlayContent?.lat}</p>
                 </div>
               </div>
             </div>
@@ -446,13 +477,14 @@ const MapComponent = ({
           <div className="border border-b border-gray w-full"></div>
           <div className="w-full pl-5 p-2 flex flex-wrap gap-1 items-start">
             <ul className="list-disc">
-              {overlayContent?.description?.map((item: any) => {
+              {/* {overlayContent?.description?.map((item: any) => {
                 return (
                   <li key={item} className="text-xs">
                     {item}
                   </li>
                 );
-              })}
+              })} */}
+              <p className="text-xs">{overlayContent?.description || "-"}</p>
             </ul>
           </div>
           <div className="text-xs flex flex-col p-2">

@@ -111,5 +111,5 @@ export const replaceStringNoSpace = (value:string) => {
 
 export const splitStringTobeArray = (value:string) => {
   if(!value) return [""];
-  return value.split(/[\s,]+/)
+  return value.split(/[\,]+/)
 }

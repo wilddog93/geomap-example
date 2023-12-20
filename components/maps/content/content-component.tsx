@@ -125,7 +125,7 @@ function ContentComponent({
         $lte: periodeFilterred.end,
       },
     })
-    if (getQuery.landCover && categoryKey !== "weather data")
+    if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
       search?.$and?.push({ landCover: { $cont: getQuery.landCover } });
 
 
@@ -168,7 +168,7 @@ function ContentComponent({
   }, [filterItems]);
 
   useEffect(() => {
-    if(categoryKey == "weather data") {
+    if(categoryKey == "Weather data (AWS)") {
       getWeatherAPI(filterItems?.queryObject);
     }
 
@@ -275,11 +275,12 @@ function ContentComponent({
             <div className="w-full flex flex-col gap-3">
               <h3 className="font-bold text-xl">{data?.location || ""}</h3>
               <ul className="list-disc text-sm">
-                {data?.description || data?.description?.length > 0
+                {/* {data?.description || data?.description?.length > 0
                   ? data?.description?.map((desc: any) => {
                       return <li key={desc}>{desc}</li>;
                     })
-                  : null}
+                  : null} */}
+                  {data?.description || "-"}
               </ul>
             </div>
 
@@ -340,11 +341,11 @@ function ContentComponent({
               !sidebar ? "lg:border-y-2 lg:border-default-300" : ""
             }`}
           >
-            {categoryKey == "ghg fluxes" ? (
+            {categoryKey == "GHG Fluxes & other variables" ? (
               <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
-            ) : categoryKey == "soil physical chemistry" ? (
+            ) : categoryKey == "Soil psychochemical properties" ? (
               <HeaderSoils items={Soils?.data} sidebar={sidebar} />
-            ) : categoryKey == "weather data" ? (
+            ) : categoryKey == "Weather data (AWS)" ? (
               <HeaderWeather items={Weather?.data} sidebar={sidebar} />
             ) : (
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

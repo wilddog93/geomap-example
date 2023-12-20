@@ -1,4 +1,4 @@
-export interface SelectTypes {
+export type SelectTypes = {
     label?: any;
     value?: any
 };
