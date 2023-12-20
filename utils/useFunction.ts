@@ -103,3 +103,13 @@ export const formatMoney = ({
     console.log(e);
   }
 };
+
+export const replaceStringNoSpace = (value:string) => {
+  if(!value) return;
+  return value.replace(/\s/g, "");
+}
+
+export const splitStringTobeArray = (value:string) => {
+  if(!value) return [""];
+  return value.split(/[\s,]+/)
+}

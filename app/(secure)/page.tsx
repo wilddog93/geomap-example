@@ -20,6 +20,7 @@ import useLocationApi from "@/api/location-properties.api";
 import { SelectTypes } from "@/utils/propTypes";
 import { useAuth } from "@/stores/auth";
 import { redirect } from "next/navigation";
+import usePropsApi from "@/api/landCover-properties.api";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState<boolean>(true);
@@ -80,16 +81,54 @@ export default function Home() {
   };
 
   // data-location
-  const { fetch, data, meta, fetching } = useLocationApi();
+  const locationApi = useLocationApi();
+  const propertyApi = usePropsApi();
 
   const filterLocation = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
     const search = {
-      $and: [],
+      $and: [{ location: { $contL: location } }],
     };
 
-    qb.setLimit(1000)
+    qb.search(search);
+    qb.sortBy({
+      field: `location`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [location]);
+
+  const getLocations = async (params: any) => {
+    await locationApi.fetch({ params: params });
+  };
+
+  useEffect(() => {
+    if (filterLocation) getLocations(filterLocation.queryObject);
+  }, [filterLocation]);
+
+  const locationOptions = useMemo(() => {
+    const { data } = locationApi;
+    let location: SelectTypes[] | any[] = [];
+    if (data.length > 0) {
+      data.map((loc) => {
+        location.push({
+          ...loc,
+          label: loc.location,
+          value: loc.location,
+        });
+      });
+    }
+    return location;
+  }, [locationApi?.data]);
+
+  const filterLandCover = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search = {
+      $and: [{ type: { $contL: "landcover" } }],
+    };
 
     qb.search(search);
     qb.sortBy({
@@ -100,37 +139,31 @@ export default function Home() {
     return qb;
   }, []);
 
-  const getLocation = async (params: any) => {
-    await fetch({ params: params.queryObject });
+  const getLandCover = async (params: any) => {
+    await propertyApi.fetch({ params: params });
   };
 
   useEffect(() => {
-    if (filterLocation) getLocation(filterLocation);
-  }, [filterLocation]);
+    if (filterLandCover) getLandCover(filterLandCover.queryObject);
+  }, [filterLandCover]);
 
-  const optionsSelect = useMemo(() => {
+  const landCoverOptions = useMemo(() => {
+    const { data } = propertyApi;
     let location: SelectTypes[] | any[] = [];
     let landCover: SelectTypes[] | any[] = [];
-    if (data?.length > 0) {
-      location = data
-        ?.filter((e) => e.type == "location")
-        .map((x) => ({
-          ...x,
-          label: x.name,
-          value: x.name,
-        }));
-      landCover = data
-        ?.filter((e) => e.type == "landCover")
-        .map((x) => ({
-          ...x,
-          label: x.name,
-          value: x.name,
-        }));
+    if (data.length > 0) {
+      data.map((prop) => {
+        landCover.push({
+          ...prop,
+          label: prop.name,
+          value: prop.name,
+        });
+      });
     }
-    return { location, landCover };
-  }, [data]);
+    return landCover;
+  }, [propertyApi?.data]);
 
-  const isLogin = true
+  const isLogin = true;
 
   if (!isLogin) {
     // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
@@ -157,7 +190,7 @@ export default function Home() {
             <MapComponent
               items={items}
               setItems={setItems}
-              locationOptions={optionsSelect.location}
+              locationOptions={locationOptions}
               locationKey={locationKey}
               onInputLocationChange={onInputLocationChange}
               onSelectionLocationChange={onSelectionLocationChange}
@@ -169,7 +202,9 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full h-full px-6 lg:px-8 shadow ${sidebar ? "lg:w-1/2" : ""}`}
+          className={`relative w-full h-full px-6 lg:px-8 shadow ${
+            sidebar ? "lg:w-1/2" : ""
+          }`}
         >
           <button
             type="button"
@@ -199,7 +234,7 @@ export default function Home() {
             sidebar={sidebar}
             locationKey={locationKey}
             categoryKey={categoryKey}
-            landCoverOptions={optionsSelect.landCover}
+            landCoverOptions={landCoverOptions}
             landCoverKey={landCoverKey}
             periodeKey={periodeKey}
             onInputLandCoverChange={onInputLandCoverChange}

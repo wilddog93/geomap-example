@@ -1,7 +1,7 @@
 import useGHGFluxApi from "@/api/ghg-flux.api";
 import AreaCharts from "@/components/chart/AreaCharts";
 import { SelectTypes } from "@/utils/propTypes";
-import { getYearly } from "@/utils/useFunction";
+import { getYearly, splitStringTobeArray } from "@/utils/useFunction";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import { Input } from "@nextui-org/input";
 import {
@@ -70,6 +70,15 @@ function ContentComponent({
   const GHGFlux = useGHGFluxApi();
   const Soils = useSoilsApi();
   const Weather = useWeatherApi();
+
+  const LocationFormatArray = useMemo(() => {
+    const string = locationKey?.toString();
+    let splitFilter:string[] = [];
+    if(locationKey) {
+      splitFilter = splitStringTobeArray(string as string)
+    }
+    return splitFilter;
+  }, [locationKey])
 
   // filter periode
   const periodeFilterred = useMemo(() => {

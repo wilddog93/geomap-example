@@ -20,7 +20,7 @@ import { Point } from "ol/geom";
 // import { fromLonLat } from "ol/proj";
 import VectorLayer from "ol/layer/Vector";
 import { XYZ } from "ol/source";
-import { convertDMS } from "@/utils/useFunction";
+import { convertDMS, replaceStringNoSpace, splitStringTobeArray } from "@/utils/useFunction";
 import { fromLonLat } from "ol/proj";
 import { Autocomplete, AutocompleteItem, Image } from "@nextui-org/react";
 import { MdLocationPin, MdPlace } from "react-icons/md";
@@ -129,8 +129,12 @@ const MapComponent = ({
 
   const mapFilterred = useMemo(() => {
     let filterred = [...mapData];
-    if (categoryKey) filterred = filterred.filter((item) => item.category?.toLowerCase() === categoryKey);
-    if (locationKey) filterred = filterred.filter((item) => item.location === locationKey);
+    if (categoryKey)
+      filterred = filterred.filter(
+        (item) => item.category?.toLowerCase() === categoryKey
+      );
+    if (locationKey)
+      filterred = filterred.filter((item) => item.location === locationKey);
 
     return filterred;
   }, [mapData, locationKey, categoryKey]);
@@ -341,6 +345,17 @@ const MapComponent = ({
     }
   }, [overlayContent]);
 
+  const LocationFormatArray = useMemo(() => {
+    const string = locationKey?.toString();
+    let splitFilter:string[] = [];
+    if(locationKey) {
+      splitFilter = splitStringTobeArray(string as string)
+    }
+    return splitFilter;
+  }, [locationKey])
+
+  console.log(LocationFormatArray, "LocationFormatArray")
+
   return (
     <Fragment>
       <div
@@ -379,7 +394,7 @@ const MapComponent = ({
           defaultSelectedKey={locationKey as Key}
           variant="faded"
           color="primary"
-          className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+          className="w-full lg:col-span-2 max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           allowsCustomValue={false}
           onSelectionChange={onSelectionLocationChange}
           onInputChange={onInputLocationChange}
