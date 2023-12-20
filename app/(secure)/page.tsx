@@ -21,7 +21,10 @@ import { SelectTypes } from "@/utils/propTypes";
 import { useAuth } from "@/stores/auth";
 import { redirect } from "next/navigation";
 import usePropsApi from "@/api/landCover-properties.api";
-import { replaceStringNoSpace, splitStringTobeArray } from "@/utils/useFunction";
+import {
+  replaceStringNoSpace,
+  splitStringTobeArray,
+} from "@/utils/useFunction";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState<boolean>(true);
@@ -33,7 +36,9 @@ export default function Home() {
   const [location, setLocation] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [locationKey, setLocationKey] = useState<Key | null>("Mempawah");
-  const [categoryKey, setCategoryKey] = useState<Key | null>("GHG Fluxes & other variables");
+  const [categoryKey, setCategoryKey] = useState<Key | null>(
+    "GHG Fluxes & other variables"
+  );
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
   const [landCoverKey, setLandCoverKey] = useState<Key | null>(
@@ -113,13 +118,13 @@ export default function Home() {
     const { data } = locationApi;
     let location: any[] | SelectTypes[] = [];
     if (data.length > 0) {
-      data.map((loc:any) => {
+      data.map((loc: any) => {
         location.push({
           ...loc,
           label: loc.location,
           value: loc.location,
           // @ts-ignore
-          categories: splitStringTobeArray(loc.description as string)
+          categories: splitStringTobeArray(loc.description as string),
         });
       });
     }
@@ -167,29 +172,31 @@ export default function Home() {
   // lcoation to be map data poin
   const mapData = useMemo(() => {
     let points: any[] = [];
-    let categories:any[] = [];
-    let newCat: SelectTypes[] = []
-    if(locationOptions.length > 0) {
-      locationOptions.map((items:any) => {
-        items?.categories?.map((x:any) => {
+    let categories: any[] = [];
+    let newCat: SelectTypes[] = [];
+    if (locationOptions.length > 0) {
+      locationOptions.map((items: any) => {
+        items?.categories?.map((x: any) => {
           points.push({
             ...items,
             lat: replaceStringNoSpace(items?.lat as string),
             long: replaceStringNoSpace(items?.long as string),
-            category: x?.trim()
-          })
+            category: x?.trim(),
+          });
           categories.push({
             label: x?.trim(),
-            value: x?.trim()
-          })
-        })
-      })
-      newCat = Array.from(new Set(categories.map(item => item?.value))).map(value => categories.find((item:any) => item?.value === value));
+            value: x?.trim(),
+          });
+        });
+      });
+      newCat = Array.from(new Set(categories.map((item) => item?.value))).map(
+        (value) => categories.find((item: any) => item?.value === value)
+      );
     }
     return { points, categories: newCat };
-  },[locationOptions])
+  }, [locationOptions]);
 
-  console.log(mapData, "locationOptions")
+  console.log(mapData, "locationOptions");
 
   const isLogin = true;
 
@@ -231,7 +238,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`relative w-full h-full px-6 lg:px-8 shadow ${
+          className={`relative overflow-auto w-full h-full px-6 lg:px-8 shadow ${
             sidebar ? "lg:w-1/2" : ""
           }`}
         >
@@ -272,6 +279,27 @@ export default function Home() {
             onSelectionLandCoverChange={onSelectionLandCoverChange}
           />
         </div>
+
+        <button
+          type="button"
+          className={`fixed lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow group group-hover:bg-white 
+              ${
+                !sidebar
+                  ? "left-5 top-20 lg:top-5 rounded-r-lg"
+                  : "inset-x-[48.3%] top-6 rounded-r-none"
+              }
+              `}
+          onClick={sideFunction}
+        >
+          {!sidebar ? (
+            <div className="w-full max-w-max flex items-center gap-1">
+              <span className="duration-300 text-sm text-default-500">Map</span>
+              <MdChevronRight className="w-4 h-4" />
+            </div>
+          ) : (
+            <MdChevronLeft className="w-4 h-4" />
+          )}
+        </button>
       </section>
       <Footer />
     </main>
