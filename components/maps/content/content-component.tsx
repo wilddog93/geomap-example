@@ -88,7 +88,7 @@ function ContentComponent({
       ?.filter((item) => item.location == key)
       .map((item) => item.state)
       .toString();
-    return { location, state };
+    return { state };
   }, [locationOptions]);
 
   // filter periode
