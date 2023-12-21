@@ -24,6 +24,7 @@ import React, {
   ChangeEvent,
   Fragment,
   Key,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -39,6 +40,7 @@ type Props = {
   sidebar?: boolean;
   data?: any[] | any;
   locationKey: Key | null;
+  locationOptions?: SelectTypes[] | any[]
   categoryKey: Key | null;
   landCoverOptions?: SelectTypes[] | any[];
   periodeKey: Key | null;
@@ -58,6 +60,7 @@ function ContentComponent({
   sidebar,
   data,
   locationKey,
+  locationOptions,
   categoryKey,
   landCoverOptions,
   periodeKey,
@@ -80,6 +83,14 @@ function ContentComponent({
     return splitFilter;
   }, [locationKey])
 
+  const getFilterLocation = useCallback((key: Key) => {
+    let state = locationOptions
+      ?.filter((item) => item.location == key)
+      .map((item) => item.state)
+      .toString();
+    return { location, state };
+  }, [locationOptions]);
+
   // filter periode
   const periodeFilterred = useMemo(() => {
     const currentDate = new Date();
@@ -101,11 +112,11 @@ function ContentComponent({
     let location: string | any = "";
     let landCover: string | any = "";
 
-    if (locationKey) location = locationKey as any;
+    if (locationKey) location = getFilterLocation(locationKey as any).state;
     if (landCoverKey) landCover = landCoverKey as any;
 
     return { location, landCover };
-  }, [locationKey, landCoverKey]);
+  }, [locationKey, landCoverKey, getFilterLocation]);
 
   const filterItems = useMemo(() => {
     const qb = RequestQueryBuilder.create();

@@ -119,10 +119,13 @@ export default function Home() {
     let location: any[] | SelectTypes[] = [];
     if (data.length > 0) {
       data.map((loc: any) => {
+        let shortLocation = splitStringTobeArray(loc.location);
+        let newShortLocation = shortLocation[shortLocation.length - 1]
         location.push({
           ...loc,
           label: loc.location,
           value: loc.location,
+          state: newShortLocation?.trim(),
           // @ts-ignore
           categories: splitStringTobeArray(loc.description as string),
         });
@@ -130,6 +133,8 @@ export default function Home() {
     }
     return location;
   }, [locationApi?.data]);
+
+  console.log(locationOptions, "locations-data", locationKey)
 
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -269,6 +274,7 @@ export default function Home() {
             data={items}
             sidebar={sidebar}
             locationKey={locationKey}
+            locationOptions={locationOptions}
             categoryKey={categoryKey}
             landCoverOptions={landCoverOptions}
             landCoverKey={landCoverKey}

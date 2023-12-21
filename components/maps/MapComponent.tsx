@@ -140,7 +140,7 @@ const MapComponent = ({
     return filterred;
   }, [mapData, locationKey, categoryKey]);
 
-  console.log(mapFilterred, "data-filter", categoryKey);
+  // console.log(mapFilterred, "locations-data-filter", categoryKey);
 
   const mapCenter = useMemo(() => {
     let center: any[] = fromLonLat([109.4342, -0.271486]);
@@ -157,8 +157,6 @@ const MapComponent = ({
         center = coordinates;
       });
     }
-
-    
 
     return center;
   }, [mapFilterred]);
