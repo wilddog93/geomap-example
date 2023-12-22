@@ -10,7 +10,7 @@ export interface GHGFlux {
   plot: string
   landCover: string
   type: 'Heterothropic' | 'Total'
-  airTemperature?: number | null
+  airTemperature: number | null
   soilTemperature: number | null
   soilMoisture: number | null
   waterTable: number | null

@@ -105,7 +105,7 @@ import {
     className?: string;
   };
   
-  const AreaChart = ({ data, options, width, height, className }: AreaProps) => {
+  const AreaCharts = ({ data, options, width, height, className }: AreaProps) => {
     return (
       <div className="w-full flex items-center gap-2 overflow-x-hidden overflow-y-auto">
         <Line
@@ -119,4 +119,4 @@ import {
     );
   };
   
-  export default AreaChart;
+  export default AreaCharts;

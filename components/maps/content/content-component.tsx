@@ -20,6 +20,7 @@ import {
   startOfYear,
   subWeeks,
 } from "date-fns";
+import { id } from "date-fns/locale";
 import React, {
   ChangeEvent,
   Fragment,
@@ -35,12 +36,15 @@ import useSoilsApi from "@/api/soils.api";
 import HeaderSoils from "./header/header-soils";
 import useWeatherApi from "@/api/weather.api";
 import HeaderWeather from "./header/header-weather";
+import { groupDataGHGFluxByMonth } from "@/utils/useHookChart";
+import useGHGFluxStatisticsYearlyApi from "@/api/ghg-flux-statistics-yearly.api";
+import GHGChartYearly from "@/components/chart/GHGChart/GHGChartYearly";
 
 type Props = {
   sidebar?: boolean;
   data?: any[] | any;
   locationKey: Key | null;
-  locationOptions?: SelectTypes[] | any[]
+  locationOptions?: SelectTypes[] | any[];
   categoryKey: Key | null;
   landCoverOptions?: SelectTypes[] | any[];
   periodeKey: Key | null;
@@ -49,6 +53,20 @@ type Props = {
   landCoverKey: Key | null;
   onSelectionLandCoverChange: (key: Key) => void;
   onInputLandCoverChange: (value: string) => void;
+};
+
+type dataSetProps = {
+  data: number[] | any[];
+  borderColor?: string;
+  backgroundColor?: string;
+  tension: number | 0.1;
+  fill: boolean | false;
+  label: string | "Label";
+};
+
+export type PropsChart = {
+  labels: string[];
+  datasets: dataSetProps[];
 };
 
 const periodeOptions = [
@@ -74,22 +92,28 @@ function ContentComponent({
   const Soils = useSoilsApi();
   const Weather = useWeatherApi();
 
+  // cchart
+  const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
+
   const LocationFormatArray = useMemo(() => {
     const string = locationKey?.toString();
-    let splitFilter:string[] = [];
-    if(locationKey) {
-      splitFilter = splitStringTobeArray(string as string)
+    let splitFilter: string[] = [];
+    if (locationKey) {
+      splitFilter = splitStringTobeArray(string as string);
     }
     return splitFilter;
-  }, [locationKey])
+  }, [locationKey]);
 
-  const getFilterLocation = useCallback((key: Key) => {
-    let state = locationOptions
-      ?.filter((item) => item.location == key)
-      .map((item) => item.state)
-      .toString();
-    return { state };
-  }, [locationOptions]);
+  const getFilterLocation = useCallback(
+    (key: Key) => {
+      let state = locationOptions
+        ?.filter((item) => item.location == key)
+        .map((item) => item.state)
+        .toString();
+      return { state };
+    },
+    [locationOptions]
+  );
 
   // filter periode
   const periodeFilterred = useMemo(() => {
@@ -124,26 +148,26 @@ function ContentComponent({
     const search: any = {
       $and: [
         { location: { $cont: getQuery.location } },
-        // { landCover: { $cont: getQuery.landCover } },
+        { type: { $eq: "Total" } },
       ],
     };
 
     // if (getQuery.location && categoryKey !== "weather data")
     //   search.$and.push({ location: { $cont: getQuery.location } });
-    if(periodeKey) search?.$and?.push({
-      date: {
-        $gte: periodeFilterred.start,
-        $lte: periodeFilterred.end,
-      },
-    })
+    if (periodeKey)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
     if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
-      search?.$and?.push({ landCover: { $cont: getQuery.landCover } });
-
+      search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
 
     qb.search(search);
     qb.sortBy({
       field: `date`,
-      order: "DESC",
+      order: "ASC",
     });
     qb.query();
     return qb;
@@ -179,13 +203,12 @@ function ContentComponent({
   }, [filterItems]);
 
   useEffect(() => {
-    if(categoryKey == "Weather data (AWS)") {
+    if (categoryKey == "Weather data (AWS)") {
       getWeatherAPI(filterItems?.queryObject);
     }
 
     // console.log(categoryKey, "categoryKey")
-  }, [landCoverKey, filterItems, categoryKey])
-  
+  }, [landCoverKey, filterItems, categoryKey]);
 
   const options = {
     responsive: true,
@@ -213,27 +236,27 @@ function ContentComponent({
 
   const dataYearly = {
     labels: [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agt",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
     ],
     datasets: [
       {
-        data: [10, 50, 100, 70, 20, 50, 80, 70, 15, 20, 10, 100],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.3)",
         tension: 0.4,
         fill: true,
-        label: "Grapic Chart",
+        label: landCoverKey as string,
       },
     ],
   };
@@ -266,17 +289,192 @@ function ContentComponent({
     ],
   };
 
-  // console.log("year get by month:", getYearly(new Date(), 1));
-  // console.log(
-  //   "monthly by week:",
-  //   `${subWeeks(new Date(), 2)} to ${new Date()}`
-  // );
+  // filter-chart
+  const filterCharts = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search: any = {
+      $and: [{ location: { $cont: getQuery.location } }],
+    };
+    if (periodeKey)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
+    if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
+      search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
+
+    qb.search(search);
+    qb.sortBy({
+      field: `date`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
+
+  const getGHGFluxChart = async (params: any) => {
+    await GHGFluxYearly.fetch({ params: params });
+  };
+
+  useEffect(() => {
+    getGHGFluxChart(filterCharts?.queryObject);
+  }, [filterCharts]);
+
+  const getChartGHGFluxYearly = useMemo(() => {
+    let chartLabel = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agt",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
+    ];
+    let chartData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    let airTemperature: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let soilTemperature: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let soilMoisture: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let waterTable: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let ch4: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let co2: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+
+    if (GHGFluxYearly.data.length > 0 && landCoverKey) {
+      GHGFluxYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "LLL", { locale: id });
+        airTemperature.labels.push(date);
+        airTemperature.datasets[0].data.push(item.avg_soilTemperature);
+
+        soilTemperature.labels.push(date);
+        soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+
+        soilMoisture.labels.push(date);
+        soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+
+        waterTable.labels.push(date);
+        waterTable.datasets[0].data.push(item.avg_waterTable);
+
+        ch4.labels.push(date);
+        ch4.datasets[0].data.push(item.avg_ch4);
+
+        co2.labels.push(date);
+        co2.datasets[0].data.push(item.avg_co2);
+      });
+    } else {
+      airTemperature.labels = chartLabel;
+      airTemperature.datasets[0].data = chartData;
+
+      soilTemperature.labels = chartLabel;
+      soilTemperature.datasets[0].data = chartData;
+
+      soilMoisture.labels = chartLabel;
+      soilMoisture.datasets[0].data = chartData;
+
+      waterTable.labels = chartLabel;
+      waterTable.datasets[0].data = chartData;
+
+      ch4.labels = chartLabel;
+      ch4.datasets[0].data = chartData;
+
+      co2.labels = chartLabel;
+      co2.datasets[0].data = chartData;
+    }
+
+    // airTemperature = dataYearly;
+    return {
+      airTemperature,
+      soilTemperature,
+      soilMoisture,
+      waterTable,
+      ch4,
+      co2,
+    };
+  }, [GHGFluxYearly.data, landCoverKey]);
+  // filter-chart-end
 
   return (
     <Fragment>
       <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
-        {/* accordion */}
-        {/* <Accordion defaultExpandedKeys={["parameter-1"]}> */}
         <ScrollShadow hideScrollBar className="w-full h-full">
           <div
             className={`w-full grid grid-cols-1 lg:grid-cols-2 items-center px-4 mb-5 gap-2 ${
@@ -285,14 +483,7 @@ function ContentComponent({
           >
             <div className="w-full flex flex-col gap-3">
               <h3 className="font-bold text-xl">{data?.location || ""}</h3>
-              <ul className="list-disc text-sm">
-                {/* {data?.description || data?.description?.length > 0
-                  ? data?.description?.map((desc: any) => {
-                      return <li key={desc}>{desc}</li>;
-                    })
-                  : null} */}
-                  {data?.description || "-"}
-              </ul>
+              <ul className="list-disc text-sm">{data?.description || "-"}</ul>
             </div>
 
             <div className="w-full flex flex-col lg:flex-row items-center justify-end gap-2">
@@ -413,104 +604,17 @@ function ContentComponent({
             </Autocomplete>
           </div>
 
-          <div className={`w-full ${sidebar ? "" : "hidden"}`}>
-            <Accordion>
-              <AccordionItem
-                key="parameter-0"
-                aria-label="parameter-0"
-                title={
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-bold">Latest Record</h3>
-                  </div>
-                }
-                indicator={<MdInfo className="w-3 h-4" />}
-                disableIndicatorAnimation
-              />
-              <AccordionItem
-                hideIndicator
-                key="parameter-1"
-                aria-label="parameter-1"
-                title={
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-semibold">Parameter 1</h3>
-                    <p className="text-xs">data 1</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <h3 className="font-semibold text-xs -mb-5">Yearly Chart</h3>
-                  <AreaCharts
-                    height="300"
-                    options={options}
-                    data={dataYearly}
-                  />
-                </div>
-              </AccordionItem>
-              <AccordionItem
-                hideIndicator
-                key="parameter-2"
-                aria-label="parameter-2"
-                title={
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-semibold">Parameter 2</h3>
-                    <p className="text-xs">data 2</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <h3 className="font-semibold text-xs -mb-5">Monthly Chart</h3>
-                  <AreaCharts
-                    height="300"
-                    options={options}
-                    data={dataMonthly}
-                  />
-                </div>
-              </AccordionItem>
-              <AccordionItem
-                hideIndicator
-                key="parameter-3"
-                aria-label="parameter-3"
-                title={
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-semibold">Parameter 3</h3>
-                    <p className="text-xs">data 3</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <h3 className="font-semibold text-xs -mb-5">Weekly Chart</h3>
-                  <AreaCharts
-                    height="300"
-                    options={options}
-                    data={dataWeekly}
-                  />
-                </div>
-              </AccordionItem>
-            </Accordion>
-          </div>
-
-          <div className="w-full flex flex-col gap-3 mt-5">
-            <div
-              className={`w-full grid grid-cols-1 lg:grid-cols-2 gap-2 py-5 ${
-                sidebar ? "hidden" : ""
-              }`}
-            >
-              <div className="w-full flex flex-col relative">
-                <h3 className="font-semibold text-xs -mb-5">Yearly Chart</h3>
-                <AreaCharts height="300" options={options} data={dataYearly} />
-              </div>
-
-              <div className="w-full flex flex-col relative">
-                <h3 className="font-semibold text-xs -mb-5">Monthly Chart</h3>
-                <AreaCharts height="300" options={options} data={dataMonthly} />
-              </div>
-
-              <div className="w-full flex flex-col relative">
-                <h3 className="font-semibold text-xs -mb-5">Weekly Chart</h3>
-                <AreaCharts height="300" options={options} data={dataWeekly} />
-              </div>
-            </div>
-          </div>
+          {categoryKey == "GHG Fluxes & other variables" ? (
+            <GHGChartYearly
+              sidebar={sidebar as boolean}
+              categoryKey={categoryKey}
+              landCoverKey={landCoverKey}
+              locationKey={locationKey}
+              periodeKey={periodeKey}
+              periodeFilterred={periodeFilterred}
+              locationOptions={locationOptions}
+            />
+          ) : null}
         </ScrollShadow>
       </div>
     </Fragment>

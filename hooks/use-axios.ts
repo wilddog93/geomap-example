@@ -56,6 +56,10 @@ export default function useAxios() {
     return (await axios.get(url, { ...config }))?.data;
   };
 
+  const $getByObject = async (url: string, config?: AxiosRequestConfig<any>) => {
+    return (await axios.get(url, { ...config }));
+  };
+
   const $put = async (
     url: string,
     body: any,
@@ -72,5 +76,5 @@ export default function useAxios() {
     return (await axios.delete(url, { ...config }))?.data;
   };
 
-  return { axios, $post, $get, $path, $put, $delete };
+  return { axios, $post, $get, $getByObject, $path, $put, $delete };
 }
