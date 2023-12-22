@@ -1,12 +1,8 @@
 import useGHGFluxApi from "@/api/ghg-flux.api";
-import AreaCharts from "@/components/chart/AreaCharts";
 import { SelectTypes } from "@/utils/propTypes";
-import { getYearly, splitStringTobeArray } from "@/utils/useFunction";
+import { splitStringTobeArray } from "@/utils/useFunction";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
-import { Input } from "@nextui-org/input";
 import {
-  Accordion,
-  AccordionItem,
   Autocomplete,
   AutocompleteItem,
   ScrollShadow,
@@ -22,7 +18,6 @@ import {
 } from "date-fns";
 import { id } from "date-fns/locale";
 import React, {
-  ChangeEvent,
   Fragment,
   Key,
   useCallback,
@@ -30,14 +25,13 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { MdCalendarToday, MdInfo, MdSearch } from "react-icons/md";
+import { MdCalendarToday } from "react-icons/md";
 import HeaderGHGFlux from "./header/header-ghg-flux";
 import useSoilsApi from "@/api/soils.api";
 import HeaderSoils from "./header/header-soils";
 import useWeatherApi from "@/api/weather.api";
 import HeaderWeather from "./header/header-weather";
-import { groupDataGHGFluxByMonth } from "@/utils/useHookChart";
-import useGHGFluxStatisticsYearlyApi from "@/api/ghg-flux-statistics-yearly.api";
+import { useGHGFluxStatisticsMonthlyApi, useGHGFluxStatisticsYearlyApi } from "@/api/ghg-flux-statistics.api";
 import GHGChartYearly from "@/components/chart/GHGChart/GHGChartYearly";
 
 type Props = {
@@ -92,17 +86,9 @@ function ContentComponent({
   const Soils = useSoilsApi();
   const Weather = useWeatherApi();
 
-  // cchart
+  // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
-
-  const LocationFormatArray = useMemo(() => {
-    const string = locationKey?.toString();
-    let splitFilter: string[] = [];
-    if (locationKey) {
-      splitFilter = splitStringTobeArray(string as string);
-    }
-    return splitFilter;
-  }, [locationKey]);
+  const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
 
   const getFilterLocation = useCallback(
     (key: Key) => {
@@ -210,86 +196,8 @@ function ContentComponent({
     // console.log(categoryKey, "categoryKey")
   }, [landCoverKey, filterItems, categoryKey]);
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: "top" as const,
-        align: "end" as const,
-        labels: {
-          borderRadius: 3,
-          boxWidth: 16,
-          useBorderRadius: true,
-          pointStyle: "circle",
-        },
-      },
-      title: {
-        display: false,
-        position: "top" as const,
-        text: "Chart.js Line Chart",
-        align: "start" as const,
-      },
-    },
-  };
-
-  const dataYearly = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agt",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
-    ],
-    datasets: [
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: landCoverKey as string,
-      },
-    ],
-  };
-
-  const dataMonthly = {
-    labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    datasets: [
-      {
-        data: [10, 50, 100, 70, 20, 50, 80, 70, 15, 20, 10, 100],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: "Grapic Chart",
-      },
-    ],
-  };
-
-  const dataWeekly = {
-    labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Friday", "Sat"],
-    datasets: [
-      {
-        data: [10, 50, 100, 70, 20, 50, 80],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: "Grapic Chart",
-      },
-    ],
-  };
-
-  // filter-chart
+  // CHART GHG FLUX
+  // filter-chart-yearly
   const filterCharts = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
@@ -317,13 +225,14 @@ function ContentComponent({
 
   const getGHGFluxChart = async (params: any) => {
     await GHGFluxYearly.fetch({ params: params });
+    await GHGFluxMonthly.fetch({ params: params });
   };
 
   useEffect(() => {
     getGHGFluxChart(filterCharts?.queryObject);
   }, [filterCharts]);
 
-  const getChartGHGFluxYearly = useMemo(() => {
+  const getChartDataGHGFlux = useMemo(() => {
     let chartLabel = [
       "Jan",
       "Feb",
@@ -419,11 +328,53 @@ function ContentComponent({
       ],
     };
 
-    if (GHGFluxYearly.data.length > 0 && landCoverKey) {
+    if (GHGFluxYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
       GHGFluxYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "LLL", { locale: id });
         airTemperature.labels.push(date);
-        airTemperature.datasets[0].data.push(item.avg_soilTemperature);
+        airTemperature.datasets[0].data.push(item.avg_airTemperature);
+
+        soilTemperature.labels.push(date);
+        soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+
+        soilMoisture.labels.push(date);
+        soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+
+        waterTable.labels.push(date);
+        waterTable.datasets[0].data.push(item.avg_waterTable);
+
+        ch4.labels.push(date);
+        ch4.datasets[0].data.push(item.avg_ch4);
+
+        co2.labels.push(date);
+        co2.datasets[0].data.push(item.avg_co2);
+      });
+    } else if (GHGFluxMonthly.data.length > 0 && landCoverKey && periodeKey == "Monthly") {
+      GHGFluxMonthly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", { locale: id });
+        airTemperature.labels.push(date);
+        airTemperature.datasets[0].data.push(item.avg_airTemperature);
+
+        soilTemperature.labels.push(date);
+        soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+
+        soilMoisture.labels.push(date);
+        soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+
+        waterTable.labels.push(date);
+        waterTable.datasets[0].data.push(item.avg_waterTable);
+
+        ch4.labels.push(date);
+        ch4.datasets[0].data.push(item.avg_ch4);
+
+        co2.labels.push(date);
+        co2.datasets[0].data.push(item.avg_co2);
+      });
+    } else if (GHGFluxYearly.data.length > 0 && landCoverKey && !periodeKey) {
+      GHGFluxYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", { locale: id });
+        airTemperature.labels.push(date);
+        airTemperature.datasets[0].data.push(item.avg_airTemperature);
 
         soilTemperature.labels.push(date);
         soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
@@ -469,8 +420,8 @@ function ContentComponent({
       ch4,
       co2,
     };
-  }, [GHGFluxYearly.data, landCoverKey]);
-  // filter-chart-end
+  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
+  // filter-chart-yearly-end
 
   return (
     <Fragment>
@@ -606,13 +557,11 @@ function ContentComponent({
 
           {categoryKey == "GHG Fluxes & other variables" ? (
             <GHGChartYearly
+              chartData={getChartDataGHGFlux}
               sidebar={sidebar as boolean}
-              categoryKey={categoryKey}
               landCoverKey={landCoverKey}
               locationKey={locationKey}
               periodeKey={periodeKey}
-              periodeFilterred={periodeFilterred}
-              locationOptions={locationOptions}
             />
           ) : null}
         </ScrollShadow>

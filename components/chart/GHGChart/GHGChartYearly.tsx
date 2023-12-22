@@ -1,10 +1,6 @@
-import useGHGFluxStatisticsYearlyApi from "@/api/ghg-flux-statistics-yearly.api";
 import { SelectTypes } from "@/utils/propTypes";
-import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import { Accordion, AccordionItem } from "@nextui-org/react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
-import React, { Fragment, Key, useCallback, useEffect, useMemo } from "react";
+import React, { Fragment, Key } from "react";
 import { MdInfo } from "react-icons/md";
 import AreaCharts from "../AreaCharts";
 
@@ -22,30 +18,30 @@ export type PropsChart = {
   datasets: dataSetProps[];
 };
 
+type ChartDataProps = {
+  airTemperature: PropsChart;
+  soilTemperature: PropsChart;
+  soilMoisture: PropsChart;
+  waterTable: PropsChart;
+  ch4: PropsChart;
+  co2: PropsChart;
+};
+
 type Props = {
+  chartData: ChartDataProps;
   sidebar: boolean;
-  locationKey: Key | null;
   landCoverKey: Key | null;
-  categoryKey: Key | null;
   periodeKey: Key | null;
-  locationOptions?: SelectTypes[] | any[];
-  periodeFilterred: {
-    start: string;
-    end: string;
-  };
+  locationKey: Key | null;
 };
 
 export default function GHGChartYearly({
+  chartData,
   sidebar,
-  locationKey,
   landCoverKey,
-  categoryKey,
   periodeKey,
-  locationOptions,
-  periodeFilterred,
 }: Props) {
   // cchart
-  const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
 
   const options = {
     responsive: true,
@@ -70,265 +66,6 @@ export default function GHGChartYearly({
       },
     },
   };
-
-  const dataYearly = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agt",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
-    ],
-    datasets: [
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: landCoverKey as string,
-      },
-    ],
-  };
-
-  const dataMonthly = {
-    labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    datasets: [
-      {
-        data: [10, 50, 100, 70, 20, 50, 80, 70, 15, 20, 10, 100],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: "Grapic Chart",
-      },
-    ],
-  };
-
-  const dataWeekly = {
-    labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Friday", "Sat"],
-    datasets: [
-      {
-        data: [10, 50, 100, 70, 20, 50, 80],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.3)",
-        tension: 0.4,
-        fill: true,
-        label: "Grapic Chart",
-      },
-    ],
-  };
-
-  const getFilterLocation = useCallback(
-    (key: Key) => {
-      let state = locationOptions
-        ?.filter((item) => item.location == key)
-        .map((item) => item.state)
-        .toString();
-      return { state };
-    },
-    [locationOptions]
-  );
-
-  const getQuery = useMemo(() => {
-    let location: string | any = "";
-    let landCover: string | any = "";
-
-    if (locationKey) location = getFilterLocation(locationKey as any).state;
-    if (landCoverKey) landCover = landCoverKey as any;
-
-    return { location, landCover };
-  }, [locationKey, landCoverKey, getFilterLocation]);
-
-  // filter-chart
-  const filterCharts = useMemo(() => {
-    const qb = RequestQueryBuilder.create();
-
-    const search: any = {
-      $and: [{ location: { $cont: getQuery.location } }],
-    };
-    if (periodeKey)
-      search?.$and?.push({
-        date: {
-          $gte: periodeFilterred?.start,
-          $lte: periodeFilterred?.end,
-        },
-      });
-    if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
-      search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
-
-    qb.search(search);
-    qb.sortBy({
-      field: `date`,
-      order: "ASC",
-    });
-    qb.query();
-    return qb;
-  }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
-
-  const getGHGFluxChart = async (params: any) => {
-    await GHGFluxYearly.fetch({ params: params });
-  };
-
-  useEffect(() => {
-    getGHGFluxChart(filterCharts?.queryObject);
-  }, [filterCharts]);
-
-  const getChartGHGFluxYearly = useMemo(() => {
-    let chartLabel = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agt",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
-    ];
-    let chartData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-    let airTemperature: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "Air Temperature",
-        },
-      ],
-    };
-    let soilTemperature: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "Soil Temperature",
-        },
-      ],
-    };
-    let soilMoisture: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "Soil Moisture",
-        },
-      ],
-    };
-    let waterTable: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "Water Table",
-        },
-      ],
-    };
-    let ch4: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "CH4",
-        },
-      ],
-    };
-    let co2: PropsChart = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.3)",
-          tension: 0.4,
-          fill: true,
-          label: "CO2",
-        },
-      ],
-    };
-
-    if (GHGFluxYearly.data.length > 0 && landCoverKey) {
-      GHGFluxYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "LLL", { locale: id });
-        airTemperature.labels.push(date);
-        airTemperature.datasets[0].data.push(item.avg_airTemperature);
-
-        soilTemperature.labels.push(date);
-        soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
-
-        soilMoisture.labels.push(date);
-        soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
-
-        waterTable.labels.push(date);
-        waterTable.datasets[0].data.push(item.avg_waterTable);
-
-        ch4.labels.push(date);
-        ch4.datasets[0].data.push(item.avg_ch4);
-
-        co2.labels.push(date);
-        co2.datasets[0].data.push(item.avg_co2);
-      });
-    } else {
-      airTemperature.labels = chartLabel;
-      airTemperature.datasets[0].data = chartData;
-
-      soilTemperature.labels = chartLabel;
-      soilTemperature.datasets[0].data = chartData;
-
-      soilMoisture.labels = chartLabel;
-      soilMoisture.datasets[0].data = chartData;
-
-      waterTable.labels = chartLabel;
-      waterTable.datasets[0].data = chartData;
-
-      ch4.labels = chartLabel;
-      ch4.datasets[0].data = chartData;
-
-      co2.labels = chartLabel;
-      co2.datasets[0].data = chartData;
-    }
-
-    // airTemperature = dataYearly;
-    return {
-      airTemperature,
-      soilTemperature,
-      soilMoisture,
-      waterTable,
-      ch4,
-      co2,
-    };
-  }, [GHGFluxYearly.data, landCoverKey]);
-  // filter-chart-end
   return (
     <Fragment>
       <div className={`w-full ${sidebar ? "" : "hidden"}`}>
@@ -364,7 +101,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.airTemperature}
+                data={chartData.airTemperature}
               />
             </div>
           </AccordionItem>
@@ -389,7 +126,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.soilTemperature}
+                data={chartData.soilTemperature}
               />
             </div>
           </AccordionItem>
@@ -414,7 +151,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.soilMoisture}
+                data={chartData.soilMoisture}
               />
             </div>
           </AccordionItem>
@@ -439,7 +176,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.waterTable}
+                data={chartData.waterTable}
               />
             </div>
           </AccordionItem>
@@ -466,7 +203,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.ch4}
+                data={chartData.ch4}
               />
             </div>
           </AccordionItem>
@@ -493,7 +230,7 @@ export default function GHGChartYearly({
               <AreaCharts
                 height="300"
                 options={options}
-                data={getChartGHGFluxYearly.co2}
+                data={chartData.co2}
               />
             </div>
           </AccordionItem>
@@ -511,7 +248,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.airTemperature}
+              data={chartData.airTemperature}
             />
           </div>
 
@@ -520,7 +257,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.soilTemperature}
+              data={chartData.soilTemperature}
             />
           </div>
 
@@ -529,7 +266,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.soilMoisture}
+              data={chartData.soilMoisture}
             />
           </div>
 
@@ -538,7 +275,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.waterTable}
+              data={chartData.waterTable}
             />
           </div>
 
@@ -547,7 +284,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.ch4}
+              data={chartData.ch4}
             />
           </div>
 
@@ -556,7 +293,7 @@ export default function GHGChartYearly({
             <AreaCharts
               height="300"
               options={options}
-              data={getChartGHGFluxYearly.co2}
+              data={chartData.co2}
             />
           </div>
         </div>
