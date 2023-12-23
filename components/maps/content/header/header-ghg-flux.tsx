@@ -3,54 +3,18 @@ import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
 interface GHGFluxProps {
-  items: GHGFlux[];
+  items: {
+    totalAirTemperature?: number | any;
+    totalSoilTemperature?: number | any;
+    totalSoilMoisture?: number | any;
+    totalWaterTable?: number | any;
+    totalCh4?: number | any;
+    totalCo2?: number | any;
+  };
   sidebar?: boolean;
 };
 
 export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
-  const itemReduce = useMemo(() => {
-    let airTemperature: number = 0;
-    let soilTemperature: number = 0;
-    let soilMoisture: number = 0;
-    let waterTable: number = 0;
-    let ch4: number = 0;
-    let co2: number = 0;
-    if(items?.length > 0) {
-      airTemperature = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.airTemperature;
-      }, 0);
-  
-      soilTemperature = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.soilTemperature;
-      }, 0);
-  
-      soilMoisture = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.soilMoisture;
-      }, 0);
-  
-      waterTable = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.waterTable;
-      }, 0);
-  
-      ch4 = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.ch4;
-      }, 0);
-  
-      co2 = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.co2;
-      }, 0);
-    }
-
-    return {
-      airTemperature,
-      soilTemperature,
-      soilMoisture,
-      waterTable,
-      ch4,
-      co2,
-    };
-  }, [items]);
-
 
   return (
     <Fragment>
@@ -58,9 +22,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Air Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.airTemperature
+            {items?.totalAirTemperature
               ? formatMoney({
-                  amount: itemReduce?.airTemperature,
+                  amount: items?.totalAirTemperature,
                   decimalCount: 2,
                 })
               : 0}
@@ -71,9 +35,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Soil Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.soilTemperature
+            {items?.totalSoilTemperature
               ? formatMoney({
-                  amount: itemReduce?.soilTemperature,
+                  amount: items?.totalSoilTemperature,
                   decimalCount: 2,
                 })
               : 0}
@@ -84,9 +48,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Soil Moisture</p>
           <p className="font-bold text-lg">
-            {itemReduce?.soilMoisture
+            {items?.totalSoilMoisture
               ? formatMoney({
-                  amount: itemReduce?.soilMoisture,
+                  amount: items?.totalSoilMoisture,
                   decimalCount: 2,
                 })
               : 0}
@@ -97,9 +61,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Water Table</p>
           <p className="font-bold text-lg">
-            {itemReduce?.waterTable
+            {items?.totalWaterTable
               ? formatMoney({
-                  amount: itemReduce?.waterTable,
+                  amount: items?.totalWaterTable,
                   decimalCount: 2,
                 })
               : 0}
@@ -112,9 +76,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
             Ch <sup>4</sup>
           </p>
           <p className="font-bold text-lg">
-            {itemReduce?.ch4
+            {items?.totalCh4
               ? formatMoney({
-                  amount: itemReduce?.ch4,
+                  amount: items?.totalCh4,
                   decimalCount: 2,
                 })
               : 0}
@@ -127,9 +91,9 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
             Co <sup>2</sup>
           </p>
           <p className="font-bold text-lg">
-            {itemReduce?.co2
+            {items?.totalCo2
               ? formatMoney({
-                  amount: itemReduce?.co2,
+                  amount: items?.totalCo2,
                   decimalCount: 2,
                 })
               : 0}

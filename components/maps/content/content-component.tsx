@@ -31,8 +31,11 @@ import useSoilsApi from "@/api/soils.api";
 import HeaderSoils from "./header/header-soils";
 import useWeatherApi from "@/api/weather.api";
 import HeaderWeather from "./header/header-weather";
-import { useGHGFluxStatisticsMonthlyApi, useGHGFluxStatisticsYearlyApi } from "@/api/ghg-flux-statistics.api";
-import GHGChartYearly from "@/components/chart/GHGChart/GHGChartYearly";
+import {
+  useGHGFluxStatisticsMonthlyApi,
+  useGHGFluxStatisticsYearlyApi,
+} from "@/api/ghg-flux-statistics.api";
+import GHGFluxCharts from "@/components/chart/GHGChart/GHGFluxCharts";
 
 type Props = {
   sidebar?: boolean;
@@ -328,7 +331,11 @@ function ContentComponent({
       ],
     };
 
-    if (GHGFluxYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
+    if (
+      GHGFluxYearly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Yearly"
+    ) {
       GHGFluxYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "LLL", { locale: id });
         airTemperature.labels.push(date);
@@ -349,9 +356,15 @@ function ContentComponent({
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
       });
-    } else if (GHGFluxMonthly.data.length > 0 && landCoverKey && periodeKey == "Monthly") {
+    } else if (
+      GHGFluxMonthly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Monthly"
+    ) {
       GHGFluxMonthly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", { locale: id });
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
 
@@ -372,7 +385,9 @@ function ContentComponent({
       });
     } else if (GHGFluxYearly.data.length > 0 && landCoverKey && !periodeKey) {
       GHGFluxYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", { locale: id });
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
 
@@ -421,7 +436,230 @@ function ContentComponent({
       co2,
     };
   }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
+
+  const getSumChartDataGHGFlux = useMemo(() => {
+    let totalAirTemperature: number = 0;
+    let totalSoilTemperature: number = 0;
+    let totalSoilMoisture: number = 0;
+    let totalWaterTable: number = 0;
+    let totalCh4: number = 0;
+    let totalCo2: number = 0;
+    if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
+      totalAirTemperature = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_airTemperature;
+        },
+        0
+      );
+      totalSoilTemperature = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilTemperature;
+        },
+        0
+      );
+      totalSoilMoisture = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilMoisture;
+        },
+        0
+      );
+      totalWaterTable = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_waterTable;
+        },
+        0
+      );
+      totalCh4 = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_ch4;
+        },
+        0
+      );
+      totalCo2 = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_co2;
+        },
+        0
+      );
+    } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
+      totalAirTemperature = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_airTemperature;
+        },
+        0
+      );
+      totalSoilTemperature = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilTemperature;
+        },
+        0
+      );
+      totalSoilMoisture = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilMoisture;
+        },
+        0
+      );
+      totalWaterTable = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_waterTable;
+        },
+        0
+      );
+      totalCh4 = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_ch4;
+        },
+        0
+      );
+      totalCo2 = GHGFluxMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_co2;
+        },
+        0
+      );
+    } else if (!periodeKey && GHGFluxYearly.data.length > 0) {
+      totalAirTemperature = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_airTemperature;
+        },
+        0
+      );
+      totalSoilTemperature = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilTemperature;
+        },
+        0
+      );
+      totalSoilMoisture = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_soilMoisture;
+        },
+        0
+      );
+      totalWaterTable = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_waterTable;
+        },
+        0
+      );
+      totalCh4 = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_ch4;
+        },
+        0
+      );
+      totalCo2 = GHGFluxYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_co2;
+        },
+        0
+      );
+    }
+    return {
+      totalAirTemperature,
+      totalSoilTemperature,
+      totalSoilMoisture,
+      totalWaterTable,
+      totalCh4,
+      totalCo2,
+    };
+  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
+
+  console.log(getSumChartDataGHGFlux, "summary");
   // filter-chart-yearly-end
+
+  console.log();
 
   return (
     <Fragment>
@@ -495,7 +733,7 @@ function ContentComponent({
             }`}
           >
             {categoryKey == "GHG Fluxes & other variables" ? (
-              <HeaderGHGFlux items={GHGFlux?.data} sidebar={sidebar} />
+              <HeaderGHGFlux items={getSumChartDataGHGFlux} sidebar={sidebar} />
             ) : categoryKey == "Soil psychochemical properties" ? (
               <HeaderSoils items={Soils?.data} sidebar={sidebar} />
             ) : categoryKey == "Weather data (AWS)" ? (
@@ -556,7 +794,7 @@ function ContentComponent({
           </div>
 
           {categoryKey == "GHG Fluxes & other variables" ? (
-            <GHGChartYearly
+            <GHGFluxCharts
               chartData={getChartDataGHGFlux}
               sidebar={sidebar as boolean}
               landCoverKey={landCoverKey}

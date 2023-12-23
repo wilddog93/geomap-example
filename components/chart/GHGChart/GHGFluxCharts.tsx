@@ -35,7 +35,7 @@ type Props = {
   locationKey: Key | null;
 };
 
-export default function GHGChartYearly({
+export default function GHGFluxCharts({
   chartData,
   sidebar,
   landCoverKey,
