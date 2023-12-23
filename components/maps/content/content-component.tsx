@@ -36,6 +36,11 @@ import {
   useGHGFluxStatisticsYearlyApi,
 } from "@/api/ghg-flux-statistics.api";
 import GHGFluxCharts from "@/components/chart/GHGChart/GHGFluxCharts";
+import {
+  useSoilsStatisticsMonthlyApi,
+  useSoilsStatisticsYearlyApi,
+} from "@/api/soils-statistics.api";
+import SoilsCharts from "@/components/chart/SoilCharts/SoilsCharts";
 
 type Props = {
   sidebar?: boolean;
@@ -92,6 +97,8 @@ function ContentComponent({
   // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
+  const SoilsYearly = useSoilsStatisticsYearlyApi();
+  const SoilsMonthly = useSoilsStatisticsMonthlyApi();
 
   const getFilterLocation = useCallback(
     (key: Key) => {
@@ -199,8 +206,7 @@ function ContentComponent({
     // console.log(categoryKey, "categoryKey")
   }, [landCoverKey, filterItems, categoryKey]);
 
-  // CHART GHG FLUX
-  // filter-chart-yearly
+  // chart
   const filterCharts = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
@@ -656,8 +662,230 @@ function ContentComponent({
     };
   }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
 
-  console.log(getSumChartDataGHGFlux, "summary");
-  // filter-chart-yearly-end
+  // soils
+  const getSoilsChart = async (params: any) => {
+    await SoilsYearly.fetch({ params: params });
+    await SoilsMonthly.fetch({ params: params });
+  };
+
+  useEffect(() => {
+    getSoilsChart(filterCharts?.queryObject);
+  }, [filterCharts]);
+
+  const getChartDataSoils = useMemo(() => {
+    let chartLabel = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agt",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
+    ];
+    let chartData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    let bulkDensity: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let gravimetricWaterContent: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let volumetricWaterContent: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+
+    if (SoilsYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
+      SoilsYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "LLL", { locale: id });
+        bulkDensity.labels.push(date);
+        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+
+        gravimetricWaterContent.labels.push(date);
+        gravimetricWaterContent.datasets[0].data.push(
+          item.avg_gravimetricWaterContent
+        );
+
+        volumetricWaterContent.labels.push(date);
+        volumetricWaterContent.datasets[0].data.push(
+          item.avg_volumetricWaterContent
+        );
+      });
+    } else if (
+      SoilsMonthly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Monthly"
+    ) {
+      SoilsMonthly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
+        bulkDensity.labels.push(date);
+        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+
+        gravimetricWaterContent.labels.push(date);
+        gravimetricWaterContent.datasets[0].data.push(
+          item.avg_gravimetricWaterContent
+        );
+
+        volumetricWaterContent.labels.push(date);
+        volumetricWaterContent.datasets[0].data.push(
+          item.avg_volumetricWaterContent
+        );
+      });
+    } else if (SoilsYearly.data.length > 0 && landCoverKey && !periodeKey) {
+      SoilsYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
+        bulkDensity.labels.push(date);
+        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+
+        gravimetricWaterContent.labels.push(date);
+        gravimetricWaterContent.datasets[0].data.push(
+          item.avg_gravimetricWaterContent
+        );
+
+        volumetricWaterContent.labels.push(date);
+        volumetricWaterContent.datasets[0].data.push(
+          item.avg_volumetricWaterContent
+        );
+      });
+    } else {
+      bulkDensity.labels = chartLabel;
+      bulkDensity.datasets[0].data = chartData;
+
+      gravimetricWaterContent.labels = chartLabel;
+      gravimetricWaterContent.datasets[0].data = chartData;
+
+      volumetricWaterContent.labels = chartLabel;
+      volumetricWaterContent.datasets[0].data = chartData;
+    }
+
+    // airTemperature = dataYearly;
+    return {
+      bulkDensity,
+      gravimetricWaterContent,
+      volumetricWaterContent,
+    };
+  }, [SoilsYearly.data, landCoverKey, SoilsMonthly.data, periodeKey]);
+
+  const getSumChartDataSoils = useMemo(() => {
+    let totalBulkDensity: number = 0;
+    let totalGravimetricWaterContent: number = 0;
+    let totalVolumetricWaterContent: number = 0;
+    if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
+      totalBulkDensity = SoilsYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_bulkDensity;
+        },
+        0
+      );
+      totalGravimetricWaterContent = SoilsYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_gravimetricWaterContent;
+        },
+        0
+      );
+      totalVolumetricWaterContent = SoilsYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_volumetricWaterContent;
+        },
+        0
+      );
+    } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
+      totalBulkDensity = SoilsMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_bulkDensity;
+        },
+        0
+      );
+      totalGravimetricWaterContent = SoilsMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_gravimetricWaterContent;
+        },
+        0
+      );
+      totalVolumetricWaterContent = SoilsMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_volumetricWaterContent;
+        },
+        0
+      );
+    }
+    return {
+      totalBulkDensity,
+      totalGravimetricWaterContent,
+      totalVolumetricWaterContent
+    };
+  }, [SoilsYearly.data, landCoverKey, SoilsMonthly.data, periodeKey]);
+
+  console.log(getSumChartDataSoils, "summary");
+  // chart-end
 
   console.log();
 
@@ -735,7 +963,7 @@ function ContentComponent({
             {categoryKey == "GHG Fluxes & other variables" ? (
               <HeaderGHGFlux items={getSumChartDataGHGFlux} sidebar={sidebar} />
             ) : categoryKey == "Soil psychochemical properties" ? (
-              <HeaderSoils items={Soils?.data} sidebar={sidebar} />
+              <HeaderSoils items={getSumChartDataSoils} sidebar={sidebar} />
             ) : categoryKey == "Weather data (AWS)" ? (
               <HeaderWeather items={Weather?.data} sidebar={sidebar} />
             ) : (
@@ -796,6 +1024,15 @@ function ContentComponent({
           {categoryKey == "GHG Fluxes & other variables" ? (
             <GHGFluxCharts
               chartData={getChartDataGHGFlux}
+              sidebar={sidebar as boolean}
+              landCoverKey={landCoverKey}
+              locationKey={locationKey}
+              periodeKey={periodeKey}
+            />
+          ) : null}
+          {categoryKey == "Soil psychochemical properties" ? (
+            <SoilsCharts
+              chartData={getChartDataSoils}
               sidebar={sidebar as boolean}
               landCoverKey={landCoverKey}
               locationKey={locationKey}

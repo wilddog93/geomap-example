@@ -4,7 +4,11 @@ import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
 interface SoilsProps {
-  items: SoilsType[];
+  items: {
+    totalBulkDensity?: number | any;
+    totalGravimetricWaterContent?: number | any;
+    totalVolumetricWaterContent?: number | any;
+  };
   sidebar?: boolean;
 };
 
@@ -12,42 +16,15 @@ export type MyUnionType = (callbackfn: (previousValue: any, currentValue: any) =
 
 
 export default function HeaderSoils({ items, sidebar }: SoilsProps) {
-  const itemReduce = useMemo(() => {
-    let gravimetricWaterContent: number = 0;
-    let bulkDensity: number = 0;
-    let volumetricWaterContent: number = 0;
-   
-    if(items?.length > 0) {
-      gravimetricWaterContent = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.values?.gravimetricWaterContent;
-      }, 0);
-  
-      bulkDensity = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.values?.bulkDensity;
-      }, 0);
-  
-      volumetricWaterContent = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-        return previousValue + currentValue?.values?.volumetricWaterContent;
-      }, 0);
-    }
-
-    return {
-      gravimetricWaterContent,
-      bulkDensity,
-      volumetricWaterContent
-    };
-  }, [items]);
-
-
   return (
     <Fragment>
       <div className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}>
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Air Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.gravimetricWaterContent
+            {items?.totalBulkDensity
               ? formatMoney({
-                  amount: itemReduce?.gravimetricWaterContent,
+                  amount: items?.totalBulkDensity,
                   decimalCount: 2,
                 })
               : 0}
@@ -58,9 +35,9 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Soil Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.bulkDensity
+            {items?.totalGravimetricWaterContent
               ? formatMoney({
-                  amount: itemReduce?.bulkDensity,
+                  amount: items?.totalGravimetricWaterContent,
                   decimalCount: 2,
                 })
               : 0}
@@ -71,9 +48,9 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Soil Moisture</p>
           <p className="font-bold text-lg">
-            {itemReduce?.volumetricWaterContent
+            {items?.totalVolumetricWaterContent
               ? formatMoney({
-                  amount: itemReduce?.volumetricWaterContent,
+                  amount: items?.totalVolumetricWaterContent,
                   decimalCount: 2,
                 })
               : 0}
