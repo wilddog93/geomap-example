@@ -210,14 +210,14 @@ export const Navbar = () => {
                   onClick={() => console.log("import-carbon")}
                   endContent={<MdUpload className="text-large" />}
                 >
-                  Carbon Stock Document
+                  Carbon Stock
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => console.log("import-ghg-flux")}
                   key="ghg-flux"
                   endContent={<MdUpload className="text-large" />}
                 >
-                  GHG Fluxes Document
+                  GHG Fluxes
                 </DropdownItem>
 
                 <DropdownItem
@@ -225,21 +225,21 @@ export const Navbar = () => {
                   key="ncs"
                   endContent={<MdUpload className="text-large" />}
                 >
-                  NCS Document
+                  NCS
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => console.log("import-soils")}
                   key="soils"
                   endContent={<MdUpload className="text-large" />}
                 >
-                  Soil Psychochemical Document
+                  Soil Psychochemical
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => console.log("import-aws")}
                   key="aws"
                   endContent={<MdUpload className="text-large" />}
                 >
-                  Weather data (AWS) Document
+                  Weather data (AWS)
                 </DropdownItem>
               </DropdownSection>
             </DropdownMenu>
