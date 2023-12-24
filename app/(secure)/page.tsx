@@ -35,7 +35,7 @@ export default function Home() {
   // filter-map
   const [location, setLocation] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
-  const [locationKey, setLocationKey] = useState<Key | null>("Mempawah");
+  const [locationKey, setLocationKey] = useState<Key | null>("");
   const [categoryKey, setCategoryKey] = useState<Key | null>(
     "GHG Fluxes & other variables"
   );

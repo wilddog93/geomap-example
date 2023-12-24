@@ -145,74 +145,6 @@ function ContentComponent({
     return { location, landCover };
   }, [locationKey, landCoverKey, getFilterLocation]);
 
-  const filterItems = useMemo(() => {
-    const qb = RequestQueryBuilder.create();
-
-    const search: any = {
-      $and: [
-        { location: { $cont: getQuery.location } },
-        { type: { $eq: "Total" } },
-      ],
-    };
-
-    // if (getQuery.location && categoryKey !== "weather data")
-    //   search.$and.push({ location: { $cont: getQuery.location } });
-    if (periodeKey)
-      search?.$and?.push({
-        date: {
-          $gte: periodeFilterred.start,
-          $lte: periodeFilterred.end,
-        },
-      });
-    if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
-      search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
-
-    qb.search(search);
-    qb.sortBy({
-      field: `date`,
-      order: "ASC",
-    });
-    qb.query();
-    return qb;
-  }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
-
-  const getGHGFluxAPI = async (params: any) => {
-    let newParams = {
-      ...params,
-      limit: 1000,
-    };
-    await GHGFlux.fetch({ params: newParams });
-  };
-
-  const getSoilsAPI = async (params: any) => {
-    let newParams = {
-      ...params,
-      limit: 1000,
-    };
-    await Soils.fetch({ params: newParams });
-  };
-
-  const getWeatherAPI = async (params: any) => {
-    let newParams = {
-      ...params,
-      limit: 1000,
-    };
-    await Weather.fetch({ params: newParams });
-  };
-
-  useEffect(() => {
-    getGHGFluxAPI(filterItems?.queryObject);
-    getSoilsAPI(filterItems?.queryObject);
-  }, [filterItems]);
-
-  useEffect(() => {
-    if (categoryKey == "Weather data (AWS)") {
-      getWeatherAPI(filterItems?.queryObject);
-    }
-
-    // console.log(categoryKey, "categoryKey")
-  }, [landCoverKey, filterItems, categoryKey]);
-
   // chart
   const filterCharts = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -898,8 +830,10 @@ function ContentComponent({
   };
 
   useEffect(() => {
-    getWeatherChart(filterCharts?.queryObject);
-  }, [filterCharts]);
+    if (categoryKey == "Weather data (AWS)") {
+      getWeatherChart(filterCharts?.queryObject);
+    }
+  }, [filterCharts, categoryKey]);
 
   const getChartDataWeather = useMemo(() => {
     let chartLabel = [
@@ -1010,41 +944,33 @@ function ContentComponent({
       ],
     };
 
-    if (WeatherYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
+    if (
+      WeatherYearly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Yearly"
+    ) {
       WeatherYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "LLL", { locale: id });
         temperature.labels.push(date);
         temperature.datasets[0].data.push(item.avg_temperature);
 
         relativeHumidity.labels.push(date);
-        relativeHumidity.datasets[0].data.push(
-          item.avg_relativeHumidity
-        );
+        relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
 
         solarRadiation.labels.push(date);
-        solarRadiation.datasets[0].data.push(
-          item.avg_solarRadiation
-        );
+        solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
 
         windSpeed.labels.push(date);
-        windSpeed.datasets[0].data.push(
-          item.avg_windSpeed
-        );
+        windSpeed.datasets[0].data.push(item.avg_windSpeed);
 
         gustSpeed.labels.push(date);
-        gustSpeed.datasets[0].data.push(
-          item.avg_gustSpeed
-        );
+        gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
 
         windDirection.labels.push(date);
-        windDirection.datasets[0].data.push(
-          item.avg_windDirection
-        );
+        windDirection.datasets[0].data.push(item.avg_windDirection);
 
         rain.labels.push(date);
-        rain.datasets[0].data.push(
-          item.avg_rain
-        );
+        rain.datasets[0].data.push(item.avg_rain);
       });
     } else if (
       WeatherMonthly.data.length > 0 &&
@@ -1059,34 +985,22 @@ function ContentComponent({
         temperature.datasets[0].data.push(item.avg_temperature);
 
         relativeHumidity.labels.push(date);
-        relativeHumidity.datasets[0].data.push(
-          item.avg_relativeHumidity
-        );
+        relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
 
         solarRadiation.labels.push(date);
-        solarRadiation.datasets[0].data.push(
-          item.avg_solarRadiation
-        );
+        solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
 
         windSpeed.labels.push(date);
-        windSpeed.datasets[0].data.push(
-          item.avg_windSpeed
-        );
+        windSpeed.datasets[0].data.push(item.avg_windSpeed);
 
         gustSpeed.labels.push(date);
-        gustSpeed.datasets[0].data.push(
-          item.avg_gustSpeed
-        );
+        gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
 
         windDirection.labels.push(date);
-        windDirection.datasets[0].data.push(
-          item.avg_windDirection
-        );
+        windDirection.datasets[0].data.push(item.avg_windDirection);
 
         rain.labels.push(date);
-        rain.datasets[0].data.push(
-          item.avg_rain
-        );
+        rain.datasets[0].data.push(item.avg_rain);
       });
     } else if (WeatherYearly.data.length > 0 && landCoverKey && !periodeKey) {
       WeatherYearly.data.map((item, i) => {
@@ -1097,34 +1011,22 @@ function ContentComponent({
         temperature.datasets[0].data.push(item.avg_temperature);
 
         relativeHumidity.labels.push(date);
-        relativeHumidity.datasets[0].data.push(
-          item.avg_relativeHumidity
-        );
+        relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
 
         solarRadiation.labels.push(date);
-        solarRadiation.datasets[0].data.push(
-          item.avg_solarRadiation
-        );
+        solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
 
         windSpeed.labels.push(date);
-        windSpeed.datasets[0].data.push(
-          item.avg_windSpeed
-        );
+        windSpeed.datasets[0].data.push(item.avg_windSpeed);
 
         gustSpeed.labels.push(date);
-        gustSpeed.datasets[0].data.push(
-          item.avg_gustSpeed
-        );
+        gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
 
         windDirection.labels.push(date);
-        windDirection.datasets[0].data.push(
-          item.avg_windDirection
-        );
+        windDirection.datasets[0].data.push(item.avg_windDirection);
 
         rain.labels.push(date);
-        rain.datasets[0].data.push(
-          item.avg_rain
-        );
+        rain.datasets[0].data.push(item.avg_rain);
       });
     } else {
       temperature.labels = chartLabel;
@@ -1157,7 +1059,7 @@ function ContentComponent({
       windSpeed,
       gustSpeed,
       windDirection,
-      rain
+      rain,
     };
   }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
 
@@ -1413,25 +1315,25 @@ function ContentComponent({
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="w-full flex flex-col">
                   <p className="text-xs mb-2">Parameter 1</p>
-                  <p className="font-bold text-lg">55.92</p>
+                  <p className="font-bold text-lg">0</p>
                   <p className="text-xs">Condition/status</p>
                 </div>
 
                 <div className="w-full flex flex-col">
                   <p className="text-xs mb-2">Parameter 2</p>
-                  <p className="font-bold text-lg">55.92</p>
+                  <p className="font-bold text-lg">0</p>
                   <p className="text-xs">Condition/status</p>
                 </div>
 
                 <div className="w-full flex flex-col">
                   <p className="text-xs mb-2">Parameter 3</p>
-                  <p className="font-bold text-lg">55.92</p>
+                  <p className="font-bold text-lg">0</p>
                   <p className="text-xs">Condition/status</p>
                 </div>
 
                 <div className="w-full flex flex-col">
                   <p className="text-xs mb-2">Parameter 4</p>
-                  <p className="font-bold text-lg">55.92</p>
+                  <p className="font-bold text-lg">0</p>
                   <p className="text-xs">Condition/status</p>
                 </div>
               </div>
