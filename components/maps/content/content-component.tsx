@@ -41,6 +41,11 @@ import {
   useSoilsStatisticsYearlyApi,
 } from "@/api/soils-statistics.api";
 import SoilsCharts from "@/components/chart/SoilCharts/SoilsCharts";
+import {
+  useWeatherStatisticsMonthlyApi,
+  useWeatherStatisticsYearlyApi,
+} from "@/api/weather-statistics.api";
+import WeatherCharts from "@/components/chart/WeatherChart/WeatherCharts";
 
 type Props = {
   sidebar?: boolean;
@@ -99,6 +104,8 @@ function ContentComponent({
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
   const SoilsYearly = useSoilsStatisticsYearlyApi();
   const SoilsMonthly = useSoilsStatisticsMonthlyApi();
+  const WeatherYearly = useWeatherStatisticsYearlyApi();
+  const WeatherMonthly = useWeatherStatisticsMonthlyApi();
 
   const getFilterLocation = useCallback(
     (key: Key) => {
@@ -880,11 +887,447 @@ function ContentComponent({
     return {
       totalBulkDensity,
       totalGravimetricWaterContent,
-      totalVolumetricWaterContent
+      totalVolumetricWaterContent,
     };
   }, [SoilsYearly.data, landCoverKey, SoilsMonthly.data, periodeKey]);
 
-  console.log(getSumChartDataSoils, "summary");
+  // weather
+  const getWeatherChart = async (params: any) => {
+    await SoilsYearly.fetch({ params: params });
+    await SoilsMonthly.fetch({ params: params });
+  };
+
+  useEffect(() => {
+    getWeatherChart(filterCharts?.queryObject);
+  }, [filterCharts]);
+
+  const getChartDataWeather = useMemo(() => {
+    let chartLabel = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agt",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
+    ];
+    let chartData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    let temperature: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let relativeHumidity: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let solarRadiation: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let windSpeed: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let gustSpeed: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let windDirection: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+    let rain: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+
+    if (WeatherYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
+      WeatherYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "LLL", { locale: id });
+        temperature.labels.push(date);
+        temperature.datasets[0].data.push(item.avg_temperature);
+
+        relativeHumidity.labels.push(date);
+        relativeHumidity.datasets[0].data.push(
+          item.avg_relativeHumidity
+        );
+
+        solarRadiation.labels.push(date);
+        solarRadiation.datasets[0].data.push(
+          item.avg_solarRadiation
+        );
+
+        windSpeed.labels.push(date);
+        windSpeed.datasets[0].data.push(
+          item.avg_windSpeed
+        );
+
+        gustSpeed.labels.push(date);
+        gustSpeed.datasets[0].data.push(
+          item.avg_gustSpeed
+        );
+
+        windDirection.labels.push(date);
+        windDirection.datasets[0].data.push(
+          item.avg_windDirection
+        );
+
+        rain.labels.push(date);
+        rain.datasets[0].data.push(
+          item.avg_rain
+        );
+      });
+    } else if (
+      WeatherMonthly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Monthly"
+    ) {
+      WeatherMonthly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
+        temperature.labels.push(date);
+        temperature.datasets[0].data.push(item.avg_temperature);
+
+        relativeHumidity.labels.push(date);
+        relativeHumidity.datasets[0].data.push(
+          item.avg_relativeHumidity
+        );
+
+        solarRadiation.labels.push(date);
+        solarRadiation.datasets[0].data.push(
+          item.avg_solarRadiation
+        );
+
+        windSpeed.labels.push(date);
+        windSpeed.datasets[0].data.push(
+          item.avg_windSpeed
+        );
+
+        gustSpeed.labels.push(date);
+        gustSpeed.datasets[0].data.push(
+          item.avg_gustSpeed
+        );
+
+        windDirection.labels.push(date);
+        windDirection.datasets[0].data.push(
+          item.avg_windDirection
+        );
+
+        rain.labels.push(date);
+        rain.datasets[0].data.push(
+          item.avg_rain
+        );
+      });
+    } else if (WeatherYearly.data.length > 0 && landCoverKey && !periodeKey) {
+      WeatherYearly.data.map((item, i) => {
+        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+          locale: id,
+        });
+        temperature.labels.push(date);
+        temperature.datasets[0].data.push(item.avg_temperature);
+
+        relativeHumidity.labels.push(date);
+        relativeHumidity.datasets[0].data.push(
+          item.avg_relativeHumidity
+        );
+
+        solarRadiation.labels.push(date);
+        solarRadiation.datasets[0].data.push(
+          item.avg_solarRadiation
+        );
+
+        windSpeed.labels.push(date);
+        windSpeed.datasets[0].data.push(
+          item.avg_windSpeed
+        );
+
+        gustSpeed.labels.push(date);
+        gustSpeed.datasets[0].data.push(
+          item.avg_gustSpeed
+        );
+
+        windDirection.labels.push(date);
+        windDirection.datasets[0].data.push(
+          item.avg_windDirection
+        );
+
+        rain.labels.push(date);
+        rain.datasets[0].data.push(
+          item.avg_rain
+        );
+      });
+    } else {
+      temperature.labels = chartLabel;
+      temperature.datasets[0].data = chartData;
+
+      relativeHumidity.labels = chartLabel;
+      relativeHumidity.datasets[0].data = chartData;
+
+      solarRadiation.labels = chartLabel;
+      solarRadiation.datasets[0].data = chartData;
+
+      windSpeed.labels = chartLabel;
+      windSpeed.datasets[0].data = chartData;
+
+      gustSpeed.labels = chartLabel;
+      gustSpeed.datasets[0].data = chartData;
+
+      windDirection.labels = chartLabel;
+      windDirection.datasets[0].data = chartData;
+
+      rain.labels = chartLabel;
+      rain.datasets[0].data = chartData;
+    }
+
+    // airTemperature = dataYearly;
+    return {
+      temperature,
+      relativeHumidity,
+      solarRadiation,
+      windSpeed,
+      gustSpeed,
+      windDirection,
+      rain
+    };
+  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+
+  const getSumChartDataWeather = useMemo(() => {
+    let totalTemperature: number = 0;
+    let totalRelativeHumidity: number = 0;
+    let totalSolarRadiation: number = 0;
+    let totalWindSpeed: number = 0;
+    let totalGustSpeed: number = 0;
+    let totalWindDirection: number = 0;
+    let totalRain: number = 0;
+
+    if (WeatherYearly.data.length > 0 && periodeKey == "Yearly") {
+      totalTemperature = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_temperature;
+        },
+        0
+      );
+      totalRelativeHumidity = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_relativeHumidity;
+        },
+        0
+      );
+      totalSolarRadiation = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_solarRadiation;
+        },
+        0
+      );
+      totalWindSpeed = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_windSpeed;
+        },
+        0
+      );
+      totalGustSpeed = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_gustSpeed;
+        },
+        0
+      );
+      totalWindDirection = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_windDirection;
+        },
+        0
+      );
+      totalRain = WeatherYearly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_rain;
+        },
+        0
+      );
+    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
+      totalTemperature = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_temperature;
+        },
+        0
+      );
+      totalRelativeHumidity = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_relativeHumidity;
+        },
+        0
+      );
+      totalSolarRadiation = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_solarRadiation;
+        },
+        0
+      );
+      totalWindSpeed = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_windSpeed;
+        },
+        0
+      );
+      totalGustSpeed = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_gustSpeed;
+        },
+        0
+      );
+      totalWindDirection = WeatherMonthly.data.reduce(
+        (
+          previousValue: any,
+          currentValue: any,
+          currentIndex: number,
+          array: any[]
+        ) => {
+          return previousValue + currentValue?.sum_windDirection;
+        },
+        0
+      );
+    }
+    return {
+      totalTemperature,
+      totalRelativeHumidity,
+      totalSolarRadiation,
+      totalWindSpeed,
+      totalGustSpeed,
+      totalWindDirection,
+      totalRain,
+    };
+  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+
+  console.log(getSumChartDataWeather, "summary");
   // chart-end
 
   console.log();
@@ -965,7 +1408,7 @@ function ContentComponent({
             ) : categoryKey == "Soil psychochemical properties" ? (
               <HeaderSoils items={getSumChartDataSoils} sidebar={sidebar} />
             ) : categoryKey == "Weather data (AWS)" ? (
-              <HeaderWeather items={Weather?.data} sidebar={sidebar} />
+              <HeaderWeather items={getSumChartDataWeather} sidebar={sidebar} />
             ) : (
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="w-full flex flex-col">
@@ -1033,6 +1476,15 @@ function ContentComponent({
           {categoryKey == "Soil psychochemical properties" ? (
             <SoilsCharts
               chartData={getChartDataSoils}
+              sidebar={sidebar as boolean}
+              landCoverKey={landCoverKey}
+              locationKey={locationKey}
+              periodeKey={periodeKey}
+            />
+          ) : null}
+          {categoryKey == "Weather data (AWS)" ? (
+            <WeatherCharts
+              chartData={getChartDataWeather}
               sidebar={sidebar as boolean}
               landCoverKey={landCoverKey}
               locationKey={locationKey}

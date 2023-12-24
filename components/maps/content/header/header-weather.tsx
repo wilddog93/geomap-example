@@ -1,75 +1,37 @@
 import { GHGFlux } from "@/api/ghg-flux.api";
-import { WeatherTypes } from "@/api/weather.api";
+import { SoilsType } from "@/api/soils.api";
 import { formatMoney } from "@/utils/useFunction";
 import React, { Fragment, useMemo } from "react";
 
 interface WeatherProps {
-  items: WeatherTypes[];
+  items: {
+    totalTemperature?: number | any;
+    totalRelativeHumidity?: number | any;
+    totalSolarRadiation?: number | any;
+    totalWindSpeed?: number | any;
+    totalGustSpeed?: number | any;
+    totalWindDirection?: number | any;
+    totalRain?: number | any;
+  };
   sidebar?: boolean;
 }
 
+export type MyUnionType = (
+  callbackfn: (previousValue: any, currentValue: any) => any
+) => any;
+
 export default function HeaderWeather({ items, sidebar }: WeatherProps) {
-  const itemReduce = useMemo(() => {
-    let temperature: number = 0,
-      relativeHumidity: number = 0,
-      solarRadiation: number = 0,
-      windSpeed: number = 0,
-      gustSpeed: number = 0,
-      windDirection: number = 0,
-      rain: number = 0;
-    
-      if(items?.length > 0) {
-        temperature = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.temperature;
-        }, 0);
-    
-        relativeHumidity = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.relativeHumidity;
-        }, 0);
-    
-        solarRadiation = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.solarRadiation;
-        }, 0);
-    
-        windSpeed = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.windSpeed;
-        }, 0);
-    
-        gustSpeed = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.gustSpeed;
-        }, 0);
-    
-        windDirection = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.windDirection;
-        }, 0);
-    
-        rain = items.reduce((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => {
-          return previousValue + currentValue?.rain;
-        }, 0);
-      }
-
-    return {
-      temperature,
-      relativeHumidity,
-      solarRadiation,
-      windSpeed,
-      gustSpeed,
-      windDirection,
-      rain
-    };
-  }, [items]);
-
   return (
     <Fragment>
       <div
-        className={`w-full grid grid-cols-1 gap-4 py-3 ${sidebar ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2 lg:grid-cols-4"}`}
+        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}
       >
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Temperature</p>
           <p className="font-bold text-lg">
-            {itemReduce?.temperature
+            {items?.totalTemperature
               ? formatMoney({
-                  amount: itemReduce?.temperature,
+                  amount: items?.totalTemperature,
                   decimalCount: 2,
                 })
               : 0}
@@ -80,9 +42,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Relative Humidity</p>
           <p className="font-bold text-lg">
-            {itemReduce?.relativeHumidity
+            {items?.totalRelativeHumidity
               ? formatMoney({
-                  amount: itemReduce?.relativeHumidity,
+                  amount: items?.totalRelativeHumidity,
                   decimalCount: 2,
                 })
               : 0}
@@ -93,9 +55,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Solar Radiation</p>
           <p className="font-bold text-lg">
-            {itemReduce?.solarRadiation
+            {items?.totalSolarRadiation
               ? formatMoney({
-                  amount: itemReduce?.solarRadiation,
+                  amount: items?.totalSolarRadiation,
                   decimalCount: 2,
                 })
               : 0}
@@ -106,9 +68,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Wind Speed</p>
           <p className="font-bold text-lg">
-            {itemReduce?.windSpeed
+            {items?.totalWindSpeed
               ? formatMoney({
-                  amount: itemReduce?.windSpeed,
+                  amount: items?.totalWindSpeed,
                   decimalCount: 2,
                 })
               : 0}
@@ -119,9 +81,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Gust Speed</p>
           <p className="font-bold text-lg">
-            {itemReduce?.gustSpeed
+            {items?.totalGustSpeed
               ? formatMoney({
-                  amount: itemReduce?.gustSpeed,
+                  amount: items?.totalGustSpeed,
                   decimalCount: 2,
                 })
               : 0}
@@ -132,9 +94,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Wind Direction</p>
           <p className="font-bold text-lg">
-            {itemReduce?.windDirection
+            {items?.totalWindDirection
               ? formatMoney({
-                  amount: itemReduce?.windDirection,
+                  amount: items?.totalWindDirection,
                   decimalCount: 2,
                 })
               : 0}
@@ -145,9 +107,9 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Rain</p>
           <p className="font-bold text-lg">
-            {itemReduce?.rain
+            {items?.totalRain
               ? formatMoney({
-                  amount: itemReduce?.rain,
+                  amount: items?.totalRain,
                   decimalCount: 2,
                 })
               : 0}
