@@ -29,7 +29,12 @@ import {
 } from "@/components/icons";
 
 // icons
-import { MdCamera, MdOutlineUpload, MdSettings } from "react-icons/md";
+import {
+  MdCamera,
+  MdOutlineUpload,
+  MdSettings,
+  MdUpload,
+} from "react-icons/md";
 
 import { Logo } from "@/components/icons";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -38,6 +43,7 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
@@ -76,15 +82,19 @@ export const Navbar = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    if(navRef.current) {
-      console.log(window.innerHeight, 'windoww-nav', navRef.current.clientHeight)
+    if (navRef.current) {
+      console.log(
+        window.innerHeight,
+        "windoww-nav",
+        navRef.current.clientHeight
+      );
     }
-  },[])
+  }, []);
 
   return (
     <NextUINavbar
-      ref={navRef} 
-      maxWidth="2xl" 
+      ref={navRef}
+      maxWidth="2xl"
       position="sticky"
       className=""
       classNames={{
@@ -154,17 +164,86 @@ export const Navbar = () => {
         justify="end"
       >
         <div className="w-full max-w-[12rem] relative flex items-center">
-          <Button
-            type="button"
-            variant="solid"
-            color="primary"
-            className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
+          <Dropdown
+            showArrow
+            radius="sm"
+            classNames={{
+              base: "before:bg-default-200", // change arrow background
+              content: "p-0 border-small border-divider bg-background",
+            }}
           >
-            Import Data
-            <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-500 group-hover:translate-x-full -right-2">
-              <MdOutlineUpload className="w-10 h-10 bg-green-400 rounded-full p-1 text-white duration-300 group-hover:rotate-90" />
-            </div>
-          </Button>
+            <DropdownTrigger>
+              <Button
+                disableRipple
+                variant="solid"
+                color="primary"
+                className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
+              >
+                Import Data
+                <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-500 group-hover:translate-x-full -right-2">
+                  <MdOutlineUpload className="w-10 h-10 bg-green-400 rounded-full p-1 text-white duration-300 group-hover:rotate-90" />
+                </div>
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Custom item styles"
+              // disabledKeys={["profile"]}
+              className="p-3"
+              color="primary"
+              itemClasses={{
+                base: [
+                  "rounded-md",
+                  "text-default-500",
+                  "transition-opacity",
+                  "data-[hover=true]:text-foreground",
+                  "data-[hover=true]:bg-default-100",
+                  "dark:data-[hover=true]:bg-default-50",
+                  "data-[selectable=true]:focus:bg-default-50",
+                  "data-[pressed=true]:opacity-70",
+                  "data-[focus-visible=true]:ring-default-500",
+                ],
+              }}
+            >
+              <DropdownSection aria-label="Upload Documents">
+                <DropdownItem
+                  key="carbon-stock"
+                  onClick={() => console.log("import-carbon")}
+                  endContent={<MdUpload className="text-large" />}
+                >
+                  Carbon Stock Document
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => console.log("import-ghg-flux")}
+                  key="ghg-flux"
+                  endContent={<MdUpload className="text-large" />}
+                >
+                  GHG Fluxes Document
+                </DropdownItem>
+
+                <DropdownItem
+                  onClick={() => console.log("ncs")}
+                  key="ncs"
+                  endContent={<MdUpload className="text-large" />}
+                >
+                  NCS Document
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => console.log("import-soils")}
+                  key="soils"
+                  endContent={<MdUpload className="text-large" />}
+                >
+                  Soil Psychochemical Document
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => console.log("import-aws")}
+                  key="aws"
+                  endContent={<MdUpload className="text-large" />}
+                >
+                  Weather data (AWS) Document
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
         </div>
         {/* <User
           name={<span className="hidden sm:flex">John Doe</span>}
