@@ -164,7 +164,7 @@ export const Navbar = () => {
           },
         });
         console.log("Files uploaded ghg:", files);
-      } else if (selected == "Location") {
+      } else if (selected == "NCS Location") {
         await LocationImport.fetch(formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -341,7 +341,7 @@ export const Navbar = () => {
                   <DropdownItem
                     key="ncs"
                     onPress={() => {
-                      setSelected("Location");
+                      setSelected("NCS Location");
                       onOpen();
                     }}
                     // endContent={<MdUpload className="text-large" />}
@@ -454,7 +454,7 @@ export const Navbar = () => {
       {/* modal */}
       <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onCloseImport}>
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">{selected}</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1 border-b-2 border-default-200">{selected}</ModalHeader>
           <ModalBody>
             <div className="w-full flex flex-col gap-2 mb-3">
               <div className="w-full flex flex-col gap-2">
@@ -505,14 +505,14 @@ export const Navbar = () => {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button type="button" className="" onClick={onCloseImport}>
+            <Button type="button" color="danger" onClick={onCloseImport}>
               <span className="text-xs font-semibold">Discard</span>
             </Button>
 
             <Button
               type="button"
               className=""
-              color="danger"
+              color="primary"
               onClick={() => onFilesUpload(files)}
               disabled={
                 GHGImport.fetching ||
