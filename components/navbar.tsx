@@ -143,52 +143,53 @@ export const Navbar = () => {
 
   const onFilesUpload = async (files: File[]) => {
     // Handle the multiple file upload logic here
-    if (!files || files.length == 0) {
-      toast.error("Please input your document files!");
-    }
+    
     let formData = new FormData();
     let imagefile = files;
     formData.append("file", imagefile[0]);
-
-    console.log(formData, "form-data");
-    if (selected == "Carbon Stock") {
-      await CarbonImport.fetch(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded carbon:", files);
-    } else if (selected == "GHG Fluxes") {
-      await GHGImport.fetch(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded ghg:", files);
-    } else if (selected == "Location") {
-      await LocationImport.fetch(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded location:", files);
-    } else if (selected == "Soil psychochemical properties") {
-      await SoilsImport.fetch(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded soil:", files);
-    } else if (selected == "Weather data (AWS)") {
-      await WeatherImport.fetch(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded weather:", files);
+    if (!files || files.length == 0) {
+      toast.error("Please input your document files!");
     } else {
-      console.log("Files uploaded:", files);
+      if (selected == "Carbon Stock") {
+        await CarbonImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded carbon:", files);
+      } else if (selected == "GHG Fluxes") {
+        await GHGImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded ghg:", files);
+      } else if (selected == "Location") {
+        await LocationImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded location:", files);
+      } else if (selected == "Soil psychochemical properties") {
+        await SoilsImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded soil:", files);
+      } else if (selected == "Weather data (AWS)") {
+        await WeatherImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded weather:", files);
+      } else {
+        console.log("Files uploaded:", files);
+      }
     }
+    
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -345,7 +346,7 @@ export const Navbar = () => {
                     }}
                     // endContent={<MdUpload className="text-large" />}
                   >
-                    NCS
+                    NCS Location
                   </DropdownItem>
                   <DropdownItem
                     key="soils"
