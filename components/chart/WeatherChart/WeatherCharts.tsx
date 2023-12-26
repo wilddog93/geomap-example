@@ -83,15 +83,11 @@ export default function WeatherCharts({
             disableIndicatorAnimation
           />
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-1`}
             aria-label={`${landCoverKey}-1`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 1"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Temperature
                 </p>
               </div>
@@ -108,15 +104,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-2`}
             aria-label={`${landCoverKey}-2`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 2"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Relative Humidity
                 </p>
               </div>
@@ -133,15 +125,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-3`}
             aria-label={`${landCoverKey}-3`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 3"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Solar Radiation
                 </p>
               </div>
@@ -158,15 +146,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-4`}
             aria-label={`${landCoverKey}-4`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 4"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Wind Speed
                 </p>
               </div>
@@ -183,15 +167,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-5`}
             aria-label={`${landCoverKey}-5`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 5"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Gust Speed
                 </p>
               </div>
@@ -208,15 +188,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-6`}
             aria-label={`${landCoverKey}-6`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 6"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Wind Direction
                 </p>
               </div>
@@ -233,15 +209,11 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-7`}
             aria-label={`${landCoverKey}-7`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 7"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Rain
                 </p>
               </div>
@@ -266,7 +238,7 @@ export default function WeatherCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Temperature</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -275,7 +247,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Relative Humidity</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -284,7 +256,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Solar Radiation</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -293,7 +265,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Speed</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -302,7 +274,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Gust Speed</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -311,7 +283,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Direction</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -320,12 +292,8 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
-            <AreaCharts
-              height="300"
-              options={options}
-              data={chartData.rain}
-            />
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Rain</h3>
+            <AreaCharts height="300" options={options} data={chartData.rain} />
           </div>
         </div>
       </div>

@@ -82,15 +82,15 @@ export default function GHGFluxCharts({
             disableIndicatorAnimation
           />
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-1`}
             aria-label={`${landCoverKey}-1`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 1"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   Air Temperature
                 </p>
               </div>
@@ -107,15 +107,15 @@ export default function GHGFluxCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-2`}
             aria-label={`${landCoverKey}-2`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 2"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   Soil Temperature
                 </p>
               </div>
@@ -132,15 +132,15 @@ export default function GHGFluxCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-3`}
             aria-label={`${landCoverKey}-3`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 3"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   Soil Moisture
                 </p>
               </div>
@@ -157,15 +157,15 @@ export default function GHGFluxCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-4`}
             aria-label={`${landCoverKey}-4`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 4"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   Water Table
                 </p>
               </div>
@@ -182,15 +182,15 @@ export default function GHGFluxCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-5`}
             aria-label={`${landCoverKey}-5`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 5"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   <span>
                     Ch<sup>4</sup>
                   </span>
@@ -200,24 +200,20 @@ export default function GHGFluxCharts({
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts
-                height="300"
-                options={options}
-                data={chartData.ch4}
-              />
+              <AreaCharts height="300" options={options} data={chartData.ch4} />
             </div>
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-6`}
             aria-label={`${landCoverKey}-6`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 6"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p
+                  className={`text-sm font-semibold ${
+                    landCoverKey ? "" : "hidden"
+                  }`}
+                >
                   <span>
                     Co<sup>2</sup>
                   </span>
@@ -227,11 +223,7 @@ export default function GHGFluxCharts({
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts
-                height="300"
-                options={options}
-                data={chartData.co2}
-              />
+              <AreaCharts height="300" options={options} data={chartData.co2} />
             </div>
           </AccordionItem>
         </Accordion>
@@ -244,7 +236,9 @@ export default function GHGFluxCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Air Temperature
+            </h3>
             <AreaCharts
               height="300"
               options={options}
@@ -253,7 +247,9 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Soil Temperature
+            </h3>
             <AreaCharts
               height="300"
               options={options}
@@ -262,7 +258,9 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Soil Moisture
+            </h3>
             <AreaCharts
               height="300"
               options={options}
@@ -271,7 +269,9 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Water Table
+            </h3>
             <AreaCharts
               height="300"
               options={options}
@@ -280,21 +280,17 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
-            <AreaCharts
-              height="300"
-              options={options}
-              data={chartData.ch4}
-            />
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Ch<sup>4</sup>
+            </h3>
+            <AreaCharts height="300" options={options} data={chartData.ch4} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
-            <AreaCharts
-              height="300"
-              options={options}
-              data={chartData.co2}
-            />
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              Co<sup>2</sup>
+            </h3>
+            <AreaCharts height="300" options={options} data={chartData.co2} />
           </div>
         </div>
       </div>

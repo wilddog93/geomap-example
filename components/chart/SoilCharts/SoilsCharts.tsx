@@ -79,15 +79,11 @@ export default function SoilsCharts({
             disableIndicatorAnimation
           />
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-1`}
             aria-label={`${landCoverKey}-1`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 1"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Bulk Density
                 </p>
               </div>
@@ -104,15 +100,11 @@ export default function SoilsCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-2`}
             aria-label={`${landCoverKey}-2`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 2"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   Gravimetric Water Content
                 </p>
               </div>
@@ -129,15 +121,11 @@ export default function SoilsCharts({
           </AccordionItem>
 
           <AccordionItem
-            hideIndicator={landCoverKey ? true : false}
             key={`${landCoverKey}-3`}
             aria-label={`${landCoverKey}-3`}
             title={
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">
-                  {landCoverKey ? landCoverKey : "Parameter 3"}
-                </h3>
-                <p className={`text-xs ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
                   volumetric Water Content
                 </p>
               </div>
@@ -162,7 +150,7 @@ export default function SoilsCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Bulk Density</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -171,7 +159,7 @@ export default function SoilsCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Gravimetric Water Content</h3>
             <AreaCharts
               height="300"
               options={options}
@@ -180,7 +168,7 @@ export default function SoilsCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs -mb-5">{landCoverKey}</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Volumetric Water Content</h3>
             <AreaCharts
               height="300"
               options={options}
