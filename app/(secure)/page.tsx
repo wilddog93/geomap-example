@@ -2,11 +2,7 @@
 
 import { Key, useEffect, useMemo, useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
-import {
-  MdChevronLeft,
-  MdChevronRight,
-  MdClose,
-} from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdClose } from "react-icons/md";
 import Footer from "@/components/footer";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import { SelectTypes } from "@/utils/propTypes";
@@ -111,6 +107,21 @@ export default function Home() {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
+  const filterByUniqueKey = (
+    arr: SelectTypes[],
+    key: keyof SelectTypes
+  ): SelectTypes[] => {
+    const uniqueValues = new Set<any>();
+    return arr.filter((obj) => {
+      const value = obj[key];
+      if (uniqueValues.has(value)) {
+        return false; // Duplicate key value, exclude from the result
+      }
+      uniqueValues.add(value);
+      return true; // Unique key value, include in the result
+    });
+  };
+
   const locationOptions = useMemo(() => {
     const { data } = locationApi;
     let location: any[] | SelectTypes[] = [];
@@ -128,7 +139,8 @@ export default function Home() {
         });
       });
     }
-    return location;
+    const filteredArray = filterByUniqueKey(location, "value");
+    return filteredArray;
   }, [locationApi?.data]);
 
   console.log(locationOptions, "locations-data", locationKey);

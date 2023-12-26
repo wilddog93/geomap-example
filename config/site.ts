@@ -10,7 +10,7 @@ export const siteConfig = {
     },
     {
       label: "Table",
-      href: "/table/ghg-fluxes?page=1&limit=10",
+      href: "/table/ghg-fluxes?page=1&limit=5",
     },
   ],
   navMenuItems: [
@@ -20,7 +20,7 @@ export const siteConfig = {
     },
     {
       label: "Table",
-      href: "/table",
+      href: "/table/ghg-fluxes?page=1&limit=5",
     },
   ],
   navMenuTables: [
@@ -28,6 +28,11 @@ export const siteConfig = {
       label: "GHG Fluxes",
       path: "ghg-fluxes",
       href: "/table/ghg-fluxes?page=1&limit=5",
+    },
+    {
+      label: "Carbon Stocks",
+      path: "carbon-stocks",
+      href: "/table/carbon-stocks/woody-debris?page=1&limit=5",
     },
     {
       label: "Soil Physical Chemistry",
@@ -38,11 +43,6 @@ export const siteConfig = {
       label: "Weather Data",
       path: "weather",
       href: "/table/weather?page=1&limit=5",
-    },
-    {
-      label: "Carbon Stocks",
-      path: "carbon-stocks",
-      href: "/table/carbon-stocks/woody-debris?page=1&limit=5",
     },
   ],
   navTabCarbon: [
