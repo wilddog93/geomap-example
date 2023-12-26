@@ -52,7 +52,6 @@ import {
   MdPlace,
   MdSort,
 } from "react-icons/md";
-import useGHGFluxApi from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
@@ -66,7 +65,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
-import useSoilsApi, { SoilsType } from "@/api/soils.api";
+import { SoilsType, useSoilsApi } from "@/api/soils.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -255,7 +254,7 @@ export default function SoilTables({
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search:any = {
+    const search: any = {
       $and: [
         // {
         //   date: {

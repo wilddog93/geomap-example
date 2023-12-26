@@ -52,7 +52,6 @@ import {
   MdPlace,
   MdSort,
 } from "react-icons/md";
-import useGHGFluxApi from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, SelectTypes } from "@/utils/propTypes";
@@ -66,7 +65,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
-import useWeatherApi, { WeatherTypes } from "@/api/weather.api";
+import { useWeatherApi, WeatherTypes } from "@/api/weather.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",

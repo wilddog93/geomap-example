@@ -52,7 +52,7 @@ import {
   MdPlace,
   MdSort,
 } from "react-icons/md";
-import useGHGFluxApi from "@/api/ghg-flux.api";
+import {useGHGFluxApi} from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";

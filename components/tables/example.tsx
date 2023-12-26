@@ -49,8 +49,13 @@ import {
   statusOptions,
 } from "@/components/tables/component/data";
 import { MdMoreVert, MdOutlineSearch, MdPlace } from "react-icons/md";
-import useGHGFluxApi from "@/api/ghg-flux.api";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useGHGFluxApi } from "@/api/ghg-flux.api";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -424,7 +429,6 @@ export default function FluxTables({ params }: TableProps) {
     if (isLimit) setRowsPerPage(Number(newLimit));
     if (isSearch) setFilterValue(newSearch as string);
   }, [search]);
-  
 
   return (
     <Table

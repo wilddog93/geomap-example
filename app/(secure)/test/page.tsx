@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/stores/auth";
-import useGHGFluxApi from "@/api/ghg-flux.api";
+import { useGHGFluxApi } from "@/api/ghg-flux.api";
 import { format, subMonths, subWeeks, subYears } from "date-fns";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -43,17 +43,19 @@ export default function TestPage() {
   };
 
   const filterItems = useMemo(() => {
-    const filteredArray = Array.from(new Set(items.map(item => item.id))).map(id => items.find(item => item.id === id));
+    const filteredArray = Array.from(new Set(items.map((item) => item.id))).map(
+      (id) => items.find((item) => item.id === id)
+    );
 
-    return filteredArray
-  }, [items])
+    return filteredArray;
+  }, [items]);
 
   useEffect(() => {
     fetch({ params: { limit: 10 } });
   }, []);
 
   useEffect(() => {
-    const intervalId = setTimeout(async() => {
+    const intervalId = setTimeout(async () => {
       if (hasMore && data?.length > 0) {
         await fetchData();
       } else {
