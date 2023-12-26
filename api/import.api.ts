@@ -11,9 +11,10 @@ export interface Files {
 
 export const PREFIX_GHG = "/ghg-flux/export";
 export const PREFIX_SOILS = "/soils/export";
-export const PREFIX_CARBON = "/carbon-stock/export";
 export const PREFIX_WEATHER = "/weather/export";
 export const PREFIX_LOCATION = "/locations/export";
+// carbon
+export const PREFIX_CARBON = "/carbon-stock/export";
 
 export function useGHGFilesApi() {
   const axios = useAxios();
