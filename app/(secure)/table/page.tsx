@@ -1,7 +1,11 @@
 "use client";
 
-import usePropsApi from "@/api/landCover-properties.api";
-import useLocationApi, { LocationTypes } from "@/api/location-properties.api";
+// api
+import { useLocationApi, usePropsApi } from "@/api/properties.api";
+// utils
+import { SelectTypes } from "@/utils/propTypes";
+import { RequestQueryBuilder } from "@nestjsx/crud-request";
+// component
 import Footer from "@/components/footer";
 import { SearchIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
@@ -9,15 +13,10 @@ import CarbonTables from "@/components/tables/carbon-tables";
 import FluxTables from "@/components/tables/flux-tables";
 import SoilTables from "@/components/tables/soil-tables";
 import WeatherTables from "@/components/tables/weather-tables";
-import { SelectTypes } from "@/utils/propTypes";
-import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
   Autocomplete,
   AutocompleteItem,
   Button,
-  ButtonGroup,
-  Tab,
-  Tabs,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Fragment, Key, useEffect, useMemo, useState } from "react";

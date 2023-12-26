@@ -1,30 +1,27 @@
 "use client";
 
-import { ChangeEvent, Key, useEffect, useMemo, useState } from "react";
+import { Key, useEffect, useMemo, useState } from "react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import {
   MdChevronLeft,
   MdChevronRight,
   MdClose,
-  MdSearch,
 } from "react-icons/md";
-import MapComponent from "@/components/maps/MapComponent";
-import { Tab, Tabs } from "@nextui-org/tabs";
-import { Navbar } from "@/components/navbar";
-import { Select, SelectItem } from "@nextui-org/select";
-import { Input } from "@nextui-org/input";
-import ContentComponent from "@/components/maps/content/content-component";
 import Footer from "@/components/footer";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
-import useLocationApi from "@/api/location-properties.api";
 import { SelectTypes } from "@/utils/propTypes";
-import { useAuth } from "@/stores/auth";
 import { redirect } from "next/navigation";
-import usePropsApi from "@/api/landCover-properties.api";
 import {
   replaceStringNoSpace,
   splitStringTobeArray,
 } from "@/utils/useFunction";
+// api
+import { useAuth } from "@/stores/auth";
+import { useLocationApi, usePropsApi } from "@/api/properties.api";
+// component
+import MapComponent from "@/components/maps/MapComponent";
+import { Navbar } from "@/components/navbar";
+import ContentComponent from "@/components/maps/content/content-component";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState<boolean>(true);
@@ -120,7 +117,7 @@ export default function Home() {
     if (data.length > 0) {
       data.map((loc: any) => {
         let shortLocation = splitStringTobeArray(loc.location);
-        let newShortLocation = shortLocation[shortLocation.length - 1]
+        let newShortLocation = shortLocation[shortLocation.length - 1];
         location.push({
           ...loc,
           label: loc.location,
@@ -134,7 +131,7 @@ export default function Home() {
     return location;
   }, [locationApi?.data]);
 
-  console.log(locationOptions, "locations-data", locationKey)
+  console.log(locationOptions, "locations-data", locationKey);
 
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();

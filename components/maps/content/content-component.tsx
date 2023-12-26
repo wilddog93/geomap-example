@@ -1,20 +1,16 @@
-import useGHGFluxApi from "@/api/ghg-flux.api";
 import { SelectTypes } from "@/utils/propTypes";
-import { splitStringTobeArray } from "@/utils/useFunction";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
   Autocomplete,
   AutocompleteItem,
   ScrollShadow,
 } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/select";
 import {
   endOfMonth,
   endOfYear,
   format,
   startOfMonth,
   startOfYear,
-  subWeeks,
 } from "date-fns";
 import { id } from "date-fns/locale";
 import React, {
@@ -26,26 +22,29 @@ import React, {
   useState,
 } from "react";
 import { MdCalendarToday } from "react-icons/md";
-import HeaderGHGFlux from "./header/header-ghg-flux";
-import useSoilsApi from "@/api/soils.api";
-import HeaderSoils from "./header/header-soils";
-import useWeatherApi from "@/api/weather.api";
-import HeaderWeather from "./header/header-weather";
+
+// API
 import {
   useGHGFluxStatisticsMonthlyApi,
   useGHGFluxStatisticsYearlyApi,
-} from "@/api/ghg-flux-statistics.api";
-import GHGFluxCharts from "@/components/chart/GHGChart/GHGFluxCharts";
+} from "@/api/ghg-flux.api";
 import {
   useSoilsStatisticsMonthlyApi,
   useSoilsStatisticsYearlyApi,
-} from "@/api/soils-statistics.api";
-import SoilsCharts from "@/components/chart/SoilCharts/SoilsCharts";
+} from "@/api/soils.api";
 import {
   useWeatherStatisticsMonthlyApi,
   useWeatherStatisticsYearlyApi,
-} from "@/api/weather-statistics.api";
+} from "@/api/weather.api";
+
+// component
+import GHGFluxCharts from "@/components/chart/GHGChart/GHGFluxCharts";
+import SoilsCharts from "@/components/chart/SoilCharts/SoilsCharts";
 import WeatherCharts from "@/components/chart/WeatherChart/WeatherCharts";
+// component-header
+import HeaderWeather from "./header/header-weather";
+import HeaderGHGFlux from "./header/header-ghg-flux";
+import HeaderSoils from "./header/header-soils";
 
 type Props = {
   sidebar?: boolean;
@@ -95,10 +94,6 @@ function ContentComponent({
   onInputLandCoverChange,
   onSelectionLandCoverChange,
 }: Props) {
-  const GHGFlux = useGHGFluxApi();
-  const Soils = useSoilsApi();
-  const Weather = useWeatherApi();
-
   // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();

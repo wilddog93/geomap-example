@@ -22,9 +22,24 @@ export interface SoilsType {
   values: ValuesType;
 }
 
-export const PREFIX = "/soils";
+export interface SoilsStatisticsProp {
+  land_cover: string;
+  soil_type: string;
+  location: string;
+  datetime: string;
+  avg_bulkDensity: number;
+  avg_gravimetricWaterContent: number;
+  avg_volumetricWaterContent: number;
+  sum_bulkDensity: number;
+  sum_gravimetricWaterContent: number;
+  sum_volumetricWaterContent: number;
+}
 
-export default function useSoilsApi() {
+export const PREFIX = "/soils";
+export const PREFIX_YEARLY = "/soils/statistics/monthly";
+export const PREFIX_MONTHLY = "/soils/statistics/daily";
+
+export function useSoilsApi() {
   const axios = useAxios();
   const [data, setData] = useState<SoilsType[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -37,6 +52,56 @@ export default function useSoilsApi() {
       const { data: lists, ...result } = await axios.$get(PREFIX, options);
       setData(lists);
       setMeta(result);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  return { fetch, data, meta, error, fetching };
+}
+
+export function useSoilsStatisticsYearlyApi() {
+  const axios = useAxios();
+  const [data, setData] = useState<SoilsStatisticsProp[]>([]);
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [error, setError] = useState<any>();
+  const [meta, setMeta] = useState<Meta>(defaultMeta());
+
+  const fetch = async (options?: AxiosRequestConfig) => {
+    try {
+      setFetching(true);
+      const { data: lists, ...result } = await axios.$getByObject(
+        PREFIX_YEARLY,
+        options
+      );
+      setData(lists);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  return { fetch, data, meta, error, fetching };
+}
+
+export function useSoilsStatisticsMonthlyApi() {
+  const axios = useAxios();
+  const [data, setData] = useState<SoilsStatisticsProp[]>([]);
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [error, setError] = useState<any>();
+  const [meta, setMeta] = useState<Meta>(defaultMeta());
+
+  const fetch = async (options?: AxiosRequestConfig) => {
+    try {
+      setFetching(true);
+      const { data: lists, ...result } = await axios.$getByObject(
+        PREFIX_MONTHLY,
+        options
+      );
+      setData(lists);
     } catch (err: any) {
       setError(err);
     } finally {
