@@ -55,7 +55,7 @@ import {
 import { useGHGFluxApi } from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
-import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
+import { ColumnProps, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
   subMonths,
@@ -66,6 +66,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
+import { WoodyTypes, useWoodyApi } from "@/api/carbon-stocks.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -83,7 +84,8 @@ const sortOptions: SelectTypes[] = [
   { label: "DATE", value: "date" },
   { label: "PLOT", value: "plot" },
   { label: "LAND COVER", value: "landCover" },
-  { label: "TYPE", value: "type" },
+  // { label: "REGION", value: "region" },
+  { label: "SITE", value: "site" },
 ];
 
 const columns: ColumnProps[] = [
@@ -92,13 +94,14 @@ const columns: ColumnProps[] = [
   { name: "DATE", uid: "date", sortable: true },
   { name: "PLOT", uid: "plot", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
-  { name: "TYPE", uid: "type", sortable: true },
-  { name: "AIR TEMPERATURE", uid: "airTemperature" },
-  { name: "SOIL TEMPERATURE", uid: "soilTemperature" },
-  { name: "SOIL MOISTURE", uid: "soilMoisture" },
-  { name: "WATER TABLE", uid: "waterTable" },
-  { name: "CH4", uid: "ch4" },
-  { name: "CO2", uid: "co2" },
+  { name: "SITE", uid: "site", sortable: true },
+  { name: "VOLUME ROTTEN", uid: "volumeRotten" },
+  { name: "VOLUME SOUND", uid: "volumeSound" },
+  { name: "VOLUME MEDIUM", uid: "volumeMedium" },
+  { name: "MASS ROTTEN", uid: "massRotten" },
+  { name: "MASS SOUND", uid: "massSound" },
+  { name: "MASS MEDIUM", uid: "massMedium" },
+  { name: "TOTAL", uid: "total" },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -106,13 +109,14 @@ const INITIAL_VISIBLE_COLUMNS = [
   "date",
   "plot",
   "landCover",
-  "type",
-  "airTemperature",
-  "soilTemperature",
-  "soilMoisture",
-  "waterTable",
-  "ch4",
-  "co2",
+  "site",
+  "volumeRotten",
+  "volumeSound",
+  "volumeMedium",
+  "massRotten",
+  "massSound",
+  "massMedium",
+  "total",
 ];
 
 type TableProps = {
@@ -128,7 +132,7 @@ type TableProps = {
   locationOptions?: SelectTypes[] | any[];
 };
 
-export default function FluxTables({
+export default function WoodyTables({
   params,
   page,
   setPage,
@@ -142,8 +146,8 @@ export default function FluxTables({
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
-  const { fetch, data, meta, fetching } = useGHGFluxApi();
-  const [dataTables, setdataTables] = useState<GhgFluxTypes[]>([]);
+  const { fetch, data, meta, fetching } = useWoodyApi();
+  const [dataTables, setdataTables] = useState<WoodyTypes[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -278,14 +282,14 @@ export default function FluxTables({
 
     const search: any = {
       $and: [
-        { location: { $contL: getQuery?.location } },
+        { region: { $contL: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
         {
           $or: [
-            { type: { $contL: getQuery?.search } },
+            { site: { $contL: getQuery?.search } },
             { landCover: { $contL: getQuery?.search } },
             { plot: { $contL: getQuery?.search } },
-            { location: { $contL: getQuery?.search } },
+            { region: { $contL: getQuery?.search } },
           ],
         },
       ],
@@ -327,12 +331,12 @@ export default function FluxTables({
   // query-params end
 
   // get-data
-  const getGHGFlux = async (params: any) => {
+  const getCarbonWoody = async (params: any) => {
     await fetch({ params: params?.queryObject });
   };
   useEffect(() => {
     if (filterParams) {
-      getGHGFlux(filterParams);
+      getCarbonWoody(filterParams);
     }
   }, [filterParams]);
   // end get-data
@@ -367,17 +371,17 @@ export default function FluxTables({
   }, [data]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: GhgFluxTypes, b: GhgFluxTypes) => {
-      const first = a[sortDescriptor.column as keyof GhgFluxTypes] as number;
-      const second = b[sortDescriptor.column as keyof GhgFluxTypes] as number;
+    return [...items].sort((a: WoodyTypes, b: WoodyTypes) => {
+      const first = a[sortDescriptor.column as keyof WoodyTypes] as number;
+      const second = b[sortDescriptor.column as keyof WoodyTypes] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((item: GhgFluxTypes, columnKey: Key) => {
-    const cellValue = item[columnKey as keyof GhgFluxTypes];
+  const renderCell = useCallback((item: WoodyTypes, columnKey: Key) => {
+    const cellValue = item[columnKey as keyof WoodyTypes];
 
     switch (columnKey) {
       case "id":
@@ -410,7 +414,7 @@ export default function FluxTables({
             <p className="text-bold text-small capitalize">{cellValue || ""}</p>
           </div>
         );
-      case "type":
+      case "site":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">
@@ -418,59 +422,65 @@ export default function FluxTables({
             </p>
           </div>
         );
-      case "airTemprature":
+      case "valumeRotten":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "soilTemprature":
+      case "valumeSound":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "soilMoisture":
+      case "valumeMedium":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "waterTable":
+      case "massRotten":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "ch4":
+      case "massSound":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "co2":
+      case "massMedium":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "actions":
+      case "total":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <MdMoreVert className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu color="primary" className="text-black">
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
+      // case "actions":
+      //   return (
+      //     <div className="relative flex justify-end items-center gap-2">
+      //       <Dropdown>
+      //         <DropdownTrigger>
+      //           <Button isIconOnly size="sm" variant="light">
+      //             <MdMoreVert className="text-default-300" />
+      //           </Button>
+      //         </DropdownTrigger>
+      //         <DropdownMenu color="primary" className="text-black">
+      //           <DropdownItem>View</DropdownItem>
+      //           <DropdownItem>Edit</DropdownItem>
+      //           <DropdownItem>Delete</DropdownItem>
+      //         </DropdownMenu>
+      //       </Dropdown>
+      //     </div>
+      //   );
       default:
         return cellValue;
     }

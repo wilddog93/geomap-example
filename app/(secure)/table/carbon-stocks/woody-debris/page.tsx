@@ -24,6 +24,8 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdPlace } from "react-icons/md";
+import WoodyTables from "@/components/tables/woody-tables";
+import { splitStringTobeArray } from "@/utils/useFunction";
 
 const itemTabs = [
   {
@@ -100,20 +102,39 @@ export default function TablePage(props: any) {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
+  const filterByUniqueKey = (arr: SelectTypes[], key: keyof SelectTypes): SelectTypes[] => {
+    const uniqueValues = new Set<any>();
+    return arr.filter((obj) => {
+      const value = obj[key];
+      if (uniqueValues.has(value)) {
+        return false; // Duplicate key value, exclude from the result
+      }
+      uniqueValues.add(value);
+      return true; // Unique key value, include in the result
+    });
+  };
+
   const locationOptions = useMemo(() => {
     const { data } = locationApi;
-    let location: SelectTypes[] | any[] = [];
+    let location: any[] | SelectTypes[] = [];
     if (data.length > 0) {
-      data.map((loc) => {
+      data.map((loc: any) => {
+        let shortLocation = splitStringTobeArray(loc.location);
+        let newShortLocation = shortLocation[shortLocation.length - 1];
         location.push({
           ...loc,
           label: loc.location,
           value: loc.location,
+          state: newShortLocation?.trim(),
+          // @ts-ignore
+          categories: splitStringTobeArray(loc.description as string),
         });
       });
     }
-    return location;
+    const filteredArray = filterByUniqueKey(location, 'value');
+    return filteredArray;
   }, [locationApi?.data]);
+
 
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -247,7 +268,7 @@ export default function TablePage(props: any) {
           </div>
 
           <div className={`w-full p-4`}>
-            <FluxTables
+            <WoodyTables
               params={props?.searchParams}
               page={page}
               setPage={setPage}
@@ -257,6 +278,7 @@ export default function TablePage(props: any) {
               setFilterValue={setSearch}
               landCoverOptions={landCoverOptions}
               locationKey={locationKey}
+              locationOptions={locationOptions}
             />
           </div>
         </div>
