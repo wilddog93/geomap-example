@@ -123,6 +123,7 @@ type TableProps = {
   setFilterValue: Dispatch<SetStateAction<string>>;
   landCoverOptions?: SelectTypes[] | any[];
   locationKey?: Key | null;
+  locationOptions?: SelectTypes[] | any[];
 };
 
 export default function WeatherTables({
@@ -135,6 +136,7 @@ export default function WeatherTables({
   setFilterValue,
   landCoverOptions,
   locationKey,
+  locationOptions
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -205,6 +207,18 @@ export default function WeatherTables({
   };
   // end function dropdown
 
+  // filter location key
+  const getFilterLocation = useCallback(
+    (key: Key) => {
+      let state = locationOptions
+        ?.filter((item) => item.location == key)
+        .map((item) => item.state)
+        .toString();
+      return { state };
+    },
+    [locationOptions]
+  );
+
   // filter periode
   const periodeFilterred = useMemo(() => {
     const currentDate = new Date();
@@ -247,7 +261,11 @@ export default function WeatherTables({
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    if (locationKey) query = { ...query, location: locationKey };
+    if (locationKey)
+      query = {
+        ...query,
+        location: getFilterLocation(locationKey as any).state,
+      };
     // if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
   }, [page, limit, filterValue, locationKey]);
@@ -324,10 +342,9 @@ export default function WeatherTables({
   }, [visibleColumns]);
 
   const pages = useMemo(() => {
-    let pages = 0;
-    if (meta.pageCount) pages = meta.pageCount;
+    let pages = meta.pageCount;
     return pages;
-  }, [meta]);
+  }, [meta.pageCount]);
 
   // const pages = meta.pageCount;
 

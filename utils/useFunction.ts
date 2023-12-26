@@ -126,3 +126,21 @@ export const convertBytes = ({ bytes, decimals = 2 }: any) => {
 
   return parseFloat(bytes.toFixed(decimals)) + " " + units[i];
 };
+
+
+// filterring
+interface MyObject {
+  id: number | string;
+  uuid: string;
+}
+export const filterByUniqueKey = (arr: MyObject[], key: keyof MyObject): MyObject[] => {
+  const uniqueValues = new Set<any>();
+  return arr.filter((obj) => {
+    const value = obj[key];
+    if (uniqueValues.has(value)) {
+      return false; // Duplicate key value, exclude from the result
+    }
+    uniqueValues.add(value);
+    return true; // Unique key value, include in the result
+  });
+};

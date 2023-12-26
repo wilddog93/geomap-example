@@ -121,6 +121,7 @@ type TableProps = {
   setFilterValue: Dispatch<SetStateAction<string>>;
   landCoverOptions?: SelectTypes[] | any[];
   locationKey?: Key | null;
+  locationOptions?: SelectTypes[] | any[];
 };
 
 export default function SoilTables({
@@ -133,6 +134,7 @@ export default function SoilTables({
   setFilterValue,
   landCoverOptions,
   locationKey,
+  locationOptions
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -204,6 +206,18 @@ export default function SoilTables({
   };
   // end function dropdown
 
+  // filter location key
+  const getFilterLocation = useCallback(
+    (key: Key) => {
+      let state = locationOptions
+        ?.filter((item) => item.location == key)
+        .map((item) => item.state)
+        .toString();
+      return { state };
+    },
+    [locationOptions]
+  );
+
   // filter periode
   const periodeFilterred = useMemo(() => {
     const currentDate = new Date();
@@ -246,7 +260,11 @@ export default function SoilTables({
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    if (locationKey) query = { ...query, location: locationKey };
+    if (locationKey)
+      query = {
+        ...query,
+        location: getFilterLocation(locationKey as any).state,
+      };
     if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
   }, [page, limit, filterValue, locationKey, landCoverKey]);
@@ -333,10 +351,9 @@ export default function SoilTables({
   }, [visibleColumns]);
 
   const pages = useMemo(() => {
-    let pages = 0;
-    if (meta.pageCount) pages = meta.pageCount;
+    let pages = meta.pageCount;
     return pages;
-  }, [meta]);
+  }, [meta.pageCount]);
 
   // const pages = meta.pageCount;
 

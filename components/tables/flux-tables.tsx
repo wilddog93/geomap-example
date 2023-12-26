@@ -52,7 +52,7 @@ import {
   MdPlace,
   MdSort,
 } from "react-icons/md";
-import {useGHGFluxApi} from "@/api/ghg-flux.api";
+import { useGHGFluxApi } from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
@@ -125,6 +125,7 @@ type TableProps = {
   setFilterValue: Dispatch<SetStateAction<string>>;
   landCoverOptions?: SelectTypes[] | any[];
   locationKey?: Key | null;
+  locationOptions?: SelectTypes[] | any[];
 };
 
 export default function FluxTables({
@@ -137,6 +138,7 @@ export default function FluxTables({
   setFilterValue,
   landCoverOptions,
   locationKey,
+  locationOptions,
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -186,7 +188,7 @@ export default function FluxTables({
 
   const onInputLandCoverChange = (value: string) => {
     setLandCoverFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionPeriodeChange = (key: Key) => {
@@ -195,7 +197,7 @@ export default function FluxTables({
 
   const onInputPeriodeChange = (value: string) => {
     setPeriodeFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionSortChange = (key: Key) => {
@@ -204,9 +206,21 @@ export default function FluxTables({
 
   const onInputSortChange = (value: string) => {
     setSortFilter(value);
-    setPage(1)
+    setPage(1);
   };
   // end function dropdown
+
+  // filter location key
+  const getFilterLocation = useCallback(
+    (key: Key) => {
+      let state = locationOptions
+        ?.filter((item) => item.location == key)
+        .map((item) => item.state)
+        .toString();
+      return { state };
+    },
+    [locationOptions]
+  );
 
   // filter periode
   const periodeFilterred = useMemo(() => {
@@ -250,7 +264,11 @@ export default function FluxTables({
       limit,
     };
     if (filterValue) query = { ...query, search: filterValue };
-    if (locationKey) query = { ...query, location: locationKey };
+    if (locationKey)
+      query = {
+        ...query,
+        location: getFilterLocation(locationKey as any).state,
+      };
     if (landCoverKey) query = { ...query, landCover: landCoverKey };
     return query;
   }, [page, limit, filterValue, locationKey, landCoverKey]);
@@ -258,7 +276,7 @@ export default function FluxTables({
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search:any = {
+    const search: any = {
       $and: [
         // {
         //   date: {
@@ -342,10 +360,9 @@ export default function FluxTables({
   }, [visibleColumns]);
 
   const pages = useMemo(() => {
-    let pages = 0;
-    if (meta.pageCount) pages = meta.pageCount;
+    let pages = meta.pageCount;
     return pages;
-  }, [meta]);
+  }, [meta.pageCount]);
 
   // const pages = meta.pageCount;
 
@@ -378,19 +395,25 @@ export default function FluxTables({
       case "id":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "date":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue ? dateFormat(cellValue) : "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue ? dateFormat(cellValue) : "-"}
+            </p>
           </div>
         );
       case "plot":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "landCover":
@@ -402,7 +425,9 @@ export default function FluxTables({
       case "type":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "airTemprature":
@@ -678,7 +703,7 @@ export default function FluxTables({
       bottomContentPlacement="outside"
       classNames={{
         wrapper: "max-h-[382px]",
-        base: "overflow-x-auto overflow-y-hidden py-5"
+        base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

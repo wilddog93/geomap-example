@@ -237,7 +237,9 @@ export const Navbar = () => {
           </NavbarBrand>
           <ul className="hidden lg:flex gap-4 justify-start ml-2">
             {siteConfig.navItems.map((item) => {
-              if (pathname == item.href) {
+              // console.log(pathname.includes(label), item.label, 'href')
+              let label = item?.label.toLowerCase()
+              if (pathname == item.href || pathname.includes(label)) {
                 return (
                   <NavbarItem isActive key={item.href}>
                     <NextLink

@@ -10,37 +10,46 @@ export const siteConfig = {
     },
     {
       label: "Table",
-      href: "/table",
+      href: "/table/ghg-fluxes?page=1&limit=10",
     },
-    // {
-    //   label: "Reports",
-    //   href: "/reports",
-    // },
   ],
   navMenuItems: [
-    {
-      label: "Profile",
-      href: "/profile",
-    },
     {
       label: "Dashboard",
       href: "/",
     },
     {
       label: "Table",
-      href: "/projects",
+      href: "/table",
     },
-    // {
-    //   label: "Reports",
-    //   href: "/reports",
-    // },
+  ],
+  navMenuTables: [
     {
-      label: "Settings",
-      href: "/settings",
+      label: "GHG Fluxes",
+      path: "ghg-fluxes",
+      href: "/table/ghg-fluxes?page=1&limit=5",
     },
     {
-      label: "Logout",
-      href: "/logout",
+      label: "Soil Physical Chemistry",
+      path: "soils",
+      href: "/table/soils?page=1&limit=5",
+    },
+    {
+      label: "Weather Data",
+      path: "weather",
+      href: "/table/weather?page=1&limit=5",
+    },
+    {
+      label: "Carbon Stocks",
+      path: "carbon-stocks",
+      href: "/table/carbon-stocks/woody-debris?page=1&limit=5",
+    },
+  ],
+  navTabCarbon: [
+    {
+      label: "Woody Debris",
+      path: "woody-debris",
+      href: "/table/carbon-stocks/woody-debris",
     },
   ],
   links: {
