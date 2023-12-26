@@ -1225,9 +1225,6 @@ function ContentComponent({
   }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
 
   console.log(getSumChartDataWeather, "summary");
-  // chart-end
-
-  console.log();
 
   return (
     <Fragment>
