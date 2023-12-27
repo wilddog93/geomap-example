@@ -26,46 +26,18 @@ import { Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdPlace } from "react-icons/md";
 import WoodyTables from "@/components/tables/carbon-stocks/woody-tables";
 import { splitStringTobeArray } from "@/utils/useFunction";
-
-const itemTabs = [
-  {
-    id: "ghg",
-    label: "GHG Flux",
-    value: "ghg-flux",
-  },
-  {
-    id: "carbon",
-    label: "Carbon Stock",
-    value: "carbon-stock",
-  },
-  {
-    id: "weather",
-    label: "Weather Data",
-    value: "weather-data",
-  },
-  {
-    id: "soil",
-    label: "Soil Physical Chemistry",
-    value: "soil-physical-chemistry",
-  },
-];
+import LittersTables from "@/components/tables/carbon-stocks/litters-tables";
 
 export default function TablePage(props: any) {
   // data-location
   const locationApi = useLocationApi();
   const propertyApi = usePropsApi();
 
-  const [selected, setSelected] = useState("ghg");
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [search, setSearch] = useState<string | any>("");
   let router = useRouter();
   const pathname = usePathname();
-
-  const handleChange = (key: Key) => {
-    setSelected(key as any);
-    setPage(1);
-  };
 
   const [location, setLocation] = useState<string>("");
   const [locationKey, setLocationKey] = useState<React.Key | null>("Mempawah");
@@ -134,7 +106,6 @@ export default function TablePage(props: any) {
     const filteredArray = filterByUniqueKey(location, 'value');
     return filteredArray;
   }, [locationApi?.data]);
-
 
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -268,7 +239,7 @@ export default function TablePage(props: any) {
           </div>
 
           <div className={`w-full p-4`}>
-            <WoodyTables
+            <LittersTables
               params={props?.searchParams}
               page={page}
               setPage={setPage}

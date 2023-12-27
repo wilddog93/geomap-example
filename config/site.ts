@@ -36,8 +36,8 @@ export const siteConfig = {
     },
     {
       label: "Soil Physical Chemistry",
-      path: "soils",
-      href: "/table/soils?page=1&limit=5",
+      path: "soils-physical",
+      href: "/table/soils-physical?page=1&limit=5",
     },
     {
       label: "Weather Data",
@@ -50,6 +50,21 @@ export const siteConfig = {
       label: "Woody Debris",
       path: "woody-debris",
       href: "/table/carbon-stocks/woody-debris",
+    },
+    {
+      label: "Litters",
+      path: "litters",
+      href: "/table/carbon-stocks/litters",
+    },
+    {
+      label: "Soils",
+      path: "carbon-soils",
+      href: "/table/carbon-stocks/carbon-soils",
+    },
+    {
+      label: "Trees",
+      path: "trees",
+      href: "/table/carbon-stocks/trees",
     },
   ],
   links: {

@@ -93,6 +93,7 @@ const columns: ColumnProps[] = [
   { name: "ID", uid: "id", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
   { name: "PLOT", uid: "plot", sortable: true },
+  { name: "REGION", uid: "region", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "SITE", uid: "site", sortable: true },
   { name: "VOLUME ROTTEN", uid: "volumeRotten" },
@@ -147,7 +148,6 @@ export default function WoodyTables({
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
   const { fetch, data, meta, fetching } = useCarbonWoodyApi();
-  const [dataTables, setdataTables] = useState<CarbonWoodyTypes[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -162,10 +162,8 @@ export default function WoodyTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
+  const [landCoverFilter, setLandCoverFilter] = useState("");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
   const [sortKey, setSortKey] = useState<Key | null>("id");
@@ -295,13 +293,13 @@ export default function WoodyTables({
       ],
     };
 
-    if (periodeKey)
-      search?.$and?.push({
-        date: {
-          $gte: periodeFilterred.start,
-          $lte: periodeFilterred.end,
-        },
-      });
+    // if (periodeKey)
+    //   search?.$and?.push({
+    //     date: {
+    //       $gte: periodeFilterred.start,
+    //       $lte: periodeFilterred.end,
+    //     },
+    //   });
     if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
     if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
 
@@ -319,7 +317,7 @@ export default function WoodyTables({
     }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, sortKey, periodeKey]);
+  }, [getQuery, sortKey]);
 
   useEffect(() => {
     router.replace(
@@ -545,7 +543,7 @@ export default function WoodyTables({
                 labelPlacement="outside"
                 placeholder="Select land cover"
                 defaultItems={landCoverOptions}
-                defaultSelectedKey="Secondary Forest"
+                defaultSelectedKey={landCoverKey as Key}
                 variant="faded"
                 color="primary"
                 className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -575,29 +573,6 @@ export default function WoodyTables({
                 onSelectionChange={onSelectionSortChange}
                 onInputChange={onInputSortChange}
                 endContent={<MdSort className="w-5 h-5" />}
-              >
-                {(item) => (
-                  <AutocompleteItem key={item.value}>
-                    {item.label}
-                  </AutocompleteItem>
-                )}
-              </Autocomplete>
-            </div>
-
-            <div className="w-full max-w-[12rem] flex flex-col gap-2">
-              <Autocomplete
-                radius="full"
-                labelPlacement="outside"
-                placeholder="Select periode"
-                defaultItems={periodeOptions}
-                defaultSelectedKey="Yearly"
-                variant="faded"
-                color="primary"
-                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                allowsCustomValue={true}
-                onSelectionChange={onSelectionPeriodeChange}
-                onInputChange={onInputPeriodeChange}
-                startContent={<MdCalendarToday className="w-5 h-5" />}
               >
                 {(item) => (
                   <AutocompleteItem key={item.value}>
