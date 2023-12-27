@@ -66,7 +66,7 @@ import {
   startOfYear,
   endOfYear,
 } from "date-fns";
-import { WoodyTypes, useWoodyApi } from "@/api/carbon-stocks.api";
+import { CarbonWoodyTypes, useCarbonWoodyApi } from "@/api/carbon-stocks.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -146,8 +146,8 @@ export default function WoodyTables({
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
-  const { fetch, data, meta, fetching } = useWoodyApi();
-  const [dataTables, setdataTables] = useState<WoodyTypes[]>([]);
+  const { fetch, data, meta, fetching } = useCarbonWoodyApi();
+  const [dataTables, setdataTables] = useState<CarbonWoodyTypes[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -371,17 +371,17 @@ export default function WoodyTables({
   }, [data]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: WoodyTypes, b: WoodyTypes) => {
-      const first = a[sortDescriptor.column as keyof WoodyTypes] as number;
-      const second = b[sortDescriptor.column as keyof WoodyTypes] as number;
+    return [...items].sort((a: CarbonWoodyTypes, b: CarbonWoodyTypes) => {
+      const first = a[sortDescriptor.column as keyof CarbonWoodyTypes] as number;
+      const second = b[sortDescriptor.column as keyof CarbonWoodyTypes] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((item: WoodyTypes, columnKey: Key) => {
-    const cellValue = item[columnKey as keyof WoodyTypes];
+  const renderCell = useCallback((item: CarbonWoodyTypes, columnKey: Key) => {
+    const cellValue = item[columnKey as keyof CarbonWoodyTypes];
 
     switch (columnKey) {
       case "id":
