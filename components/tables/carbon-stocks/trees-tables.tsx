@@ -235,7 +235,7 @@ export default function TreesTables({
           $or: [
             { site: { $contL: getQuery?.search } },
             { landCover: { $contL: getQuery?.search } },
-            { plot: { $contL: getQuery?.search } },
+            { type: { $contL: getQuery?.search } },
             { region: { $contL: getQuery?.search } },
           ],
         },
