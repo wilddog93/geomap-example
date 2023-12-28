@@ -308,33 +308,37 @@ function ContentComponent({
 
     if (
       GHGFluxYearly.data.length > 0 &&
-      landCoverKey &&
-      periodeKey == "Yearly"
+      periodeKey == "Yearly" && landCoverKey
     ) {
       GHGFluxYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "LLL", { locale: id });
+        let date = format(new Date(item.datetime), "MMM-yy");
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
+        airTemperature.datasets[0].label = item.land_cover;
 
         soilTemperature.labels.push(date);
         soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+        soilTemperature.datasets[0].label = item.land_cover;
 
         soilMoisture.labels.push(date);
         soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+        soilMoisture.datasets[0].label = item.land_cover;
 
         waterTable.labels.push(date);
         waterTable.datasets[0].data.push(item.avg_waterTable);
+        waterTable.datasets[0].label = item.land_cover;
 
         ch4.labels.push(date);
         ch4.datasets[0].data.push(item.avg_ch4);
+        ch4.datasets[0].label = item.land_cover;
 
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
+        co2.datasets[0].label = item.land_cover;
       });
     } else if (
       GHGFluxMonthly.data.length > 0 &&
-      landCoverKey &&
-      periodeKey == "Monthly"
+      periodeKey == "Monthly" && landCoverKey
     ) {
       GHGFluxMonthly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "yyyy-MM-dd", {
@@ -342,21 +346,27 @@ function ContentComponent({
         });
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
+        airTemperature.datasets[0].label = item.land_cover;
 
         soilTemperature.labels.push(date);
         soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+        soilTemperature.datasets[0].label = item.land_cover;
 
         soilMoisture.labels.push(date);
         soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+        soilMoisture.datasets[0].label = item.land_cover;
 
         waterTable.labels.push(date);
         waterTable.datasets[0].data.push(item.avg_waterTable);
+        waterTable.datasets[0].label = item.land_cover;
 
         ch4.labels.push(date);
         ch4.datasets[0].data.push(item.avg_ch4);
+        ch4.datasets[0].label = item.land_cover;
 
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
+        co2.datasets[0].label = item.land_cover;
       });
     } else if (GHGFluxYearly.data.length > 0 && landCoverKey && !periodeKey) {
       GHGFluxYearly.data.map((item, i) => {
@@ -365,21 +375,27 @@ function ContentComponent({
         });
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
+        airTemperature.datasets[0].label = item.land_cover;
 
         soilTemperature.labels.push(date);
         soilTemperature.datasets[0].data.push(item.avg_soilTemperature);
+        soilTemperature.datasets[0].label = item.land_cover;
 
         soilMoisture.labels.push(date);
         soilMoisture.datasets[0].data.push(item.avg_soilMoisture);
+        soilMoisture.datasets[0].label = item.land_cover;
 
         waterTable.labels.push(date);
         waterTable.datasets[0].data.push(item.avg_waterTable);
+        waterTable.datasets[0].label = item.land_cover;
 
         ch4.labels.push(date);
         ch4.datasets[0].data.push(item.avg_ch4);
+        ch4.datasets[0].label = item.land_cover;
 
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
+        co2.datasets[0].label = item.land_cover;
       });
     } else {
       airTemperature.labels = chartLabel;
@@ -410,7 +426,7 @@ function ContentComponent({
       ch4,
       co2,
     };
-  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
+  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey, categoryKey]);
 
   const getSumChartDataGHGFlux = useMemo(() => {
     let totalAirTemperature: number = 0;
@@ -539,7 +555,7 @@ function ContentComponent({
       totalCh4,
       totalCo2,
     };
-  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey]);
+  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey, categoryKey]);
 
   // soils
   const getSoilsChart = async (params: any) => {
