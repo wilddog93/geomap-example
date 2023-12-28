@@ -113,7 +113,7 @@ const CSoilCharts: FC<CSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)}%C`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`
           }
         }
       },

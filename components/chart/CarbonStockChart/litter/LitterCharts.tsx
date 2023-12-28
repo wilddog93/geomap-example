@@ -103,7 +103,7 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
         callbacks: {
           label: function (item: any) {
             console.log(item, 'labels')
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Litter`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (Mg/ha)`
           }
         }
       },

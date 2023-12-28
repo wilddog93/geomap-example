@@ -32,7 +32,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Woody Debris</p>
+          <p className="text-xs mb-2">Woody Debris (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalWoodyDebris
               ? formatMoney({
@@ -40,12 +40,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Litter Mass</p>
+          <p className="text-xs mb-2">Litter Mass (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalLitterMass
               ? formatMoney({
@@ -53,12 +53,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Litter</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">N Soils</p>
+          <p className="text-xs mb-2">%N (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalNSoils
               ? formatMoney({
@@ -66,12 +66,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> %</span>
           </p>
-          <p className="text-xs">%N</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">C Soils</p>
+          <p className="text-xs mb-2">%C (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalCSoils
               ? formatMoney({
@@ -79,12 +79,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> %</span>
           </p>
-          <p className="text-xs">%C</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">nMg/Ha Soils</p>
+          <p className="text-xs mb-2">N (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalNMGSoils
               ? formatMoney({
@@ -92,12 +92,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">nMg/Ha</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">cMg/Ha Soils</p>
+          <p className="text-xs mb-2">C (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalCMGSoils
               ? formatMoney({
@@ -105,25 +105,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">cMg/Ha</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">DBH Trees</p>
-          <p className="font-bold text-lg">
-            {items?.totalDBHTrees
-              ? formatMoney({
-                  amount: items?.totalDBHTrees,
-                  decimalCount: 2,
-                })
-              : 0}
-          </p>
-          <p className="text-xs">Cm</p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">TAGB Trees</p>
+          <p className="text-xs mb-2">TAGB Trees (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalTAGBTrees
               ? formatMoney({
@@ -131,12 +118,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Kg</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Notes Trees</p>
+          <p className="text-xs mb-2">Notes Trees (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalNotesTrees
               ? formatMoney({
@@ -144,12 +131,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Notes</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Plot Trees</p>
+          <p className="text-xs mb-2">Plot Trees (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalPlotTrees
               ? formatMoney({
@@ -157,12 +144,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Mg/Ha</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Plot Radius Trees</p>
+          <p className="text-xs mb-2">Plot Radius Trees (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalPlotRadiusTrees
               ? formatMoney({
@@ -170,12 +157,25 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (Mg/ha)</span>
           </p>
-          <p className="text-xs">Mg/Ha</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Wood Density Trees</p>
+          <p className="text-xs mb-2">DBH Trees (AVG)</p>
+          <p className="font-bold text-lg">
+            {items?.totalDBHTrees
+              ? formatMoney({
+                  amount: items?.totalDBHTrees,
+                  decimalCount: 2,
+                })
+              : 0}
+            <span className="text-sm"> (g/cm3)</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Wood Density Trees (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalWoodDensityTrees
               ? formatMoney({
@@ -183,8 +183,8 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> (g/cm3)</span>
           </p>
-          <p className="text-xs">gcm3</p>
         </div>
       </div>
     </Fragment>

@@ -98,7 +98,7 @@ export default function CarbonStockCharts({
                 aria-label={`litters-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Litter Mas</p>
+                    <p className={`text-sm font-semibold`}>Litter Mass</p>
                   </div>
                 }
                 aria-selected="true"
@@ -123,7 +123,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-1`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>N</p>
+                    <p className={`text-sm font-semibold`}>%N</p>
                   </div>
                 }
               >
@@ -137,7 +137,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>C</p>
+                    <p className={`text-sm font-semibold`}>%C</p>
                   </div>
                 }
               >
@@ -151,7 +151,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-3`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>nMg/Ha</p>
+                    <p className={`text-sm font-semibold`}>N</p>
                   </div>
                 }
               >
@@ -165,7 +165,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-4`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>cMg/Ha</p>
+                    <p className={`text-sm font-semibold`}>C</p>
                   </div>
                 }
               >

@@ -25,7 +25,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         }`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Air Temperature</p>
+          <p className="text-xs mb-2">Air Temperature (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalAirTemperature
               ? formatMoney({
@@ -57,7 +57,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Moisture</p>
+          <p className="text-xs mb-2">Soil Moisture (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalSoilMoisture
               ? formatMoney({
@@ -73,7 +73,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Water Table</p>
+          <p className="text-xs mb-2">Water Table (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalWaterTable
               ? formatMoney({
@@ -87,7 +87,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            Ch <sup>4</sup>
+            Ch <sup>4</sup> (AVG)
           </p>
           <p className="font-bold text-lg">
             {items?.totalCh4
@@ -104,7 +104,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            Co <sup>2</sup>
+            Co <sup>2</sup> (AVG)
           </p>
           <p className="font-bold text-lg">
             {items?.totalCo2

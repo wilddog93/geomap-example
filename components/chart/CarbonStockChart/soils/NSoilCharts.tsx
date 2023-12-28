@@ -114,7 +114,7 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)}%N`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`
           }
         }
       },

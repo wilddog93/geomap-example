@@ -113,7 +113,7 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} gcm3`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (g/cm3)`
           }
         }
       },

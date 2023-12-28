@@ -113,7 +113,7 @@ const DBHTreesCharts: FC<DBHTreesChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} cm`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (g/cm3)`
           }
         }
       },

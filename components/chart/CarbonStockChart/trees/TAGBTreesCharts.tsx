@@ -113,7 +113,7 @@ const TAGBTreesCharts: FC<TAGBTreesChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} kg`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (Mg/ha)`
           }
         }
       },
