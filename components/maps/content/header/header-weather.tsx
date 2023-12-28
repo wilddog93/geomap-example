@@ -35,8 +35,11 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm">
+              {" "}
+              <sup>o</sup>C
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -48,8 +51,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> %</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -61,8 +64,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> W/m²</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -74,8 +77,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> mph</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -87,8 +90,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span className="text-sm"> mph</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -100,8 +103,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span className="text-sm"> ø</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -113,8 +116,8 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span className="text-sm"> mm</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
       </div>
     </Fragment>

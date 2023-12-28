@@ -44,7 +44,7 @@ export default function WeatherCharts({
 }: Props) {
   // cchart
 
-  const options = {
+  const optionsTemperature = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -74,12 +74,198 @@ export default function WeatherCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Total`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ˚C`
           }
         }
       },
     },
   };
+
+  const optionsPercent = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsRadiation = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} W/m²`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsSpeed = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} mph`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsDirection = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ø`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsRain = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} mm`
+          }
+        }
+      },
+    },
+  };
+
   return (
     <Fragment>
       <div className={`w-full ${sidebar ? "" : "hidden"}`}>
@@ -100,7 +286,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-1`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Temperature
                 </p>
               </div>
@@ -110,7 +296,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsTemperature}
                 data={chartData.temperature}
               />
             </div>
@@ -121,7 +307,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-2`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Relative Humidity
                 </p>
               </div>
@@ -131,7 +317,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsPercent}
                 data={chartData.relativeHumidity}
               />
             </div>
@@ -142,7 +328,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-3`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Solar Radiation
                 </p>
               </div>
@@ -152,7 +338,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsRadiation}
                 data={chartData.solarRadiation}
               />
             </div>
@@ -163,7 +349,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-4`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Wind Speed
                 </p>
               </div>
@@ -173,7 +359,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsSpeed}
                 data={chartData.windSpeed}
               />
             </div>
@@ -184,7 +370,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-5`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Gust Speed
                 </p>
               </div>
@@ -194,7 +380,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsSpeed}
                 data={chartData.gustSpeed}
               />
             </div>
@@ -205,7 +391,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-6`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Wind Direction
                 </p>
               </div>
@@ -215,7 +401,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsDirection}
                 data={chartData.windDirection}
               />
             </div>
@@ -226,7 +412,7 @@ export default function WeatherCharts({
             aria-label={`${landCoverKey}-7`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Rain
                 </p>
               </div>
@@ -236,7 +422,7 @@ export default function WeatherCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsRain}
                 data={chartData.rain}
               />
             </div>
@@ -254,7 +440,7 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Temperature</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsTemperature}
               data={chartData.temperature}
             />
           </div>
@@ -263,7 +449,7 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Relative Humidity</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsPercent}
               data={chartData.relativeHumidity}
             />
           </div>
@@ -272,7 +458,7 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Solar Radiation</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsRadiation}
               data={chartData.solarRadiation}
             />
           </div>
@@ -281,7 +467,7 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Speed</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsSpeed}
               data={chartData.windSpeed}
             />
           </div>
@@ -290,7 +476,7 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Gust Speed</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsSpeed}
               data={chartData.gustSpeed}
             />
           </div>
@@ -299,14 +485,14 @@ export default function WeatherCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Direction</h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsDirection}
               data={chartData.windDirection}
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">Rain</h3>
-            <AreaCharts height="300" options={options} data={chartData.rain} />
+            <AreaCharts height="300" options={optionsRain} data={chartData.rain} />
           </div>
         </div>
       </div>

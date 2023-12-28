@@ -37,8 +37,8 @@ export interface WeatherStatisticsProp {
 }
 
 export const PREFIX = "/weather";
-export const PREFIX_YEARLY = "/wewather/statistics/monthly";
-export const PREFIX_MONTHLY = "/wewather/statistics/daily";
+export const PREFIX_YEARLY = "/weather/statistics/monthly";
+export const PREFIX_MONTHLY = "/weather/statistics/daily";
 
 export function useWeatherApi() {
   const axios = useAxios();

@@ -421,165 +421,111 @@ function ContentComponent({
     let totalCo2: number = 0;
     if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
       totalAirTemperature = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_co2;
         },
         0
       );
     } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
       totalAirTemperature = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_co2;
         },
         0
       );
     } else if (!periodeKey && GHGFluxYearly.data.length > 0) {
       totalAirTemperature = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_co2;
         },
         0
@@ -744,56 +690,38 @@ function ContentComponent({
     let totalVolumetricWaterContent: number = 0;
     if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
       totalBulkDensity = SoilsYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_bulkDensity;
         },
         0
       );
       totalGravimetricWaterContent = SoilsYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_gravimetricWaterContent;
         },
         0
       );
       totalVolumetricWaterContent = SoilsYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_volumetricWaterContent;
         },
         0
       );
     } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
       totalBulkDensity = SoilsMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_bulkDensity;
         },
         0
       );
       totalGravimetricWaterContent = SoilsMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_gravimetricWaterContent;
         },
         0
       );
       totalVolumetricWaterContent = SoilsMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_volumetricWaterContent;
         },
         0
@@ -808,8 +736,8 @@ function ContentComponent({
 
   // weather
   const getWeatherChart = async (params: any) => {
-    await SoilsYearly.fetch({ params: params });
-    await SoilsMonthly.fetch({ params: params });
+    await WeatherYearly.fetch({ params: params });
+    await WeatherMonthly.fetch({ params: params });
   };
 
   useEffect(() => {
@@ -844,7 +772,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -857,7 +785,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -870,7 +798,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -883,7 +811,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -896,7 +824,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -909,7 +837,7 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
@@ -922,116 +850,136 @@ function ContentComponent({
           backgroundColor: "rgba(53, 162, 235, 0.3)",
           tension: 0.4,
           fill: true,
-          label: (landCoverKey as string) || "Land cover",
+          label: (locationKey as string) || "Land cover",
         },
       ],
     };
 
-    if (
-      WeatherYearly.data.length > 0 &&
-      landCoverKey &&
-      periodeKey == "Yearly"
-    ) {
+    if (WeatherYearly.data.length > 0 && periodeKey == "Yearly") {
       WeatherYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "LLL", { locale: id });
         temperature.labels.push(date);
         temperature.datasets[0].data.push(item.avg_temperature);
+        temperature.datasets[0].label = item.location;
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
+        relativeHumidity.datasets[0].label = item.location
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
+        solarRadiation.datasets[0].label = item.location;
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
+        windSpeed.datasets[0].label = item.location
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
+        gustSpeed.datasets[0].label = item.location
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
+        windDirection.datasets[0].label = item.location
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
+        rain.datasets[0].label = item.location
       });
-    } else if (
-      WeatherMonthly.data.length > 0 &&
-      landCoverKey &&
-      periodeKey == "Monthly"
-    ) {
+    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
       WeatherMonthly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "yyyy-MM-dd", {
           locale: id,
         });
         temperature.labels.push(date);
         temperature.datasets[0].data.push(item.avg_temperature);
+        temperature.datasets[0].label = item.location;
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
+        relativeHumidity.datasets[0].label = item.location
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
+        solarRadiation.datasets[0].label = item.location;
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
+        windSpeed.datasets[0].label = item.location
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
+        gustSpeed.datasets[0].label = item.location
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
+        windDirection.datasets[0].label = item.location
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
+        rain.datasets[0].label = item.location
       });
-    } else if (WeatherYearly.data.length > 0 && landCoverKey && !periodeKey) {
+    } else if (WeatherYearly.data.length > 0 && !periodeKey) {
       WeatherYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "yyyy-MM-dd", {
           locale: id,
         });
         temperature.labels.push(date);
         temperature.datasets[0].data.push(item.avg_temperature);
+        temperature.datasets[0].label = item.location;
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
+        relativeHumidity.datasets[0].label = item.location
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
+        solarRadiation.datasets[0].label = item.location;
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
+        windSpeed.datasets[0].label = item.location
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
+        gustSpeed.datasets[0].label = item.location
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
+        windDirection.datasets[0].label = item.location
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
+        rain.datasets[0].label = item.location
       });
     } else {
       temperature.labels = chartLabel;
       temperature.datasets[0].data = chartData;
+      temperature.datasets[0].label = locationKey as string;
 
       relativeHumidity.labels = chartLabel;
       relativeHumidity.datasets[0].data = chartData;
+      relativeHumidity.datasets[0].label = locationKey as string;
 
       solarRadiation.labels = chartLabel;
       solarRadiation.datasets[0].data = chartData;
+      solarRadiation.datasets[0].label = locationKey as string;
 
       windSpeed.labels = chartLabel;
       windSpeed.datasets[0].data = chartData;
+      windSpeed.datasets[0].label = locationKey as string;
 
       gustSpeed.labels = chartLabel;
       gustSpeed.datasets[0].data = chartData;
+      gustSpeed.datasets[0].label = locationKey as string;
 
       windDirection.labels = chartLabel;
       windDirection.datasets[0].data = chartData;
+      windDirection.datasets[0].label = locationKey as string;
 
       rain.labels = chartLabel;
       rain.datasets[0].data = chartData;
+      rain.datasets[0].label = locationKey as string;
     }
 
     // airTemperature = dataYearly;
@@ -1044,7 +992,7 @@ function ContentComponent({
       windDirection,
       rain,
     };
-  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+  }, [WeatherYearly.data, locationKey, WeatherMonthly.data, periodeKey]);
 
   const getSumChartDataWeather = useMemo(() => {
     let totalTemperature: number = 0;
@@ -1057,120 +1005,124 @@ function ContentComponent({
 
     if (WeatherYearly.data.length > 0 && periodeKey == "Yearly") {
       totalTemperature = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_temperature;
         },
         0
       );
       totalRelativeHumidity = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_relativeHumidity;
         },
         0
       );
       totalSolarRadiation = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_solarRadiation;
         },
         0
       );
       totalWindSpeed = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_windSpeed;
         },
         0
       );
       totalGustSpeed = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_gustSpeed;
         },
         0
       );
       totalWindDirection = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_windDirection;
         },
         0
       );
       totalRain = WeatherYearly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_rain;
         },
         0
       );
     } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
       totalTemperature = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_temperature;
         },
         0
       );
       totalRelativeHumidity = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_relativeHumidity;
         },
         0
       );
       totalSolarRadiation = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_solarRadiation;
         },
         0
       );
       totalWindSpeed = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_windSpeed;
         },
         0
       );
       totalGustSpeed = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_gustSpeed;
         },
         0
       );
       totalWindDirection = WeatherMonthly.data.reduce(
-        (
-          previousValue: any,
-          currentValue
-        ) => {
+        (previousValue: any, currentValue) => {
           return previousValue + currentValue?.avg_windDirection;
+        },
+        0
+      );
+    } else if (WeatherYearly.data.length > 0 && !periodeKey) {
+      totalTemperature = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_temperature;
+        },
+        0
+      );
+      totalRelativeHumidity = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_relativeHumidity;
+        },
+        0
+      );
+      totalSolarRadiation = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_solarRadiation;
+        },
+        0
+      );
+      totalWindSpeed = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_windSpeed;
+        },
+        0
+      );
+      totalGustSpeed = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_gustSpeed;
+        },
+        0
+      );
+      totalWindDirection = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_windDirection;
+        },
+        0
+      );
+      totalRain = WeatherYearly.data.reduce(
+        (previousValue: any, currentValue) => {
+          return previousValue + currentValue?.avg_rain;
         },
         0
       );
@@ -1184,7 +1136,7 @@ function ContentComponent({
       totalWindDirection,
       totalRain,
     };
-  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+  }, [WeatherYearly.data, locationKey, WeatherMonthly.data, periodeKey]);
 
   // carbon-stock
   const WoodyYearly = useCarbonWoodyStatisticsYearlyApi();
@@ -1392,7 +1344,10 @@ function ContentComponent({
                   variant="faded"
                   color="primary"
                   className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
-                    categoryKey === "Carbon Stock" ? "hidden" : ""
+                    categoryKey === "Carbon Stock" ||
+                    categoryKey === "Weather data (AWS)"
+                      ? "hidden"
+                      : ""
                   }`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionLandCoverChange}
@@ -1489,7 +1444,10 @@ function ContentComponent({
               variant="faded"
               color="primary"
               className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
-                categoryKey === "Carbon Stock" ? "hidden" : ""
+                categoryKey === "Carbon Stock" ||
+                categoryKey === "Weather data (AWS)"
+                  ? "hidden"
+                  : ""
               }`}
               allowsCustomValue={true}
               onSelectionChange={onSelectionLandCoverChange}
