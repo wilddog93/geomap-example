@@ -1,12 +1,12 @@
-import { CarbonSoilsStatisticsProp } from "@/api/carbon-stocks.api";
+import { CarbonTreesStatisticsProp } from "@/api/carbon-stocks.api";
 import React, { FC } from "react";
-import BarCharts from "../BarCharts";
+import BarCharts from "../../BarCharts";
 
-interface NSoilChartsProps {
-  data: CarbonSoilsStatisticsProp[];
+interface DBHTreesChartsProps {
+  data: CarbonTreesStatisticsProp[];
 }
 
-const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
+const DBHTreesCharts: FC<DBHTreesChartsProps> = ({ data }) => {
   // color
   const getColor = (value: string) => {
     let color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
@@ -44,7 +44,6 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
     return color;
   };
 
-  // console.log(landCovers, 'summary-lan', regions)
   const groupedData = data.reduce((acc: any, item) => {
     const key = `${item.region}-${item.land_cover}`;
     if (!acc[key]) {
@@ -66,7 +65,7 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
             const key = `${region}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_n,
+                (sum: any, item: any) => sum + item.avg_dbh,
                 0
               ) || 0
             );
@@ -114,7 +113,7 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)}%N`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} cm`
           }
         }
       },
@@ -130,9 +129,9 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
     },
   };
 
-    console.log(data, "summary-chart");
+  //   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
 
   return <BarCharts height="300" data={chartData} options={options} />;
 };
 
-export default NSoilCharts;
+export default DBHTreesCharts;

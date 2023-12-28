@@ -1,12 +1,12 @@
 import { CarbonSoilsStatisticsProp } from "@/api/carbon-stocks.api";
 import React, { FC } from "react";
-import BarCharts from "../BarCharts";
+import BarCharts from "../../BarCharts";
 
-interface CMGSoilChartsProps {
+interface NMGSoilChartsProps {
   data: CarbonSoilsStatisticsProp[];
 }
 
-const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
+const NMGSoilCharts: FC<NMGSoilChartsProps> = ({ data }) => {
   // color
   const getColor = (value: string) => {
     let color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
@@ -65,7 +65,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
             const key = `${region}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_cMgHa,
+                (sum: any, item: any) => sum + item.avg_nMgHa,
                 0
               ) || 0
             );
@@ -113,7 +113,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} C Mg/Ha`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} N Mg/Ha`
           }
         }
       },
@@ -134,4 +134,4 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
   return <BarCharts height="300" data={chartData} options={options} />;
 };
 
-export default CMGSoilCharts;
+export default NMGSoilCharts;

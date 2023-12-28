@@ -112,6 +112,7 @@ export interface CarbonTreesTypes {
 }
 
 export interface CarbonTreesStatisticsProp {
+  region: string;
   land_cover: string;
   site: string;
   avg_plot: number;

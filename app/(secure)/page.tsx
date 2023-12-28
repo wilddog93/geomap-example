@@ -252,7 +252,7 @@ export default function Home() {
             sidebar ? "lg:w-1/2" : ""
           }`}
         >
-          <button
+          {/* <button
             type="button"
             className={`fixed lg:absolute z-10 rounded-l-lg px-1 py-2 bg-white shadow group group-hover:bg-white 
               ${
@@ -273,7 +273,7 @@ export default function Home() {
             ) : (
               <MdChevronLeft className="w-4 h-4" />
             )}
-          </button>
+          </button> */}
 
           <ContentComponent
             data={items}

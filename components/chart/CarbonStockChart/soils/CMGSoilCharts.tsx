@@ -1,12 +1,12 @@
-import { CarbonWoodyStatisticsProp } from "@/api/carbon-stocks.api";
+import { CarbonSoilsStatisticsProp } from "@/api/carbon-stocks.api";
 import React, { FC } from "react";
-import BarCharts from "../BarCharts";
+import BarCharts from "../../BarCharts";
 
-interface WoodyChartsProps {
-  data: CarbonWoodyStatisticsProp[];
+interface CMGSoilChartsProps {
+  data: CarbonSoilsStatisticsProp[];
 }
 
-const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
+const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
   // color
   const getColor = (value: string) => {
     let color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
@@ -17,13 +17,25 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
       case "Primary Forest":
         color = "#576CBC";
         break;
+      case "PF":
+        color = "#576CBC";
+        break;
       case "Secondary Forest":
+        color = "#E2703A";
+        break;
+      case "SF":
         color = "#E2703A";
         break;
       case "Oil Palm":
         color = "#4E9F3D";
         break;
+      case "OP":
+        color = "#4E9F3D";
+        break;
       case "Shrubs":
+        color = "#A12568";
+        break;
+      case "S":
         color = "#A12568";
         break;
       default:
@@ -53,7 +65,7 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
             const key = `${region}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_total,
+                (sum: any, item: any) => sum + item.avg_cMgHa,
                 0
               ) || 0
             );
@@ -101,7 +113,7 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)}`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} C Mg/Ha`
           }
         }
       },
@@ -117,9 +129,9 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
     },
   };
 
-//   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
+  //   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
 
   return <BarCharts height="300" data={chartData} options={options} />;
 };
 
-export default WoodyCharts;
+export default CMGSoilCharts;

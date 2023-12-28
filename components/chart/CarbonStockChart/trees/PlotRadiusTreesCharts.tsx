@@ -1,12 +1,12 @@
-import { CarbonLittersStatisticsProp, CarbonWoodyStatisticsProp } from "@/api/carbon-stocks.api";
+import { CarbonTreesStatisticsProp } from "@/api/carbon-stocks.api";
 import React, { FC } from "react";
-import BarCharts from "../BarCharts";
+import BarCharts from "../../BarCharts";
 
-interface LittersChartsProps {
-  data: CarbonLittersStatisticsProp[];
+interface PlotRadiusTreesChartsProps {
+  data: CarbonTreesStatisticsProp[];
 }
 
-const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
+const PlotRadiusTreesCharts: FC<PlotRadiusTreesChartsProps> = ({ data }) => {
   // color
   const getColor = (value: string) => {
     let color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
@@ -17,13 +17,25 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
       case "Primary Forest":
         color = "#576CBC";
         break;
+      case "PF":
+        color = "#576CBC";
+        break;
       case "Secondary Forest":
+        color = "#E2703A";
+        break;
+      case "SF":
         color = "#E2703A";
         break;
       case "Oil Palm":
         color = "#4E9F3D";
         break;
+      case "OP":
+        color = "#4E9F3D";
+        break;
       case "Shrubs":
+        color = "#A12568";
+        break;
+      case "S":
         color = "#A12568";
         break;
       default:
@@ -53,7 +65,7 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
             const key = `${region}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_litterMas,
+                (sum: any, item: any) => sum + item.avg_plotRadius,
                 0
               ) || 0
             );
@@ -63,9 +75,8 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
     borderColor: getColor(landCover),
     tension: 0.4,
     borderRadius: 5,
+    boxSize: "1rem"
   }));
-
-  console.log(datasets, 'datasets')
 
   const chartData = {
     labels: regions,
@@ -102,8 +113,7 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            console.log(item, 'labels')
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} litter`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/ha`
           }
         }
       },
@@ -119,9 +129,9 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
     },
   };
 
-//   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
+  //   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
 
   return <BarCharts height="300" data={chartData} options={options} />;
 };
 
-export default LittersCharts;
+export default PlotRadiusTreesCharts;

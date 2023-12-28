@@ -87,9 +87,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   Air Temperature
                 </p>
@@ -112,9 +110,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   Soil Temperature
                 </p>
@@ -137,9 +133,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   Soil Moisture
                 </p>
@@ -162,9 +156,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   Water Table
                 </p>
@@ -187,9 +179,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   <span>
                     Ch<sup>4</sup>
@@ -210,9 +200,7 @@ export default function GHGFluxCharts({
             title={
               <div className="flex justify-between items-center">
                 <p
-                  className={`text-sm font-semibold ${
-                    landCoverKey ? "" : "hidden"
-                  }`}
+                  className={`text-sm font-semibold`}
                 >
                   <span>
                     Co<sup>2</sup>
