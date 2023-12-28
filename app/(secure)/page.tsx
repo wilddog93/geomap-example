@@ -37,7 +37,7 @@ export default function Home() {
   const [landCoverKey, setLandCoverKey] = useState<Key | null>(
     "Secondary Forest"
   );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [landCoverFilter, setLandCoverFilter] = useState("");
 
   // function
   // location-search
@@ -143,8 +143,6 @@ export default function Home() {
     return filteredArray;
   }, [locationApi?.data]);
 
-  console.log(locationOptions, "locations-data", locationKey);
-
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();
     const search = {
@@ -209,8 +207,6 @@ export default function Home() {
     }
     return { points, categories: newCat };
   }, [locationOptions]);
-
-  console.log(mapData, "locationOptions");
 
   const isLogin = true;
 

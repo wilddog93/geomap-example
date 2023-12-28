@@ -24,6 +24,7 @@ export interface CarbonWoodyTypes {
 }
 
 export interface CarbonWoodyStatisticsProp {
+  region: string;
   land_cover: string;
   datetime: string;
   site: string;
@@ -49,6 +50,7 @@ export interface CarbonLittersTypes {
 }
 
 export interface CarbonLittersStatisticsProp {
+  region: string;
   land_cover: string;
   site: string;
   sum_litterMas: number;
@@ -74,6 +76,7 @@ export interface CarbonSoilsTypes {
 }
 
 export interface CarbonSoilsStatisticsProp {
+  region: string;
   land_cover: string;
   site: string;
   avg_c: number;
@@ -134,19 +137,15 @@ export const PREFIX_WOODY_MONTHLY =
 
 // litters
 export const PREFIX_LITTERS = "/carbon-stocks/litters?cache=0";
-export const PREFIX_LITTERS_YEARLY =
-  "/carbon-stocks/litters/statistics/monthly";
-export const PREFIX_LITTERS_MONTHLY = "/carbon-stocks/litters/statistics/daily";
+export const PREFIX_LITTERS_STATS = "/carbon-stocks/litters/statistics";
 
 // soils
 export const PREFIX_SOILS = "/carbon-stocks/soils?cache=0";
-export const PREFIX_SOILS_YEARLY = "/carbon-stocks/soils/statistics/monthly";
-export const PREFIX_SOILS_MONTHLY = "/carbon-stocks/soils/statistics/daily";
+export const PREFIX_SOILS_STATS = "/carbon-stocks/soils/statistics";
 
 // trees
 export const PREFIX_TREES = "/carbon-stocks/trees?cache=0";
-export const PREFIX_TREES_YEARLY = "/carbon-stocks/trees/statistics/monthly";
-export const PREFIX_TREES_MONTHLY = "/carbon-stocks/trees/statistics/daily";
+export const PREFIX_TREES_STATS = "/carbon-stocks/trees/statistics";
 
 // woody-debris
 export function useCarbonWoodyApi() {
@@ -200,7 +199,7 @@ export function useCarbonWoodyStatisticsYearlyApi() {
   return { fetch, data, meta, error, fetching };
 }
 
-export function useCaarbonWoodyStatisticsMonthlyApi() {
+export function useCarbonWoodyStatisticsMonthlyApi() {
   const axios = useAxios();
   const [data, setData] = useState<CarbonWoodyStatisticsProp[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -253,7 +252,7 @@ export function useCarbonLittersApi() {
   return { fetch, data, meta, error, fetching };
 }
 
-export function useCarbonLittersStatisticsYearlyApi() {
+export function useCarbonLittersStatisticsApi() {
   const axios = useAxios();
   const [data, setData] = useState<CarbonLittersStatisticsProp[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -264,32 +263,7 @@ export function useCarbonLittersStatisticsYearlyApi() {
     try {
       setFetching(true);
       const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_LITTERS_YEARLY,
-        options
-      );
-      setData(lists);
-    } catch (err: any) {
-      setError(err);
-    } finally {
-      setFetching(false);
-    }
-  };
-
-  return { fetch, data, meta, error, fetching };
-}
-
-export function useCarbonLittersStatisticsMonthlyApi() {
-  const axios = useAxios();
-  const [data, setData] = useState<CarbonLittersStatisticsProp[]>([]);
-  const [fetching, setFetching] = useState<boolean>(false);
-  const [error, setError] = useState<any>();
-  const [meta, setMeta] = useState<Meta>(defaultMeta());
-
-  const fetch = async (options?: AxiosRequestConfig) => {
-    try {
-      setFetching(true);
-      const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_LITTERS_MONTHLY,
+        PREFIX_LITTERS_STATS,
         options
       );
       setData(lists);
@@ -331,7 +305,7 @@ export function useCarbonSoilsApi() {
   return { fetch, data, meta, error, fetching };
 }
 
-export function useCarbonSoilsStatisticsYearlyApi() {
+export function useCarbonSoilsStatisticsApi() {
   const axios = useAxios();
   const [data, setData] = useState<CarbonSoilsStatisticsProp[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -342,32 +316,7 @@ export function useCarbonSoilsStatisticsYearlyApi() {
     try {
       setFetching(true);
       const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_SOILS_YEARLY,
-        options
-      );
-      setData(lists);
-    } catch (err: any) {
-      setError(err);
-    } finally {
-      setFetching(false);
-    }
-  };
-
-  return { fetch, data, meta, error, fetching };
-}
-
-export function useCarbonSoilsStatisticsMonthlyApi() {
-  const axios = useAxios();
-  const [data, setData] = useState<CarbonSoilsStatisticsProp[]>([]);
-  const [fetching, setFetching] = useState<boolean>(false);
-  const [error, setError] = useState<any>();
-  const [meta, setMeta] = useState<Meta>(defaultMeta());
-
-  const fetch = async (options?: AxiosRequestConfig) => {
-    try {
-      setFetching(true);
-      const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_SOILS_MONTHLY,
+        PREFIX_SOILS_STATS,
         options
       );
       setData(lists);
@@ -409,7 +358,7 @@ export function useCarbonTreesApi() {
   return { fetch, data, meta, error, fetching };
 }
 
-export function useCarbonTreesStatisticsYearlyApi() {
+export function useCarbonTreesStatisticsApi() {
   const axios = useAxios();
   const [data, setData] = useState<CarbonTreesStatisticsProp[]>([]);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -420,32 +369,7 @@ export function useCarbonTreesStatisticsYearlyApi() {
     try {
       setFetching(true);
       const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_TREES_YEARLY,
-        options
-      );
-      setData(lists);
-    } catch (err: any) {
-      setError(err);
-    } finally {
-      setFetching(false);
-    }
-  };
-
-  return { fetch, data, meta, error, fetching };
-}
-
-export function useCarbonTreesStatisticsMonthlyApi() {
-  const axios = useAxios();
-  const [data, setData] = useState<CarbonTreesStatisticsProp[]>([]);
-  const [fetching, setFetching] = useState<boolean>(false);
-  const [error, setError] = useState<any>();
-  const [meta, setMeta] = useState<Meta>(defaultMeta());
-
-  const fetch = async (options?: AxiosRequestConfig) => {
-    try {
-      setFetching(true);
-      const { data: lists, ...result } = await axios.$getByObject(
-        PREFIX_TREES_MONTHLY,
+        PREFIX_TREES_STATS,
         options
       );
       setData(lists);

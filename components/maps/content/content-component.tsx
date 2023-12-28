@@ -45,6 +45,11 @@ import WeatherCharts from "@/components/chart/WeatherChart/WeatherCharts";
 import HeaderWeather from "./header/header-weather";
 import HeaderGHGFlux from "./header/header-ghg-flux";
 import HeaderSoils from "./header/header-soils";
+import {
+  useCarbonWoodyStatisticsMonthlyApi,
+  useCarbonWoodyStatisticsYearlyApi,
+} from "@/api/carbon-stocks.api";
+import CarbonStockCharts from "@/components/chart/CarbonStockChart/CarbonStockCharts";
 
 type Props = {
   sidebar?: boolean;
@@ -141,6 +146,7 @@ function ContentComponent({
   }, [locationKey, landCoverKey, getFilterLocation]);
 
   // chart
+  // filter
   const filterCharts = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
@@ -154,7 +160,7 @@ function ContentComponent({
           $lte: periodeFilterred.end,
         },
       });
-    if (getQuery.landCover && categoryKey !== "Weather data (AWS)")
+    if (getQuery.landCover)
       search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
 
     qb.search(search);
@@ -166,14 +172,39 @@ function ContentComponent({
     return qb;
   }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
 
+  const filterChartWeather = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search: any = {
+      $and: [{ location: { $cont: getQuery.location } }],
+    };
+    if (periodeKey)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
+
+    qb.search(search);
+    qb.sortBy({
+      field: `date`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery, periodeFilterred, periodeKey]);
+  // filter-end
+
   const getGHGFluxChart = async (params: any) => {
     await GHGFluxYearly.fetch({ params: params });
     await GHGFluxMonthly.fetch({ params: params });
   };
 
   useEffect(() => {
-    getGHGFluxChart(filterCharts?.queryObject);
-  }, [filterCharts]);
+    if (categoryKey == "GHG Fluxes & other variables")
+      getGHGFluxChart(filterCharts.queryObject);
+  }, [filterCharts, categoryKey]);
 
   const getChartDataGHGFlux = useMemo(() => {
     let chartLabel = [
@@ -603,8 +634,9 @@ function ContentComponent({
   };
 
   useEffect(() => {
-    getSoilsChart(filterCharts?.queryObject);
-  }, [filterCharts]);
+    if (categoryKey == "Soil psychochemical properties")
+      getSoilsChart(filterCharts?.queryObject);
+  }, [filterCharts, categoryKey]);
 
   const getChartDataSoils = useMemo(() => {
     let chartLabel = [
@@ -826,9 +858,9 @@ function ContentComponent({
 
   useEffect(() => {
     if (categoryKey == "Weather data (AWS)") {
-      getWeatherChart(filterCharts?.queryObject);
+      getWeatherChart(filterChartWeather?.queryObject);
     }
-  }, [filterCharts, categoryKey]);
+  }, [filterChartWeather, categoryKey]);
 
   const getChartDataWeather = useMemo(() => {
     let chartLabel = [
@@ -1224,8 +1256,6 @@ function ContentComponent({
     };
   }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
 
-  console.log(getSumChartDataWeather, "summary");
-
   return (
     <Fragment>
       <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
@@ -1254,7 +1284,7 @@ function ContentComponent({
                   defaultSelectedKey={landCoverKey as Key}
                   variant="faded"
                   color="primary"
-                  className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionLandCoverChange}
                   onInputChange={onInputLandCoverChange}
@@ -1276,7 +1306,7 @@ function ContentComponent({
                   defaultSelectedKey={periodeKey as Key}
                   variant="faded"
                   color="primary"
-                  className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionPeriodeChange}
                   onInputChange={onInputPeriodeChange}
@@ -1345,7 +1375,7 @@ function ContentComponent({
               defaultSelectedKey={landCoverKey as Key}
               variant="faded"
               color="primary"
-              className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+              className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
               allowsCustomValue={true}
               onSelectionChange={onSelectionLandCoverChange}
               onInputChange={onInputLandCoverChange}
@@ -1383,6 +1413,14 @@ function ContentComponent({
               landCoverKey={landCoverKey}
               locationKey={locationKey}
               periodeKey={periodeKey}
+            />
+          ) : null}
+          {categoryKey == "Carbon Stock" ? (
+            <CarbonStockCharts
+              sidebar={sidebar as boolean}
+              query={getQuery}
+              categoryKey={categoryKey}
+              locationKey={locationKey}
             />
           ) : null}
         </ScrollShadow>

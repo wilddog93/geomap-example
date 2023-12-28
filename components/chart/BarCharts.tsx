@@ -69,7 +69,7 @@ type BarProps = {
     className?: string
 }
 
-const Barcharts = ({ data, options, width, height, className }: BarProps) => {
+const BarCharts = ({ data, options, width, height, className }: BarProps) => {
 
     return (
         <div className='w-full flex items-center gap-2 overflow-x-hidden overflow-y-auto'>
@@ -84,4 +84,4 @@ const Barcharts = ({ data, options, width, height, className }: BarProps) => {
     )
 }
 
-export default Barcharts;
+export default BarCharts;
