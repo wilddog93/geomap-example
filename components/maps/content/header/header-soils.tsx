@@ -20,7 +20,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
     <Fragment>
       <div className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}>
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Air Temperature</p>
+          <p className="text-xs mb-2">Bulk Density <span>(AVG)</span> </p>
           <p className="font-bold text-lg">
             {items?.totalBulkDensity
               ? formatMoney({
@@ -28,12 +28,12 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span>{" "}<sup>o</sup>C</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Temperature</p>
+          <p className="text-xs mb-2">Gravimetric Water Content <span>(AVG)</span> </p>
           <p className="font-bold text-lg">
             {items?.totalGravimetricWaterContent
               ? formatMoney({
@@ -41,12 +41,12 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span>{" "}<sup>o</sup>C</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Moisture</p>
+          <p className="text-xs mb-2">Volumetric Water Content <span>(AVG)</span> </p>
           <p className="font-bold text-lg">
             {items?.totalVolumetricWaterContent
               ? formatMoney({
@@ -54,8 +54,8 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span>{" "}<sup>o</sup>C</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
       </div>
     </Fragment>

@@ -36,7 +36,7 @@ export default function LoginPage() {
     setIsHidden((t) => !t);
   };
 
-  const isLogin = true
+  const isLogin = false
 
   if (isLogin) {
     // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");

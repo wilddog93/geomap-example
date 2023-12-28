@@ -12,13 +12,18 @@ interface GHGFluxProps {
     totalCo2?: number | any;
   };
   sidebar?: boolean;
-};
+}
 
 export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
-
   return (
     <Fragment>
-      <div className={`w-full grid grid-cols-1 gap-4 py-3 ${sidebar ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-6"}`}>
+      <div
+        className={`w-full grid grid-cols-1 gap-4 py-3 ${
+          sidebar
+            ? "sm:grid-cols-2 lg:grid-cols-3"
+            : "sm:grid-cols-3 lg:grid-cols-6"
+        }`}
+      >
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Air Temperature</p>
           <p className="font-bold text-lg">
@@ -28,12 +33,15 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm">
+              {" "}
+              <sup>o</sup>C
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Temperature</p>
+          <p className="text-xs mb-2">Soil Temperature (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalSoilTemperature
               ? formatMoney({
@@ -41,8 +49,11 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm">
+              {" "}
+              <sup>o</sup>C
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -54,8 +65,11 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm">
+              {" "}
+              (m<sup>3</sup>/m<sup>3</sup>)
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -67,8 +81,8 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm"> cm</span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -82,8 +96,10 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+            <span className="text-sm">
+              {"  "} (tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>)
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -97,8 +113,10 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                   decimalCount: 2,
                 })
               : 0}
+              <span className="text-sm">
+              {"  "} (tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>)
+            </span>
           </p>
-          <p className="text-xs">Total</p>
         </div>
       </div>
     </Fragment>

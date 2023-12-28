@@ -423,66 +423,54 @@ function ContentComponent({
       totalAirTemperature = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_airTemperature;
+          return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilTemperature;
+          return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilMoisture;
+          return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_waterTable;
+          return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_ch4;
+          return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_co2;
+          return previousValue + currentValue?.avg_co2;
         },
         0
       );
@@ -490,66 +478,54 @@ function ContentComponent({
       totalAirTemperature = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_airTemperature;
+          return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilTemperature;
+          return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilMoisture;
+          return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_waterTable;
+          return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_ch4;
+          return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_co2;
+          return previousValue + currentValue?.avg_co2;
         },
         0
       );
@@ -557,66 +533,54 @@ function ContentComponent({
       totalAirTemperature = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_airTemperature;
+          return previousValue + currentValue?.avg_airTemperature;
         },
         0
       );
       totalSoilTemperature = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilTemperature;
+          return previousValue + currentValue?.avg_soilTemperature;
         },
         0
       );
       totalSoilMoisture = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_soilMoisture;
+          return previousValue + currentValue?.avg_soilMoisture;
         },
         0
       );
       totalWaterTable = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_waterTable;
+          return previousValue + currentValue?.avg_waterTable;
         },
         0
       );
       totalCh4 = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_ch4;
+          return previousValue + currentValue?.avg_ch4;
         },
         0
       );
       totalCo2 = GHGFluxYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_co2;
+          return previousValue + currentValue?.avg_co2;
         },
         0
       );
@@ -782,33 +746,27 @@ function ContentComponent({
       totalBulkDensity = SoilsYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_bulkDensity;
+          return previousValue + currentValue?.avg_bulkDensity;
         },
         0
       );
       totalGravimetricWaterContent = SoilsYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_gravimetricWaterContent;
+          return previousValue + currentValue?.avg_gravimetricWaterContent;
         },
         0
       );
       totalVolumetricWaterContent = SoilsYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_volumetricWaterContent;
+          return previousValue + currentValue?.avg_volumetricWaterContent;
         },
         0
       );
@@ -816,33 +774,27 @@ function ContentComponent({
       totalBulkDensity = SoilsMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_bulkDensity;
+          return previousValue + currentValue?.avg_bulkDensity;
         },
         0
       );
       totalGravimetricWaterContent = SoilsMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_gravimetricWaterContent;
+          return previousValue + currentValue?.avg_gravimetricWaterContent;
         },
         0
       );
       totalVolumetricWaterContent = SoilsMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_volumetricWaterContent;
+          return previousValue + currentValue?.avg_volumetricWaterContent;
         },
         0
       );
@@ -1107,77 +1059,63 @@ function ContentComponent({
       totalTemperature = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_temperature;
+          return previousValue + currentValue?.avg_temperature;
         },
         0
       );
       totalRelativeHumidity = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_relativeHumidity;
+          return previousValue + currentValue?.avg_relativeHumidity;
         },
         0
       );
       totalSolarRadiation = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_solarRadiation;
+          return previousValue + currentValue?.avg_solarRadiation;
         },
         0
       );
       totalWindSpeed = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_windSpeed;
+          return previousValue + currentValue?.avg_windSpeed;
         },
         0
       );
       totalGustSpeed = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_gustSpeed;
+          return previousValue + currentValue?.avg_gustSpeed;
         },
         0
       );
       totalWindDirection = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_windDirection;
+          return previousValue + currentValue?.avg_windDirection;
         },
         0
       );
       totalRain = WeatherYearly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_rain;
+          return previousValue + currentValue?.avg_rain;
         },
         0
       );
@@ -1185,66 +1123,54 @@ function ContentComponent({
       totalTemperature = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_temperature;
+          return previousValue + currentValue?.avg_temperature;
         },
         0
       );
       totalRelativeHumidity = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_relativeHumidity;
+          return previousValue + currentValue?.avg_relativeHumidity;
         },
         0
       );
       totalSolarRadiation = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_solarRadiation;
+          return previousValue + currentValue?.avg_solarRadiation;
         },
         0
       );
       totalWindSpeed = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_windSpeed;
+          return previousValue + currentValue?.avg_windSpeed;
         },
         0
       );
       totalGustSpeed = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_gustSpeed;
+          return previousValue + currentValue?.avg_gustSpeed;
         },
         0
       );
       totalWindDirection = WeatherMonthly.data.reduce(
         (
           previousValue: any,
-          currentValue: any,
-          currentIndex: number,
-          array: any[]
+          currentValue
         ) => {
-          return previousValue + currentValue?.sum_windDirection;
+          return previousValue + currentValue?.avg_windDirection;
         },
         0
       );
@@ -1335,84 +1261,84 @@ function ContentComponent({
     totalWoodyDebris =
       WoodyYearly.data.length > 0
         ? WoodyYearly.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_total;
+            return previousValue + currentValue?.avg_total;
           }, 0)
         : 0;
 
     totalLitterMass =
       LitterChartApi.data.length > 0
         ? LitterChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_litterMas;
+            return previousValue + currentValue?.avg_litterMas;
           }, 0)
         : 0;
 
     totalNSoils =
       SoilChartApi.data.length > 0
         ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_n;
+            return previousValue + currentValue?.avg_n;
           }, 0)
         : 0;
 
     totalCSoils =
       SoilChartApi.data.length > 0
         ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_c;
+            return previousValue + currentValue?.avg_c;
           }, 0)
         : 0;
 
     totalNMGSoils =
       SoilChartApi.data.length > 0
         ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_nMgHa;
+            return previousValue + currentValue?.avg_nMgHa;
           }, 0)
         : 0;
 
     totalCMGSoils =
       SoilChartApi.data.length > 0
         ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_cMgHa;
+            return previousValue + currentValue?.avg_cMgHa;
           }, 0)
         : 0;
 
     totalDBHTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_dbh;
+            return previousValue + currentValue?.avg_dbh;
           }, 0)
         : 0;
 
     totalTAGBTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_tagb;
+            return previousValue + currentValue?.avg_tagb;
           }, 0)
         : 0;
 
     totalNotesTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_notes;
+            return previousValue + currentValue?.avg_notes;
           }, 0)
         : 0;
 
     totalPlotTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_plot;
+            return previousValue + currentValue?.avg_plot;
           }, 0)
         : 0;
 
     totalPlotRadiusTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_plotRadius;
+            return previousValue + currentValue?.avg_plotRadius;
           }, 0)
         : 0;
 
     totalWoodDensityTrees =
       TreesChartApi.data.length > 0
         ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.sum_woodDensity;
+            return previousValue + currentValue?.avg_woodDensity;
           }, 0)
         : 0;
 

@@ -9,12 +9,12 @@ export interface Files {
   file: File[];
 }
 
-export const PREFIX_GHG = "/ghg-flux/export";
-export const PREFIX_SOILS = "/soils/export";
-export const PREFIX_WEATHER = "/weather/export";
-export const PREFIX_LOCATION = "/locations/export";
+export const PREFIX_GHG = "/ghg-flux/import";
+export const PREFIX_SOILS = "/soils/import";
+export const PREFIX_WEATHER = "/weather/import";
+export const PREFIX_LOCATION = "/locations/import";
 // carbon
-export const PREFIX_CARBON = "/carbon-stocks/export";
+export const PREFIX_CARBON = "/carbon-stocks/import";
 export const PREFIX_CARBON_WOODY = "/carbon-stocks/woody-debris/import";
 
 export function useGHGFilesApi() {

@@ -43,6 +43,191 @@ export default function GHGFluxCharts({
 }: Props) {
   // cchart
 
+  const optionsTemperature = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ˚C`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsSoil = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (m³/m³)`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsWater = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} cm`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsCo2 = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (tCO₂ ha⁻¹ yr⁻¹)`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsCh4 = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (tCO₂e ha⁻¹ yr⁻¹)`
+          }
+        }
+      },
+    },
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -112,7 +297,7 @@ export default function GHGFluxCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsTemperature}
                 data={chartData.airTemperature}
               />
             </div>
@@ -135,7 +320,7 @@ export default function GHGFluxCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsTemperature}
                 data={chartData.soilTemperature}
               />
             </div>
@@ -158,7 +343,7 @@ export default function GHGFluxCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsSoil}
                 data={chartData.soilMoisture}
               />
             </div>
@@ -181,7 +366,7 @@ export default function GHGFluxCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsWater}
                 data={chartData.waterTable}
               />
             </div>
@@ -204,7 +389,7 @@ export default function GHGFluxCharts({
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts height="300" options={options} data={chartData.ch4} />
+              <AreaCharts height="300" options={optionsCh4} data={chartData.ch4} />
             </div>
           </AccordionItem>
 
@@ -225,7 +410,7 @@ export default function GHGFluxCharts({
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts height="300" options={options} data={chartData.co2} />
+              <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
             </div>
           </AccordionItem>
         </Accordion>
