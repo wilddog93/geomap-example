@@ -86,7 +86,6 @@ const periodeOptions: SelectTypes[] = [
 
 const sortOptions: SelectTypes[] = [
   { label: "ID", value: "id" },
-  { label: "BAG", value: "bag" },
   { label: "LAND COVER", value: "landCover" },
   // { label: "REGION", value: "region" },
   { label: "SITE", value: "site" },
@@ -95,7 +94,6 @@ const sortOptions: SelectTypes[] = [
 const columns: ColumnProps[] = [
   { name: "NO", uid: "no", sortable: true },
   { name: "ID", uid: "id", sortable: true },
-  { name: "BAG", uid: "bag", sortable: true },
   { name: "REGION", uid: "region", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "SITE", uid: "site", sortable: true },
