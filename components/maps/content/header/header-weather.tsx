@@ -36,7 +36,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -49,7 +49,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -62,7 +62,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -75,7 +75,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -88,7 +88,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -101,7 +101,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
 
         <div className="w-full flex flex-col">
@@ -114,7 +114,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
                 })
               : 0}
           </p>
-          <p className="text-xs">Condition/status</p>
+          <p className="text-xs">Total</p>
         </div>
       </div>
     </Fragment>

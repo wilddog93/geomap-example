@@ -288,7 +288,6 @@ export default function SoilTables({
             { landCover: { $contL: getQuery?.search } },
             { plot: { $contL: getQuery?.search } },
             { location: { $contL: getQuery?.search } },
-            { "values.sampleCode": { $contL: getQuery?.search } },
           ],
         },
       ],

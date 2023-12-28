@@ -1430,7 +1430,12 @@ function ContentComponent({
       totalPlotRadiusTrees,
       totalWoodDensityTrees,
     };
-  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+  }, [
+    WoodyYearly.data,
+    LitterChartApi.data,
+    SoilChartApi.data,
+    TreesChartApi.data,
+  ]);
 
   return (
     <Fragment>

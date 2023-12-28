@@ -64,8 +64,22 @@ export default function GHGFluxCharts({
         text: "Chart.js Line Chart",
         align: "start" as const,
       },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Total`
+          }
+        }
+      },
     },
   };
+  
   return (
     <Fragment>
       <div className={`w-full ${sidebar ? "" : "hidden"}`}>
