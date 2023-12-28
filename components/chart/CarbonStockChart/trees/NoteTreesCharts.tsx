@@ -113,7 +113,7 @@ const NoteTreesCharts: FC<NoteTreesChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (Mg/ha)`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/ha`
           }
         }
       },

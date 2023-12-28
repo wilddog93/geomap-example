@@ -27,7 +27,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Temperature</p>
+          <p className="text-xs mb-2">Temperature (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalTemperature
               ? formatMoney({
@@ -43,7 +43,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Relative Humidity</p>
+          <p className="text-xs mb-2">Relative Humidity (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalRelativeHumidity
               ? formatMoney({
@@ -56,7 +56,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Solar Radiation</p>
+          <p className="text-xs mb-2">Solar Radiation (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalSolarRadiation
               ? formatMoney({
@@ -69,7 +69,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Wind Speed</p>
+          <p className="text-xs mb-2">Wind Speed (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalWindSpeed
               ? formatMoney({
@@ -82,7 +82,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Gust Speed</p>
+          <p className="text-xs mb-2">Gust Speed (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalGustSpeed
               ? formatMoney({
@@ -95,7 +95,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Wind Direction</p>
+          <p className="text-xs mb-2">Wind Direction (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalWindDirection
               ? formatMoney({
@@ -108,7 +108,7 @@ export default function HeaderWeather({ items, sidebar }: WeatherProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Rain</p>
+          <p className="text-xs mb-2">Rain (AVG)</p>
           <p className="font-bold text-lg">
             {items?.totalRain
               ? formatMoney({

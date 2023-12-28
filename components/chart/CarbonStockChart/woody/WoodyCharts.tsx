@@ -45,6 +45,7 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
   const regions = Array.from(new Set(data.map((item) => item.region)));
   const landCovers = Array.from(new Set(data.map((item) => item.land_cover)));
   // Prepare datasets for stacked bar chart
+
   const datasets = landCovers.map((landCover) => ({
     label: landCover.length > 0 ? landCover : ["all"],
     data:
@@ -63,7 +64,7 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
     borderColor: getColor(landCover),
     tension: 0.4,
     borderRadius: 5,
-    boxSize: "1rem"
+    boxSize: "1rem",
   }));
 
   const chartData = {
@@ -94,16 +95,16 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
       },
       tooltip: {
         titleFont: {
-          size: 14
+          size: 14,
         },
         bodyFont: {
-          size: 14
+          size: 14,
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (Mg/ha)`
-          }
-        }
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/ha`;
+          },
+        },
       },
     },
     barThickness: 80,
@@ -117,7 +118,7 @@ const WoodyCharts: FC<WoodyChartsProps> = ({ data }) => {
     },
   };
 
-//   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
+  //   console.log(JSON.stringify(chartData, null, 2), "summary-chart");
 
   return <BarCharts height="300" data={chartData} options={options} />;
 };

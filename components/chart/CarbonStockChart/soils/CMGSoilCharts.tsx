@@ -113,7 +113,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (Mg/Ha)`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/Ha`
           }
         }
       },

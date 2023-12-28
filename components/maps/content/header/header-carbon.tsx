@@ -40,7 +40,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (Mg/ha)</span>
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
 
@@ -170,7 +170,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (g/cm3)</span>
+            <span className="text-sm"> g/cm3</span>
           </p>
         </div>
 
@@ -183,7 +183,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> (g/cm3)</span>
+            <span className="text-sm"> g/cm3</span>
           </p>
         </div>
       </div>
