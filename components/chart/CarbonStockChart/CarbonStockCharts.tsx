@@ -4,6 +4,10 @@ import React, { Fragment, Key, useEffect, useMemo } from "react";
 import { MdInfo } from "react-icons/md";
 import AreaCharts from "../AreaCharts";
 import {
+  CarbonLittersStatisticsProp,
+  CarbonSoilsStatisticsProp,
+  CarbonTreesStatisticsProp,
+  CarbonWoodyStatisticsProp,
   useCarbonLittersStatisticsApi,
   useCarbonSoilsStatisticsApi,
   useCarbonTreesStatisticsApi,
@@ -25,6 +29,12 @@ import PlotRadiusTreesCharts from "./trees/PlotRadiusTreesCharts";
 import WoodTreesCharts from "./trees/WoodTreesCharts";
 
 type Props = {
+  chartData: {
+    woody: CarbonWoodyStatisticsProp[],
+    litter: CarbonLittersStatisticsProp[],
+    soils: CarbonSoilsStatisticsProp[],
+    trees: CarbonTreesStatisticsProp[],
+  }
   sidebar: boolean;
   query: {
     location: any;
@@ -35,6 +45,7 @@ type Props = {
 };
 
 export default function CarbonStockCharts({
+  chartData,
   sidebar,
   query,
   categoryKey,
@@ -43,55 +54,6 @@ export default function CarbonStockCharts({
   // cchart
 
   // carbon-stock
-  const WoodyYearly = useCarbonWoodyStatisticsYearlyApi();
-  const WoodyMonthly = useCarbonWoodyStatisticsMonthlyApi();
-  const LitterChartApi = useCarbonLittersStatisticsApi();
-  const SoilChartApi = useCarbonSoilsStatisticsApi();
-  const TreesChartApi = useCarbonTreesStatisticsApi();
-
-  const filterChartCarbon = useMemo(() => {
-    const qb = RequestQueryBuilder.create();
-
-    const search: any = {
-      $and: [{ region: { $cont: query.location } }],
-    };
-
-    qb.search(search);
-    qb.sortBy({
-      field: `region`,
-      order: "ASC",
-    });
-    qb.query();
-    return qb;
-  }, [query]);
-
-  const getWoodyChart = async (params: any) => {
-    await WoodyYearly.fetch(params);
-    await WoodyMonthly.fetch(params);
-  };
-
-  const getLitterChart = async (params: any) => {
-    await LitterChartApi.fetch(params);
-  };
-
-  const getSoilChart = async (params: any) => {
-    await SoilChartApi.fetch(params);
-  };
-
-  const getTreesChart = async (params: any) => {
-    await TreesChartApi.fetch(params);
-  };
-
-  useEffect(() => {
-    if (categoryKey == "Carbon Stock") {
-      getWoodyChart(filterChartCarbon?.queryObject);
-      getLitterChart(filterChartCarbon?.queryObject);
-      getSoilChart(filterChartCarbon?.queryObject);
-      getTreesChart(filterChartCarbon?.queryObject);
-    }
-  }, [filterChartCarbon, categoryKey]);
-
-  console.log(WoodyYearly.data, "summary-data");
 
   return (
     <Fragment>
@@ -117,7 +79,7 @@ export default function CarbonStockCharts({
                 aria-selected="true"
               >
                 <div className="w-full flex flex-col relative">
-                  <WoodyCharts data={WoodyYearly.data} />
+                  <WoodyCharts data={chartData.woody} />
                 </div>
               </AccordionItem>
             </Accordion>
@@ -142,7 +104,7 @@ export default function CarbonStockCharts({
                 aria-selected="true"
               >
                 <div className="w-full flex flex-col relative">
-                  <LittersCharts data={LitterChartApi.data} />
+                  <LittersCharts data={chartData.litter} />
                 </div>
               </AccordionItem>
             </Accordion>
@@ -166,7 +128,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <NSoilCharts data={SoilChartApi.data} />
+                  <NSoilCharts data={chartData.soils} />
                 </div>
               </AccordionItem>
 
@@ -180,7 +142,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <CSoilCharts data={SoilChartApi.data} />
+                  <CSoilCharts data={chartData.soils} />
                 </div>
               </AccordionItem>
 
@@ -194,7 +156,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <NMGSoilCharts data={SoilChartApi.data} />
+                  <NMGSoilCharts data={chartData.soils} />
                 </div>
               </AccordionItem>
 
@@ -208,7 +170,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <CMGSoilCharts data={SoilChartApi.data} />
+                  <CMGSoilCharts data={chartData.soils} />
                 </div>
               </AccordionItem>
             </Accordion>
@@ -232,7 +194,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <DBHTreesCharts data={TreesChartApi.data} />
+                  <DBHTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
 
@@ -246,7 +208,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <TAGBTreesCharts data={TreesChartApi.data} />
+                  <TAGBTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
 
@@ -260,7 +222,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <NoteTreesCharts data={TreesChartApi.data} />
+                  <NoteTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
 
@@ -274,7 +236,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <PlotTreesCharts data={TreesChartApi.data} />
+                  <PlotTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
 
@@ -288,7 +250,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <PlotRadiusTreesCharts data={TreesChartApi.data} />
+                  <PlotRadiusTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
 
@@ -302,7 +264,7 @@ export default function CarbonStockCharts({
                 }
               >
                 <div className="w-full flex flex-col relative">
-                  <WoodTreesCharts data={TreesChartApi.data} />
+                  <WoodTreesCharts data={chartData.trees} />
                 </div>
               </AccordionItem>
             </Accordion>
@@ -326,84 +288,84 @@ export default function CarbonStockCharts({
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Woody Debris
             </h3>
-            <WoodyCharts data={WoodyYearly.data} />
+            <WoodyCharts data={chartData.woody} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Litters
             </h3>
-            <LittersCharts data={LitterChartApi.data} />
+            <LittersCharts data={chartData.litter} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Soils (N)
             </h3>
-            <NSoilCharts data={SoilChartApi.data} />
+            <NSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Soils (C)
             </h3>
-            <CSoilCharts data={SoilChartApi.data} />
+            <CSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Soils (nMg/Ha)
             </h3>
-            <NMGSoilCharts data={SoilChartApi.data} />
+            <NMGSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Soils (cMg/Ha)
             </h3>
-            <CMGSoilCharts data={SoilChartApi.data} />
+            <CMGSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (dbh)
             </h3>
-            <DBHTreesCharts data={TreesChartApi.data} />
+            <DBHTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (tagb)
             </h3>
-            <TAGBTreesCharts data={TreesChartApi.data} />
+            <TAGBTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (notes)
             </h3>
-            <NoteTreesCharts data={TreesChartApi.data} />
+            <NoteTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (Plot)
             </h3>
-            <PlotTreesCharts data={TreesChartApi.data} />
+            <PlotTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (Plot Radius)
             </h3>
-            <PlotRadiusTreesCharts data={TreesChartApi.data} />
+            <PlotRadiusTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Trees (Wood Density)
             </h3>
-            <WoodTreesCharts data={TreesChartApi.data} />
+            <WoodTreesCharts data={chartData.trees} />
           </div>
         </div>
       </div>

@@ -46,10 +46,14 @@ import HeaderWeather from "./header/header-weather";
 import HeaderGHGFlux from "./header/header-ghg-flux";
 import HeaderSoils from "./header/header-soils";
 import {
+  useCarbonLittersStatisticsApi,
+  useCarbonSoilsStatisticsApi,
+  useCarbonTreesStatisticsApi,
   useCarbonWoodyStatisticsMonthlyApi,
   useCarbonWoodyStatisticsYearlyApi,
 } from "@/api/carbon-stocks.api";
 import CarbonStockCharts from "@/components/chart/CarbonStockChart/CarbonStockCharts";
+import HeaderCarbon from "./header/header-carbon";
 
 type Props = {
   sidebar?: boolean;
@@ -1256,6 +1260,178 @@ function ContentComponent({
     };
   }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
 
+  // carbon-stock
+  const WoodyYearly = useCarbonWoodyStatisticsYearlyApi();
+  const WoodyMonthly = useCarbonWoodyStatisticsMonthlyApi();
+  const LitterChartApi = useCarbonLittersStatisticsApi();
+  const SoilChartApi = useCarbonSoilsStatisticsApi();
+  const TreesChartApi = useCarbonTreesStatisticsApi();
+
+  const filterChartCarbon = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const search: any = {
+      $and: [{ region: { $cont: getQuery.location } }],
+    };
+
+    qb.search(search);
+    qb.sortBy({
+      field: `region`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery]);
+
+  const getWoodyChart = async (params: any) => {
+    await WoodyYearly.fetch(params);
+    await WoodyMonthly.fetch(params);
+  };
+
+  const getLitterChart = async (params: any) => {
+    await LitterChartApi.fetch(params);
+  };
+
+  const getSoilChart = async (params: any) => {
+    await SoilChartApi.fetch(params);
+  };
+
+  const getTreesChart = async (params: any) => {
+    await TreesChartApi.fetch(params);
+  };
+
+  useEffect(() => {
+    if (categoryKey == "Carbon Stock") {
+      getWoodyChart(filterChartCarbon?.queryObject);
+      getLitterChart(filterChartCarbon?.queryObject);
+      getSoilChart(filterChartCarbon?.queryObject);
+      getTreesChart(filterChartCarbon?.queryObject);
+    }
+  }, [filterChartCarbon, categoryKey]);
+
+  const getChartDataCarbon = useMemo(() => {
+    return {
+      woody: WoodyYearly.data,
+      litter: LitterChartApi.data,
+      soils: SoilChartApi.data,
+      trees: TreesChartApi.data,
+    };
+  }, [WoodyYearly, LitterChartApi, SoilChartApi, TreesChartApi]);
+
+  const getSumChartDataCarbon = useMemo(() => {
+    let totalWoodyDebris: number = 0;
+    let totalLitterMass: number = 0;
+    let totalNSoils: number = 0;
+    let totalCSoils: number = 0;
+    let totalNMGSoils: number = 0;
+    let totalCMGSoils: number = 0;
+    let totalDBHTrees: number = 0;
+    let totalTAGBTrees: number = 0;
+    let totalNotesTrees: number = 0;
+    let totalPlotTrees: number = 0;
+    let totalPlotRadiusTrees: number = 0;
+    let totalWoodDensityTrees: number = 0;
+
+    totalWoodyDebris =
+      WoodyYearly.data.length > 0
+        ? WoodyYearly.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_total;
+          }, 0)
+        : 0;
+
+    totalLitterMass =
+      LitterChartApi.data.length > 0
+        ? LitterChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_litterMas;
+          }, 0)
+        : 0;
+
+    totalNSoils =
+      SoilChartApi.data.length > 0
+        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_n;
+          }, 0)
+        : 0;
+
+    totalCSoils =
+      SoilChartApi.data.length > 0
+        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_c;
+          }, 0)
+        : 0;
+
+    totalNMGSoils =
+      SoilChartApi.data.length > 0
+        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_nMgHa;
+          }, 0)
+        : 0;
+
+    totalCMGSoils =
+      SoilChartApi.data.length > 0
+        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_cMgHa;
+          }, 0)
+        : 0;
+
+    totalDBHTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_dbh;
+          }, 0)
+        : 0;
+
+    totalTAGBTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_tagb;
+          }, 0)
+        : 0;
+
+    totalNotesTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_notes;
+          }, 0)
+        : 0;
+
+    totalPlotTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_plot;
+          }, 0)
+        : 0;
+
+    totalPlotRadiusTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_plotRadius;
+          }, 0)
+        : 0;
+
+    totalWoodDensityTrees =
+      TreesChartApi.data.length > 0
+        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
+            return previousValue + currentValue?.sum_woodDensity;
+          }, 0)
+        : 0;
+
+    return {
+      totalWoodyDebris,
+      totalLitterMass,
+      totalNSoils,
+      totalCSoils,
+      totalNMGSoils,
+      totalCMGSoils,
+      totalDBHTrees,
+      totalTAGBTrees,
+      totalNotesTrees,
+      totalPlotTrees,
+      totalPlotRadiusTrees,
+      totalWoodDensityTrees,
+    };
+  }, [WeatherYearly.data, landCoverKey, WeatherMonthly.data, periodeKey]);
+
   return (
     <Fragment>
       <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
@@ -1284,7 +1460,9 @@ function ContentComponent({
                   defaultSelectedKey={landCoverKey as Key}
                   variant="faded"
                   color="primary"
-                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
+                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
+                    categoryKey === "Carbon Stock" ? "hidden" : ""
+                  }`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionLandCoverChange}
                   onInputChange={onInputLandCoverChange}
@@ -1306,7 +1484,9 @@ function ContentComponent({
                   defaultSelectedKey={periodeKey as Key}
                   variant="faded"
                   color="primary"
-                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
+                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
+                    categoryKey === "Carbon Stock" ? "hidden" : ""
+                  }`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionPeriodeChange}
                   onInputChange={onInputPeriodeChange}
@@ -1333,6 +1513,8 @@ function ContentComponent({
               <HeaderSoils items={getSumChartDataSoils} sidebar={sidebar} />
             ) : categoryKey == "Weather data (AWS)" ? (
               <HeaderWeather items={getSumChartDataWeather} sidebar={sidebar} />
+            ) : categoryKey == "Carbon Stock" ? (
+              <HeaderCarbon items={getSumChartDataCarbon} sidebar={sidebar} />
             ) : (
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="w-full flex flex-col">
@@ -1375,7 +1557,9 @@ function ContentComponent({
               defaultSelectedKey={landCoverKey as Key}
               variant="faded"
               color="primary"
-              className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${categoryKey === "Carbon Stock" ? "hidden" : ""}`}
+              className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
+                categoryKey === "Carbon Stock" ? "hidden" : ""
+              }`}
               allowsCustomValue={true}
               onSelectionChange={onSelectionLandCoverChange}
               onInputChange={onInputLandCoverChange}
@@ -1417,6 +1601,7 @@ function ContentComponent({
           ) : null}
           {categoryKey == "Carbon Stock" ? (
             <CarbonStockCharts
+              chartData={getChartDataCarbon}
               sidebar={sidebar as boolean}
               query={getQuery}
               categoryKey={categoryKey}
