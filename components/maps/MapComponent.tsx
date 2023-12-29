@@ -204,7 +204,7 @@ const MapComponent = ({
         iconSrc = "/icons/weather.png";
         break;
       default:
-        iconSrc = "/icons/ghg-flux.png";
+        iconSrc = "/icons/forest.png";
         break;
     }
 
@@ -297,7 +297,7 @@ const MapComponent = ({
           iconSrc = "/icons/weather.png";
           break;
         default:
-          iconSrc = "/icons/ghg-flux.png";
+          iconSrc = "/icons/forest.png";
           break;
       }
       console.log(iconSrc, "icon");

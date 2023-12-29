@@ -70,7 +70,44 @@ export default function SoilsCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Total`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)}%`
+          }
+        }
+      },
+    },
+  };
+
+  const optionsBD = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          borderRadius: 3,
+          boxWidth: 16,
+          useBorderRadius: true,
+          pointStyle: "circle",
+        },
+      },
+      title: {
+        display: false,
+        position: "top" as const,
+        text: "Chart.js Line Chart",
+        align: "start" as const,
+      },
+      tooltip: {
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 14
+        },
+        callbacks: {
+          label: function (item: any) {
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} g/cm³`
           }
         }
       },
@@ -97,7 +134,7 @@ export default function SoilsCharts({
             aria-label={`${landCoverKey}-1`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Bulk Density
                 </p>
               </div>
@@ -107,7 +144,7 @@ export default function SoilsCharts({
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
               <AreaCharts
                 height="300"
-                options={options}
+                options={optionsBD}
                 data={chartData.bulkDensity}
               />
             </div>
@@ -118,7 +155,7 @@ export default function SoilsCharts({
             aria-label={`${landCoverKey}-2`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   Gravimetric Water Content
                 </p>
               </div>
@@ -139,7 +176,7 @@ export default function SoilsCharts({
             aria-label={`${landCoverKey}-3`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold ${landCoverKey ? "" : "hidden"}`}>
+                <p className={`text-sm font-semibold`}>
                   volumetric Water Content
                 </p>
               </div>

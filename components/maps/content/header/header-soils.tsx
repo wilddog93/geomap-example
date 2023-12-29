@@ -28,7 +28,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span>{" "}<sup>o</sup>C</span>
+              <span className="text-sm">{" "}g/cm<sup>3</sup></span>
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span>{" "}<sup>o</sup>C</span>
+              <span className="text-sm">{" "}%</span>
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span>{" "}<sup>o</sup>C</span>
+              <span className="text-sm">{" "}%</span>
           </p>
         </div>
       </div>
