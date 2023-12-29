@@ -1512,6 +1512,7 @@ function ContentComponent({
               categoryKey={categoryKey}
               locationKey={locationKey}
             />
+            // <BoxPlotCharts />
           ) : null}
         </ScrollShadow>
       </div>

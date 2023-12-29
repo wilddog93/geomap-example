@@ -35,6 +35,7 @@
     "@nextui-org/user": "^2.0.25",
     "@react-aria/ssr": "^3.8.0",
     "@react-aria/visually-hidden": "^3.8.6",
+    "@sgratzl/chartjs-chart-boxplot": "^4.2.7",
     "@types/leaflet": "^1.9.8",
     "@types/node": "20.5.7",
     "@types/ol": "^7.0.0",
