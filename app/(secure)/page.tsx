@@ -18,12 +18,16 @@ import { useLocationApi, usePropsApi } from "@/api/properties.api";
 import MapComponent from "@/components/maps/MapComponent";
 import { Navbar } from "@/components/navbar";
 import ContentComponent from "@/components/maps/content/content-component";
+import { getCookie } from "cookies-next";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState<boolean>(true);
   const [items, setItems] = useState<any>(null);
 
   const auth = useAuth();
+  const token = getCookie("token")
+
+  console.log(token, "token", auth.isAuth);
 
   // filter-map
   const [location, setLocation] = useState<string>("");

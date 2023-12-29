@@ -10,6 +10,7 @@ import {
   Input,
   ScrollShadow,
 } from "@nextui-org/react";
+import { getCookie } from "cookies-next";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -24,11 +25,12 @@ export default function LoginPage() {
   const [isHidden, setIsHidden] = useState<boolean>(true);
 
   const auth = useAuth();
+  const token = getCookie("token")
 
   console.log(auth, 'auth')
   
   const login = () => {
-    auth.setAuth(true)
+    auth.login("token-example")
     router.push("/")
   }
 
@@ -42,6 +44,8 @@ export default function LoginPage() {
     // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
     redirect(`/`);
   }
+
+  console.log(token, "token")
 
   return (
     <div className="relative overflow-hidden w-full h-screen lg:h-full flex items-center bg-white shadow-default">
