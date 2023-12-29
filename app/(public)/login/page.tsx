@@ -1,5 +1,6 @@
 "use client";
 
+import useAxios from "@/hooks/use-axios";
 import { useAuth } from "@/stores/auth";
 import {
   Button,
@@ -10,42 +11,59 @@ import {
   Input,
   ScrollShadow,
 } from "@nextui-org/react";
+import { AxiosRequestConfig } from "axios";
 import { getCookie } from "cookies-next";
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import {
   MdArrowForward,
   MdLock,
   MdVisibility,
   MdVisibilityOff,
 } from "react-icons/md";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
   const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
+  const axios = useAxios();
   const auth = useAuth();
-  const token = getCookie("token")
+  const token = getCookie("token");
 
-  console.log(auth, 'auth')
-  
-  const login = async() => {
-    auth.login("token-example")
-    router.push("/")
-  }
+  console.log(auth, "auth", token);
+
+  const login = async (body?: any, options?: AxiosRequestConfig) => {
+    console.log(body, options, "data");
+    setLoading(true)
+    try {
+      const { data: lists, ...result } = await axios.$post(
+        "/auth/login",
+        body,
+        options
+      );
+      toast.info("Login is successfully!")
+      setLoading(false)
+      await auth.login(result?.token?.access_token);
+      await router.push("/");
+    } catch (error:any) {
+      toast.error(error?.response?.data?.message)
+      setLoading(false)
+    }
+  };
 
   const isFunctionHidden = () => {
     setIsHidden((t) => !t);
   };
+  
 
-  const isLogin = false
+  // if (token) {
+  //   redirect(`/`);
+  // }
 
-  if (isLogin) {
-    // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
-    redirect(`/`);
-  }
-
-  console.log(token, "token")
+  console.log(token, "token");
 
   return (
     <div className="relative overflow-hidden w-full h-screen lg:h-full flex items-center bg-white shadow-default">
@@ -55,7 +73,10 @@ export default function LoginPage() {
             Melindungi Alam, Melestarikan Kehidupan
           </h1>
 
-          <Card radius="none" className="bg-gray/10 w-96 backdrop-blur-sm shadow-sm rounded-none">
+          <Card
+            radius="none"
+            className="bg-gray/10 w-96 backdrop-blur-sm shadow-sm rounded-none"
+          >
             <CardBody>
               <p className="text-white text-lg drop-shadow-md">
                 Mewujudkan Indonesia yang lestari, menjaga keseimbangan antara
@@ -102,6 +123,10 @@ export default function LoginPage() {
                   Kata sandi
                 </label>
                 <Input
+                  value={password}
+                  onChange={(event: ChangeEvent<{ value: string }>) =>
+                    setPassword(event?.currentTarget.value)
+                  }
                   radius="full"
                   type={isHidden ? "password" : "text"}
                   label=""
@@ -141,9 +166,9 @@ export default function LoginPage() {
                     variant="solid"
                     color="primary"
                     className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
-                    onClick={login}
+                    onClick={() => login({ password })}
                   >
-                    Login
+                    {loading ? "Loading..." : "Login"}
                     <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-300 group-hover:translate-x-full -right-2">
                       <MdArrowForward className="w-10 h-10 bg-green-400 rounded-full p-1 text-white" />
                     </div>

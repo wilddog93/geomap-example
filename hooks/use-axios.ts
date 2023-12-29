@@ -1,23 +1,25 @@
 import AxiosInstance, { type AxiosRequestConfig } from "axios";
 import getConfig from 'next/config'
 import { useAuth } from "@/stores/auth";
+import { getCookie } from "cookies-next";
 
 export default function useAxios() {
   const axios = AxiosInstance.create({
     baseURL: process.env.API_ENDPOINT,
   });
 
-  // const auth = useAuth();
+  const auth = useAuth();
+  const token = getCookie("token")
 
-  // axios.interceptors.request.use((config) => {
-  //   const token = auth.state.token;
-  //   // Check if token exist and Authorization headers not set.
-  //   if (token && !config.headers.Authorization) {
-  //     config.headers["Authorization"] = "Bearer " + token;
-  //   }
+  axios.interceptors.request.use((config) => {
+    // const token = auth.token;
+    // Check if token exist and Authorization headers not set.
+    if (token && !config.headers.Authorization) {
+      config.headers["Authorization"] = "Bearer " + token;
+    }
 
-  //   return config;
-  // });
+    return config;
+  });
 
   // axios.interceptors.response.use(
   //   (response) => response,
@@ -28,7 +30,7 @@ export default function useAxios() {
   //       !config._retry &&
   //       config.url != "/auth/refresh" &&
   //       config.url != "/auth/login" &&
-  //       auth.state.refreshToken
+  //       auth.refreshToken
   //     ) {
   //       // Request refresh token.
   //       const token = await auth.refreshAccessToken();

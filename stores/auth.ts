@@ -1,27 +1,36 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 import { setCookie, deleteCookie } from "cookies-next";
 
 interface AuthState {
-  isAuth: boolean
-  setAuth: (s: boolean) => void
-  token: string | null
-  login: (token: string) => void;
+  isAuth: boolean;
+  token: string | null;
+  refreshToken: string | null;
+  refreshAccessToken: () => void;
+  login: (data: any) => void;
   logout: () => void;
 }
 
-export const useAuth = create<AuthState>()((set) => ({
+export const useAuth = create<AuthState>()((set, get) => ({
   isAuth: false,
   token: null,
-  setAuth: (isAuth) => set(() => ({ isAuth })),
-  login: (token) => {
-    set({ token, isAuth: true })
-    setCookie("token", token, {
+  refreshToken: null,
+  login: (data) => {
+    set({ token: data?.token, refreshToken: data?.refreshToken, isAuth: true });
+    setCookie("token", data?.token, {
+      secure: false,
+      maxAge: 60 * 60 * 24,
+    });
+    setCookie("refreshToken", data?.refreshToken, {
       secure: false,
       maxAge: 60 * 60 * 24,
     });
   },
   logout: () => {
-    set({ isAuth: false, token: null })
+    set({ isAuth: false, token: null, refreshToken: null });
     deleteCookie("token");
+    deleteCookie("refreshToken");
   },
-}))
+  refreshAccessToken: () => {
+    console.log("refresh-token")
+  }
+}));

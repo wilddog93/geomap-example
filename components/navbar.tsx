@@ -74,6 +74,9 @@ import {
   useWoodyFilesApi,
 } from "@/api/import.api";
 import { toast } from "react-toastify";
+import { AxiosRequestConfig } from "axios";
+import useAxios from "@/hooks/use-axios";
+import { useAuth } from "@/stores/auth";
 
 export const Navbar = () => {
   let navRef = useRef<HTMLDivElement | null>(null);
@@ -114,8 +117,30 @@ export const Navbar = () => {
   const [loadingImport, setLoadingImport] = useState<boolean>(false);
   const [isImport, setIsImport] = useState<boolean>(false);
   const [files, setFiles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const auth = useAuth();
+  const axios = useAxios();
+
+  const logout = async (options?: AxiosRequestConfig) => {
+    let config = options;
+    // cconfi
+    setLoading(true)
+    try {
+      const { data: lists, ...result } = await axios.$post(
+        "/auth/logout",
+        options
+      );
+      toast.info("Logout is successfully!")
+      setLoading(false)
+      await auth.logout();
+      await router.push("/login");
+    } catch (error:any) {
+      toast.error(error?.response?.data?.message)
+      setLoading(false)
+    }
+  };
 
   useEffect(() => {
     if (navRef.current) {

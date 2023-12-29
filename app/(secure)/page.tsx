@@ -18,7 +18,7 @@ import { useLocationApi, usePropsApi } from "@/api/properties.api";
 import MapComponent from "@/components/maps/MapComponent";
 import { Navbar } from "@/components/navbar";
 import ContentComponent from "@/components/maps/content/content-component";
-import { getCookie } from "cookies-next";
+import { getCookie, getCookies } from "cookies-next";
 
 export default function Home() {
   const [sidebar, setSidebar] = useState<boolean>(true);
@@ -212,12 +212,10 @@ export default function Home() {
     return { points, categories: newCat };
   }, [locationOptions]);
 
-  const isLogin = true;
-
-  if (!isLogin) {
-    // const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
-    redirect(`/login`);
-  }
+  // if (!token) {
+  //   const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
+  //   redirect(`/login`);
+  // }
 
   return (
     <main className="relative w-full h-full flex-grow text-default-500">

@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
-import { Metadata } from "next";
+import { GetServerSideProps, Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { dmSans, fontSans } from "@/config/fonts";
 import { Providers } from "../providers";
@@ -12,6 +12,7 @@ import { useAuth } from "@/stores/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ToastContainer } from "react-toastify";
+import { getCookies } from "cookies-next";
 
 export const metadata: Metadata = {
   title: {
