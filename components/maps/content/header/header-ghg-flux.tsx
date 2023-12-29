@@ -87,7 +87,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            Ch <sub>4</sub> (AVG)
+            CH <sub>4</sub> (AVG)
           </p>
           <p className="font-bold text-lg">
             {items?.totalCh4
@@ -104,7 +104,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            Co <sub>2</sub> (AVG)
+            CO <sub>2</sub> (AVG)
           </p>
           <p className="font-bold text-lg">
             {items?.totalCo2

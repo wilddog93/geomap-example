@@ -381,7 +381,7 @@ export default function GHGFluxCharts({
                   className={`text-sm font-semibold`}
                 >
                   <span>
-                    Ch<sup>4</sup>
+                    CH<sub>4</sub>
                   </span>
                 </p>
               </div>
@@ -402,7 +402,7 @@ export default function GHGFluxCharts({
                   className={`text-sm font-semibold`}
                 >
                   <span>
-                    Co<sup>2</sup>
+                    CO<sub>2</sub>
                   </span>
                 </p>
               </div>
