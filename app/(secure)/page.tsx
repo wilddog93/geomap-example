@@ -217,6 +217,8 @@ export default function Home() {
   //   redirect(`/login`);
   // }
 
+  console.log(token, "result-token-1")
+
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
       <Navbar />

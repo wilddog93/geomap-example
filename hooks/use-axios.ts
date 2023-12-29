@@ -1,5 +1,5 @@
 import AxiosInstance, { type AxiosRequestConfig } from "axios";
-import getConfig from 'next/config'
+import getConfig from "next/config";
 import { useAuth } from "@/stores/auth";
 import { getCookie } from "cookies-next";
 
@@ -9,10 +9,11 @@ export default function useAxios() {
   });
 
   const auth = useAuth();
-  const token = getCookie("token")
 
   axios.interceptors.request.use((config) => {
     // const token = auth.token;
+    const token = getCookie("token");
+    // console.log(token, "result-token");
     // Check if token exist and Authorization headers not set.
     if (token && !config.headers.Authorization) {
       config.headers["Authorization"] = "Bearer " + token;
@@ -58,8 +59,11 @@ export default function useAxios() {
     return (await axios.get(url, { ...config }))?.data;
   };
 
-  const $getByObject = async (url: string, config?: AxiosRequestConfig<any>) => {
-    return (await axios.get(url, { ...config }));
+  const $getByObject = async (
+    url: string,
+    config?: AxiosRequestConfig<any>
+  ) => {
+    return await axios.get(url, { ...config });
   };
 
   const $put = async (

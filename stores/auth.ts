@@ -10,7 +10,7 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuth = create<AuthState>()((set, get) => ({
+export const useAuth = create<AuthState>()((set) => ({
   isAuth: false,
   token: null,
   refreshToken: null,

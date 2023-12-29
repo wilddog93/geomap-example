@@ -46,7 +46,7 @@ export default function LoginPage() {
       );
       toast.info("Login is successfully!")
       setLoading(false)
-      await auth.login(result?.token?.access_token);
+      await auth.login({ token: result?.token?.access_token, refreshToken: result?.token?.refresh_token });
       await router.push("/");
     } catch (error:any) {
       toast.error(error?.response?.data?.message)
