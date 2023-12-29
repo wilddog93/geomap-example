@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   console.log(auth, 'auth')
   
-  const login = () => {
+  const login = async() => {
     auth.login("token-example")
     router.push("/")
   }
