@@ -67,9 +67,11 @@ import { FaCircleNotch } from "react-icons/fa";
 import {
   useCarbonFilesApi,
   useGHGFilesApi,
+  useLittersFilesApi,
   useLocationFilesApi,
   useSoilsFilesApi,
   useWeatherFilesApi,
+  useWoodyFilesApi,
 } from "@/api/import.api";
 import { toast } from "react-toastify";
 
@@ -99,11 +101,13 @@ export const Navbar = () => {
   );
 
   // import
-  const CarbonImport = useCarbonFilesApi();
   const GHGImport = useGHGFilesApi();
   const LocationImport = useLocationFilesApi();
   const SoilsImport = useSoilsFilesApi();
   const WeatherImport = useWeatherFilesApi();
+  const CarbonImport = useCarbonFilesApi();
+  const CarbonWoodyImport = useWoodyFilesApi();
+  const CarbonLittersImport = useLittersFilesApi();
 
   const [selected, setSelected] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -185,6 +189,20 @@ export const Navbar = () => {
           },
         });
         console.log("Files uploaded weather:", files);
+      } else if (selected == "Woody Debris") {
+        await CarbonWoodyImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded carbon:", files);
+      } else if (selected == "Litters") {
+        await CarbonLittersImport.fetch(formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Files uploaded carbon:", files);
       } else {
         console.log("Files uploaded:", files);
       }
@@ -320,16 +338,6 @@ export const Navbar = () => {
               >
                 <DropdownSection aria-label="Upload Documents">
                   <DropdownItem
-                    key="carbon-stock"
-                    onPress={() => {
-                      setSelected("Carbon Stock");
-                      onOpen();
-                    }}
-                    // endContent={<MdUpload className="text-large" />}
-                  >
-                    Carbon Stock
-                  </DropdownItem>
-                  <DropdownItem
                     key="ghg-flux"
                     onPress={() => {
                       setSelected("GHG Fluxes");
@@ -350,6 +358,7 @@ export const Navbar = () => {
                   >
                     NCS Location
                   </DropdownItem>
+
                   <DropdownItem
                     key="soils"
                     onPress={() => {
@@ -360,6 +369,7 @@ export const Navbar = () => {
                   >
                     Soil Psychochemical
                   </DropdownItem>
+
                   <DropdownItem
                     key="aws"
                     onPress={() => {
@@ -370,6 +380,26 @@ export const Navbar = () => {
                   >
                     Weather data (AWS)
                   </DropdownItem>
+
+                  <DropdownItem
+                    key="carbon-stock-woody"
+                    onPress={() => {
+                      setSelected("Woody Debris");
+                      onOpen();
+                    }}
+                  >
+                    Woody Debris
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="carbon-litters"
+                    onPress={() => {
+                      setSelected("Litters");
+                      onOpen();
+                    }}
+                  >
+                    Litter Mass
+                  </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
             </Dropdown>
@@ -377,42 +407,6 @@ export const Navbar = () => {
         </NavbarContent>
 
         <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-          {/* <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <button className="focus:outline-none">
-              <Avatar
-                className="transition-transform"
-                color="secondary"
-                name="John Doe"
-                size="sm"
-                src="https://i.pravatar.cc/150?u=a04258114e29026702d"
-                fallback={
-                  <MdCamera
-                    className="animate-pulse w-6 h-6 text-default-500"
-                    fill="currentColor"
-                    size={20}
-                  />
-                }
-              />
-            </button>
-          </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Profile Actions"
-            variant="flat"
-            color="primary"
-            className="text-black"
-          >
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">John Doe</p>
-            </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="logout" color="danger" onPress={onOpen}>
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown> */}
           <NavbarMenuToggle />
         </NavbarContent>
 
@@ -442,7 +436,7 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                   }
-                  href="#"
+                  href={item.href}
                   size="lg"
                 >
                   {item.label}
