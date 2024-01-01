@@ -1430,7 +1430,7 @@ function ContentComponent({
                   )}
                 </Autocomplete>
 
-                <div className={`w-full my-3 ${!periodeKey ? "hidden" : ""}`}>
+                <div className={`w-full my-3 ${!periodeKey || categoryKey === "Carbon Stock" ? "hidden" : ""}`}>
                   <div
                     className={`w-full ${
                       periodeKey !== "Yearly" ? "hidden" : ""
