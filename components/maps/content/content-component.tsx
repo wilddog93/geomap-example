@@ -154,8 +154,6 @@ function ContentComponent({
   }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
 
-  console.log(periodeFilterred, "result-date");
-
   const getQuery = useMemo(() => {
     let location: string | any = "";
     let landCover: string | any = "";
@@ -168,7 +166,7 @@ function ContentComponent({
 
   // chart
   // filter
-  const filterCharts = useMemo(() => {
+  const filterChartsGHG = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
     const search: any = {
@@ -231,8 +229,8 @@ function ContentComponent({
 
   useEffect(() => {
     if (categoryKey == "GHG Fluxes & other variables")
-      getGHGFluxChart(filterCharts.queryObject);
-  }, [filterCharts, categoryKey]);
+      getGHGFluxChart(filterChartsGHG.queryObject);
+  }, [filterChartsGHG, categoryKey]);
 
   const getChartDataGHGFlux = useMemo(() => {
     let chartLabel = [
@@ -527,6 +525,37 @@ function ContentComponent({
   ]);
 
   // soils
+  const filterChartsSoils = useMemo(() => {
+    const qb = RequestQueryBuilder.create();
+
+    const soilCond = categoryKey == "Soil psychochemical properties" || categoryKey == "Soil Chem Char_1" || categoryKey == "Soil Chem Char_2" || categoryKey == "Soil Chem Char_3"
+
+    const search: any = {
+      $and: [{ location: { $cont: getQuery.location } }],
+    };
+    if (periodeKey)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
+
+      if (categoryKey == "Soil psychochemical properties")
+      search?.$and?.push({ soilType: { $eq: "physical" } });
+
+    if (getQuery.landCover)
+      search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
+
+    qb.search(search);
+    qb.sortBy({
+      field: `date`,
+      order: "ASC",
+    });
+    qb.query();
+    return qb;
+  }, [getQuery, periodeFilterred, categoryKey, periodeKey]);
+
   const getSoilsChart = async (params: any) => {
     await SoilsYearly.fetch({ params: params });
     await SoilsMonthly.fetch({ params: params });
@@ -534,8 +563,8 @@ function ContentComponent({
 
   useEffect(() => {
     if (categoryKey == "Soil psychochemical properties")
-      getSoilsChart(filterCharts?.queryObject);
-  }, [filterCharts, categoryKey]);
+      getSoilsChart(filterChartsGHG?.queryObject);
+  }, [filterChartsGHG, categoryKey]);
 
   const getChartDataSoils = useMemo(() => {
     let chartLabel = [
@@ -594,43 +623,80 @@ function ContentComponent({
       ],
     };
 
-    if(landCoverKey) {
+    let pH: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+
+    let redox: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
+
+    if (landCoverKey) {
       if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
         SoilsYearly.data.map((item, i) => {
           let date = format(new Date(item.datetime), "MMM-yy", { locale: id });
           bulkDensity.labels.push(date);
           bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-  
+
           gravimetricWaterContent.labels.push(date);
           gravimetricWaterContent.datasets[0].data.push(
             item.avg_gravimetricWaterContent
           );
-  
+
           volumetricWaterContent.labels.push(date);
           volumetricWaterContent.datasets[0].data.push(
             item.avg_volumetricWaterContent
           );
+
+          pH.labels.push(date);
+          pH.datasets[0].data.push(item.avg_pH);
+
+          redox.labels.push(date);
+          redox.datasets[0].data.push(item.avg_redox);
         });
-      } else if (
-        SoilsMonthly.data.length > 0 &&
-        periodeKey == "Monthly"
-      ) {
+      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
         SoilsMonthly.data.map((item, i) => {
           let date = format(new Date(item.datetime), "yyyy-MM-dd", {
             locale: id,
           });
           bulkDensity.labels.push(date);
           bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-  
+
           gravimetricWaterContent.labels.push(date);
           gravimetricWaterContent.datasets[0].data.push(
             item.avg_gravimetricWaterContent
           );
-  
+
           volumetricWaterContent.labels.push(date);
           volumetricWaterContent.datasets[0].data.push(
             item.avg_volumetricWaterContent
           );
+
+          pH.labels.push(date);
+          pH.datasets[0].data.push(item.avg_pH);
+
+          redox.labels.push(date);
+          redox.datasets[0].data.push(item.avg_redox);
         });
       } else if (SoilsYearly.data.length > 0 && !periodeKey) {
         SoilsYearly.data.map((item, i) => {
@@ -639,12 +705,12 @@ function ContentComponent({
           });
           bulkDensity.labels.push(date);
           bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-  
+
           gravimetricWaterContent.labels.push(date);
           gravimetricWaterContent.datasets[0].data.push(
             item.avg_gravimetricWaterContent
           );
-  
+
           volumetricWaterContent.labels.push(date);
           volumetricWaterContent.datasets[0].data.push(
             item.avg_volumetricWaterContent
@@ -653,22 +719,30 @@ function ContentComponent({
       } else {
         bulkDensity.labels = chartLabel;
         bulkDensity.datasets[0].data = chartData;
-  
+
         gravimetricWaterContent.labels = chartLabel;
         gravimetricWaterContent.datasets[0].data = chartData;
-  
+
         volumetricWaterContent.labels = chartLabel;
         volumetricWaterContent.datasets[0].data = chartData;
+
+        pH.labels = chartLabel;
+        pH.datasets[0].data = chartData;
+
+        redox.labels = chartLabel;
+        redox.datasets[0].data = chartData;
       }
     }
 
-    console.log(GHGFluxYearly.data, 'result-data')
+    console.log(SoilsYearly.data, "result-data");
 
     // airTemperature = dataYearly;
     return {
       bulkDensity,
       gravimetricWaterContent,
       volumetricWaterContent,
+      pH,
+      redox
     };
   }, [SoilsYearly.data, landCoverKey, SoilsMonthly.data, periodeKey]);
 
@@ -676,7 +750,9 @@ function ContentComponent({
     let totalBulkDensity: number = 0;
     let totalGravimetricWaterContent: number = 0;
     let totalVolumetricWaterContent: number = 0;
-    if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
+    let totalPh: number = 0;
+    let totalRedox: number = 0;
+    if (SoilsYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
       totalBulkDensity =
         getSums(SoilsYearly.data.map((item) => item.avg_bulkDensity)) /
         SoilsYearly.data.length;
@@ -688,23 +764,41 @@ function ContentComponent({
         getSums(
           SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
         ) / SoilsYearly.data.length;
-    } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
+      totalPh =
+        getSums(SoilsYearly.data.map((item) => item.avg_pH)) /
+        SoilsYearly.data.length;
+      totalRedox =
+        getSums(SoilsYearly.data.map((item) => item.avg_redox)) /
+        SoilsYearly.data.length;
+    } else if (
+      SoilsMonthly.data.length > 0 &&
+      landCoverKey &&
+      periodeKey == "Monthly"
+    ) {
       totalBulkDensity =
         getSums(SoilsMonthly.data.map((item) => item.avg_bulkDensity)) /
-        SoilsYearly.data.length;
+        SoilsMonthly.data.length;
       totalGravimetricWaterContent =
         getSums(
           SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent)
-        ) / SoilsYearly.data.length;
+        ) / SoilsMonthly.data.length;
       totalVolumetricWaterContent =
         getSums(
           SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent)
-        ) / SoilsYearly.data.length;
+        ) / SoilsMonthly.data.length;
+      totalPh =
+        getSums(SoilsMonthly.data.map((item) => item.avg_pH)) /
+        SoilsMonthly.data.length;
+      totalRedox =
+        getSums(SoilsMonthly.data.map((item) => item.avg_redox)) /
+        SoilsMonthly.data.length;
     }
     return {
       totalBulkDensity,
       totalGravimetricWaterContent,
       totalVolumetricWaterContent,
+      totalPh,
+      totalRedox
     };
   }, [SoilsYearly.data, landCoverKey, SoilsMonthly.data, periodeKey]);
 

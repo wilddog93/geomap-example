@@ -144,3 +144,15 @@ export const filterByUniqueKey = (arr: MyObject[], key: keyof MyObject): MyObjec
     return true; // Unique key value, include in the result
   });
 };
+
+// sort object array
+export const sortByArr = (fn: any, sortBy: boolean) => {
+  function cmp(a: any, b: any) {
+    if (sortBy) return -(a < b) || +(a > b);
+    else return -(a > b) || +(a < b);
+  }
+  return function (a: any, b: any) {
+    // console.log(fn(a), "sort");
+    return cmp(fn(a), fn(b));
+  };
+};

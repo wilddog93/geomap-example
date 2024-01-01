@@ -85,11 +85,14 @@ import { SearchIcon } from "../icons";
 //     ],
 //   },
 // ];
-
+// GHG Fluxes & other variables, Carbon Stock, Soil psychochemical properties, Weather data (AWS)
 const categoryOptions: SelectTypes[] = [
-  { value: "carbon stock", label: "Carbon Stock" },
-  { value: "ghg fluxes", label: "GHG Fluxes" },
-  { value: "soil physical chemistry", label: "Soil Physical Chemistry" },
+  { value: "Carbon Stock", label: "Carbon Stock" },
+  { value: "GHG Fluxes & other variables", label: "GHG Fluxes & other variables" },
+  { value: "Soil psychochemical properties", label: "Soil psychochemical properties" },
+  { value: "Soil Chemistry properties 1", label: "Soil Chemistry properties 1" },
+  { value: "Soil Chemistry properties 2", label: "Soil Chemistry properties 2" },
+  { value: "soil chemistry_3", label: "Soil Chemistry 3" },
   { value: "weather data", label: "Weather Data" },
 ];
 

@@ -22,6 +22,8 @@ type ChartDataProps = {
   bulkDensity: PropsChart;
   gravimetricWaterContent: PropsChart;
   volumetricWaterContent: PropsChart;
+  pH: PropsChart;
+  redox: PropsChart;
 };
 
 type Props = {
@@ -188,6 +190,48 @@ export default function SoilsCharts({
                 height="300"
                 options={options}
                 data={chartData.volumetricWaterContent}
+              />
+            </div>
+          </AccordionItem>
+
+          <AccordionItem
+            key={`${landCoverKey}-4`}
+            aria-label={`${landCoverKey}-4`}
+            title={
+              <div className="flex justify-between items-center">
+                <p className={`text-sm font-semibold`}>
+                  Hydrogen Potential
+                </p>
+              </div>
+            }
+          >
+            <div className="w-full flex flex-col relative">
+              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <AreaCharts
+                height="300"
+                options={options}
+                data={chartData.pH}
+              />
+            </div>
+          </AccordionItem>
+
+          <AccordionItem
+            key={`${landCoverKey}-3`}
+            aria-label={`${landCoverKey}-3`}
+            title={
+              <div className="flex justify-between items-center">
+                <p className={`text-sm font-semibold`}>
+                  Redox Potential
+                </p>
+              </div>
+            }
+          >
+            <div className="w-full flex flex-col relative">
+              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <AreaCharts
+                height="300"
+                options={options}
+                data={chartData.redox}
               />
             </div>
           </AccordionItem>

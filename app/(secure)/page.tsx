@@ -9,6 +9,7 @@ import { SelectTypes } from "@/utils/propTypes";
 import { redirect } from "next/navigation";
 import {
   replaceStringNoSpace,
+  sortByArr,
   splitStringTobeArray,
 } from "@/utils/useFunction";
 // api
@@ -36,11 +37,9 @@ export default function Home() {
   const [categoryKey, setCategoryKey] = useState<Key | null>(
     "GHG Fluxes & other variables"
   );
-  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
-  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
+  const [periodeKey, setPeriodeKey] = useState<Key | null>("");
+  const [periodeFilter, setPeriodeFilter] = useState("");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
   const [landCoverFilter, setLandCoverFilter] = useState("");
 
   // function
@@ -85,7 +84,6 @@ export default function Home() {
 
   // data-location
   const locationApi = useLocationApi();
-  const propertyApi = usePropsApi();
 
   const filterLocation = useMemo(() => {
     const qb = RequestQueryBuilder.create();
@@ -139,7 +137,8 @@ export default function Home() {
           value: loc.location,
           state: newShortLocation?.trim(),
           // @ts-ignore
-          categories: splitStringTobeArray(loc.description as string),
+          categories: splitStringTobeArray((loc.optionalDescription as string) || (loc.description as string)),
+          landCoverOptions: splitStringTobeArray((loc.landCover as string))
         });
       });
     }
@@ -147,64 +146,13 @@ export default function Home() {
     return filteredArray;
   }, [locationApi?.data]);
 
-  const filterLocationLand = useMemo(() => {
-    let shortLocation = splitStringTobeArray(locationKey as string);
-    let newShortLocation = shortLocation[shortLocation.length - 1];
-
-    let newArr:any[] = []
-
-    return newShortLocation?.trim()
-  }, [locationKey]);
-
-  console.log(locationOptions, "result-location");
-
-  const filterLandCover = useMemo(() => {
-    const qb = RequestQueryBuilder.create();
-    const search:any = {
-      $and: [
-        { type: { $contL: "landcover" } },
-      ],
-    };
-    qb.search(search);
-    qb.sortBy({
-      field: `name`,
-      order: "ASC",
-    });
-    qb.query();
-    return qb;
-  }, [filterLocationLand]);
-
-  const getLandCover = async (params: any) => {
-    await propertyApi.fetch({ params: params });
-  };
-
-  console.log(propertyApi.data, 'result-landcover')
-
-  useEffect(() => {
-    if (filterLandCover) getLandCover(filterLandCover.queryObject);
-  }, [filterLandCover]);
-
-  const landCoverOptions = useMemo(() => {
-    const { data } = propertyApi;
-    let location: SelectTypes[] | any[] = [];
-    let landCover: SelectTypes[] | any[] = [];
-    if (data.length > 0) {
-      data.map((prop) => {
-        landCover.push({
-          ...prop,
-          label: prop.name,
-          value: prop.name,
-        });
-      });
-    }
-    return landCover;
-  }, [propertyApi?.data]);
-
   // lcoation to be map data poin
   const mapData = useMemo(() => {
     let points: any[] = [];
     let categories: any[] = [];
     let newCat: SelectTypes[] = [];
+    let landCovers: any[] = [];
+    let newLandCover: SelectTypes[] = [];
     if (locationOptions.length > 0) {
       locationOptions.map((items: any) => {
         items?.categories?.map((x: any) => {
@@ -219,20 +167,60 @@ export default function Home() {
             value: x?.trim(),
           });
         });
+        items?.landCoverOptions?.map((t:any) => {
+          landCovers.push({
+            value: t?.trim(),
+            label: t?.trim(),
+          })
+        })
       });
       newCat = Array.from(new Set(categories.map((item) => item?.value))).map(
         (value) => categories.find((item: any) => item?.value === value)
       );
+
+      newLandCover = Array.from(new Set(landCovers.map((item) => item?.value))).map(
+        (value) => landCovers.find((item: any) => item?.value === value)
+      );
     }
-    return { points, categories: newCat };
+    return { points, categories: newCat, landCovers: newLandCover };
   }, [locationOptions]);
 
-  // if (!token) {
-  //   const returnUrl = encodeURIComponent(headers().get("x-invoke-path") || "/");
-  //   redirect(`/login`);
-  // }
+  // land-cover options
+  const landCoverOptions = useMemo(() => {
+    let shortLocation = splitStringTobeArray(locationKey as string);
+    let newShortLocation = shortLocation[shortLocation.length - 1];
 
-  // console.log(token, "result-token-1")
+    let locationSelected = newShortLocation?.trim()
+    let newLandCover: SelectTypes[] = [];
+
+    let filter = locationSelected ? locationOptions?.filter((loc:any) => {
+      return loc?.state == locationSelected
+    }) : locationOptions;
+
+    filter?.map((item:any) => {
+      item?.landCoverOptions?.map((land:any) => {
+        newLandCover.push({
+          value: land?.trim(),
+          label: land?.trim(),
+        })
+      })
+    })
+
+    let result = Array.from(new Set(newLandCover.map((item) => item?.value))).map(
+      (value) => newLandCover.find((item: any) => item?.value === value)
+    );
+
+    const getValue = (o: any) => {
+      return o?.value;
+    };
+    let sortByValue = sortByArr(getValue, true);
+    let sortResult = result.sort(sortByValue);
+
+    return sortResult;
+  }, [locationKey, locationOptions]);
+
+  console.log(landCoverOptions, "result-landcover")
+  console.log(locationOptions, "result-location")
 
   return (
     <main className="relative w-full h-full flex-grow text-default-500">

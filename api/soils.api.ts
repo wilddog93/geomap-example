@@ -5,11 +5,11 @@ import Meta from "./meta.interface";
 import defaultMeta from "./utils";
 
 type ValuesType = {
-    sampleCode: string | any;
-    gravimetricWaterContent: number | null;
-    bulkDensity: number | null;
-    volumetricWaterContent: number | null;
-}
+  sampleCode: string | any;
+  gravimetricWaterContent: number | null;
+  bulkDensity: number | null;
+  volumetricWaterContent: number | null;
+};
 
 export interface SoilsType {
   id: number;
@@ -29,9 +29,13 @@ export interface SoilsStatisticsProp {
   datetime: string;
   avg_bulkDensity: number;
   avg_gravimetricWaterContent: number;
+  avg_pH: number;
+  avg_redox: number;
   avg_volumetricWaterContent: number;
   sum_bulkDensity: number;
   sum_gravimetricWaterContent: number;
+  sum_pH: number;
+  sum_redox: number;
   sum_volumetricWaterContent: number;
 }
 

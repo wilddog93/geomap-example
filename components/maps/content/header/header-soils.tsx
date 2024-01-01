@@ -8,6 +8,8 @@ interface SoilsProps {
     totalBulkDensity?: number | any;
     totalGravimetricWaterContent?: number | any;
     totalVolumetricWaterContent?: number | any;
+    totalPh?: number | any;
+    totalRedox?: number | any;
   };
   sidebar?: boolean;
 };
@@ -20,7 +22,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
     <Fragment>
       <div className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}>
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Bulk Density <span>(AVG)</span> </p>
+          <p className="text-xs mb-2">Average Bulk Density</p>
           <p className="font-bold text-lg">
             {items?.totalBulkDensity
               ? formatMoney({
@@ -33,7 +35,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Gravimetric Water Content <span>(AVG)</span> </p>
+          <p className="text-xs mb-2">Average Gravimetric Water Content</p>
           <p className="font-bold text-lg">
             {items?.totalGravimetricWaterContent
               ? formatMoney({
@@ -46,11 +48,37 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Volumetric Water Content <span>(AVG)</span> </p>
+          <p className="text-xs mb-2">Average Volumetric Water Content</p>
           <p className="font-bold text-lg">
             {items?.totalVolumetricWaterContent
               ? formatMoney({
                   amount: items?.totalVolumetricWaterContent,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average pH</p>
+          <p className="font-bold text-lg">
+            {items?.totalPh
+              ? formatMoney({
+                  amount: items?.totalPh,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Redox Potential</p>
+          <p className="font-bold text-lg">
+            {items?.totalRedox
+              ? formatMoney({
+                  amount: items?.totalRedox,
                   decimalCount: 2,
                 })
               : 0}
