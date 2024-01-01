@@ -336,7 +336,7 @@ function ContentComponent({
       landCoverKey
     ) {
       GHGFluxYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "MMM-yy");
+        let date = format(new Date(item.datetime), "MMM yy");
         airTemperature.labels.push(date);
         airTemperature.datasets[0].data.push(item.avg_airTemperature);
         airTemperature.datasets[0].label = item.land_cover;
@@ -367,7 +367,7 @@ function ContentComponent({
       landCoverKey
     ) {
       GHGFluxMonthly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+        let date = format(new Date(item.datetime), "dd MMM yy", {
           locale: id,
         });
         airTemperature.labels.push(date);
@@ -396,7 +396,7 @@ function ContentComponent({
       });
     } else if (GHGFluxYearly.data.length > 0 && landCoverKey && !periodeKey) {
       GHGFluxYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+        let date = format(new Date(item.datetime), "MMM yy", {
           locale: id,
         });
         airTemperature.labels.push(date);
@@ -1404,18 +1404,21 @@ function ContentComponent({
                     }`}
                   >
                     <label className="w-full text-gray-5 overflow-hidden">
-                      <div className="relative">
-                        <DatePicker
-                          selected={periodeDate}
-                          onChange={(date: any) => setPeriodeDate(date)}
-                          showYearPicker
-                          dateFormat="yyyy"
-                          // yearItemNumber={6}
-                          isClearable
-                          className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
-                        />
-                        <MdCalendarToday className="absolute left-3 top-2 h-5 w-5 text-gray-5 p-1" />
-                      </div>
+                      <DatePicker
+                        selected={periodeDate}
+                        onChange={(date: any) => setPeriodeDate(date)}
+                        showYearPicker
+                        dateFormat="yyyy"
+                        yearItemNumber={6}
+                        showIcon
+                        icon={
+                          (
+                            <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                          ) as any
+                        }
+                        isClearable
+                        className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                      />
                     </label>
                   </div>
 
@@ -1425,29 +1428,33 @@ function ContentComponent({
                     }`}
                   >
                     <label className="w-full text-gray-5 overflow-hidden">
-                      <div className="relative">
-                        <DatePicker
-                          selectsRange={true}
-                          startDate={startDate}
-                          endDate={endDate}
-                          onChange={(dates: any) => {
-                            setDateRange(dates);
-                          }}
-                          monthsShown={1}
-                          placeholderText={"Select date"}
-                          todayButton
-                          dropdownMode="select"
-                          peekNextMonth
-                          showMonthDropdown
-                          showYearDropdown
-                          calendarClassName="-left-10"
-                          clearButtonTitle="Clear"
-                          clearButtonClassName="p-1"
-                          className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
-                          isClearable
-                        />
-                        <MdCalendarToday className="absolute left-3 top-2 h-5 w-5 text-gray-5 p-1" />
-                      </div>
+                      <DatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(dates: any) => {
+                          setDateRange(dates);
+                        }}
+                        dateFormat="dd/MM-yy"
+                        monthsShown={2}
+                        placeholderText={"Select date"}
+                        // todayButton={"Today"}
+                        dropdownMode="select"
+                        peekNextMonth={true}
+                        dateFormatCalendar="MMM yyyy"
+                        showMonthDropdown
+                        showYearDropdown
+                        calendarClassName="-left-10"
+                        clearButtonClassName="p-1"
+                        className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                        isClearable
+                        showIcon
+                        icon={
+                          (
+                            <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                          ) as any
+                        }
+                      />
                     </label>
                   </div>
                 </div>
