@@ -8,9 +8,10 @@ type dataSetProps = {
   data: number[] | any[];
   borderColor?: string;
   backgroundColor?: string;
-  tension: number | 0.1;
+  tension?: number | 0.1;
   fill: boolean | false;
   label: string | "Label";
+  borderRadius?: number | string;
 };
 
 export type PropsChart = {

@@ -3,14 +3,16 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import React, { Fragment, Key } from "react";
 import { MdInfo } from "react-icons/md";
 import AreaCharts from "../AreaCharts";
+import BarCharts from "../BarCharts";
 
 type dataSetProps = {
   data: number[] | any[];
   borderColor?: string;
   backgroundColor?: string;
-  tension: number | 0.1;
+  tension?: number | 0.1;
   fill: boolean | false;
   label: string | "Label";
+  borderRadius?: number | string
 };
 
 export type PropsChart = {
@@ -387,40 +389,19 @@ export default function WeatherCharts({
           </AccordionItem>
 
           <AccordionItem
-            key={`${landCoverKey}-6`}
-            aria-label={`${landCoverKey}-6`}
-            title={
-              <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>
-                  Wind Direction
-                </p>
-              </div>
-            }
-          >
-            <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts
-                height="300"
-                options={optionsDirection}
-                data={chartData.windDirection}
-              />
-            </div>
-          </AccordionItem>
-
-          <AccordionItem
             key={`${landCoverKey}-7`}
             aria-label={`${landCoverKey}-7`}
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Rain
+                  Rainfall
                 </p>
               </div>
             }
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
-              <AreaCharts
+              <BarCharts
                 height="300"
                 options={optionsRain}
                 data={chartData.rain}
@@ -482,17 +463,8 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Direction</h3>
-            <AreaCharts
-              height="300"
-              options={optionsDirection}
-              data={chartData.windDirection}
-            />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Rain</h3>
-            <AreaCharts height="300" options={optionsRain} data={chartData.rain} />
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Rainfall</h3>
+            <BarCharts height="300" options={optionsRain} data={chartData.rain} />
           </div>
         </div>
       </div>
