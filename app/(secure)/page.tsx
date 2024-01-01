@@ -25,7 +25,7 @@ export default function Home() {
   const [items, setItems] = useState<any>(null);
 
   const auth = useAuth();
-  const token = getCookie("token")
+  const token = getCookie("token");
 
   console.log(token, "token", auth.isAuth);
 
@@ -147,10 +147,23 @@ export default function Home() {
     return filteredArray;
   }, [locationApi?.data]);
 
+  const filterLocationLand = useMemo(() => {
+    let shortLocation = splitStringTobeArray(locationKey as string);
+    let newShortLocation = shortLocation[shortLocation.length - 1];
+
+    let newArr:any[] = []
+
+    return newShortLocation?.trim()
+  }, [locationKey]);
+
+  console.log(locationOptions, "result-location");
+
   const filterLandCover = useMemo(() => {
     const qb = RequestQueryBuilder.create();
-    const search = {
-      $and: [{ type: { $contL: "landcover" } }],
+    const search:any = {
+      $and: [
+        { type: { $contL: "landcover" } },
+      ],
     };
     qb.search(search);
     qb.sortBy({
@@ -159,11 +172,13 @@ export default function Home() {
     });
     qb.query();
     return qb;
-  }, []);
+  }, [filterLocationLand]);
 
   const getLandCover = async (params: any) => {
     await propertyApi.fetch({ params: params });
   };
+
+  console.log(propertyApi.data, 'result-landcover')
 
   useEffect(() => {
     if (filterLandCover) getLandCover(filterLandCover.queryObject);
@@ -217,7 +232,7 @@ export default function Home() {
   //   redirect(`/login`);
   // }
 
-  console.log(token, "result-token-1")
+  // console.log(token, "result-token-1")
 
   return (
     <main className="relative w-full h-full flex-grow text-default-500">

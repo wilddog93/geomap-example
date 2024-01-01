@@ -386,9 +386,15 @@ const MapComponent = ({
     <Fragment>
       <div
         id="map"
-        className=""
-        style={{ width: "100%", height: "100%" }}
-      ></div>
+        className="map-filter relative"
+        style={{ 
+          width: "100%", 
+          height: "100%",
+        }}
+      >
+        {/* <div className="w-full h-full absolute z-10 bg-primary/50 inset-0"></div> */}
+      </div>
+
       <div className="absolute z-10 right-1 top-24 lg:top-16">
         <Image alt="kompas" src="image/kompas.png" className="w-10 h-10" />
       </div>

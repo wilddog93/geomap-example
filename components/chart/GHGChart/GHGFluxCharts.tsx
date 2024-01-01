@@ -110,7 +110,7 @@ export default function GHGFluxCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (m³/m³)`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} m³/m³`
           }
         }
       },
@@ -184,7 +184,7 @@ export default function GHGFluxCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (tCO₂ ha⁻¹ yr⁻¹)`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} tCO₂ ha⁻¹ yr⁻¹`
           }
         }
       },
@@ -221,7 +221,7 @@ export default function GHGFluxCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (tCO₂e ha⁻¹ yr⁻¹)`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} tCO₂e ha⁻¹ yr⁻¹`
           }
         }
       },
@@ -381,7 +381,8 @@ export default function GHGFluxCharts({
                   className={`text-sm font-semibold`}
                 >
                   <span>
-                    CH<sub>4</sub>
+                    {/* CH<sub>4</sub> */}
+                    Methane Flux
                   </span>
                 </p>
               </div>
@@ -402,7 +403,8 @@ export default function GHGFluxCharts({
                   className={`text-sm font-semibold`}
                 >
                   <span>
-                    CO<sub>2</sub>
+                    {/* CO<sub>2</sub> */}
+                    Total Respiration
                   </span>
                 </p>
               </div>
@@ -428,7 +430,7 @@ export default function GHGFluxCharts({
             </h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsTemperature}
               data={chartData.airTemperature}
             />
           </div>
@@ -439,7 +441,7 @@ export default function GHGFluxCharts({
             </h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsTemperature}
               data={chartData.soilTemperature}
             />
           </div>
@@ -450,7 +452,7 @@ export default function GHGFluxCharts({
             </h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsSoil}
               data={chartData.soilMoisture}
             />
           </div>
@@ -461,23 +463,25 @@ export default function GHGFluxCharts({
             </h3>
             <AreaCharts
               height="300"
-              options={options}
+              options={optionsWater}
               data={chartData.waterTable}
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Ch<sup>4</sup>
+              {/* Ch<sup>4</sup> */}
+              Methane Flux
             </h3>
-            <AreaCharts height="300" options={options} data={chartData.ch4} />
+            <AreaCharts height="300" options={optionsCh4} data={chartData.ch4} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Co<sup>2</sup>
+              {/* Co<sup>2</sup> */}
+              Total Respiration
             </h3>
-            <AreaCharts height="300" options={options} data={chartData.co2} />
+            <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { MdCalendarToday } from "react-icons/md";
+import { MdCalendarToday, MdOutlineCalendarToday } from "react-icons/md";
 
 // API
 import {
@@ -54,6 +54,10 @@ import {
 } from "@/api/carbon-stocks.api";
 import CarbonStockCharts from "@/components/chart/CarbonStockChart/CarbonStockCharts";
 import HeaderCarbon from "./header/header-carbon";
+
+// date-piceker
+import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
 
 type Props = {
   sidebar?: boolean;
@@ -111,6 +115,17 @@ function ContentComponent({
   const WeatherYearly = useWeatherStatisticsYearlyApi();
   const WeatherMonthly = useWeatherStatisticsMonthlyApi();
 
+  const now = new Date();
+  const [periodeDate, setPeriodeDate] = useState(new Date());
+  const [start, setStart] = useState(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  );
+  const [end, setEnd] = useState(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  );
+  const [dateRange, setDateRange] = useState<Date[] | any[]>([start, end]);
+  const [startDate, endDate] = dateRange;
+
   const getFilterLocation = useCallback(
     (key: Key) => {
       let state = locationOptions
@@ -128,16 +143,18 @@ function ContentComponent({
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
-      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
-      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
-    } else {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+      start = format(new Date(startDate), "yyyy-MM-dd");
+      end = format(new Date(endDate), "yyyy-MM-dd");
+    } else if (periodeKey == "Yearly") {
+      start = format(startOfYear(periodeDate), "yyyy-MM-dd");
+      end = format(endOfYear(periodeDate), "yyyy-MM-dd");
     }
 
     return { start, end };
-  }, [periodeKey]);
+  }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
+
+  console.log(periodeFilterred, "result-date");
 
   const getQuery = useMemo(() => {
     let location: string | any = "";
@@ -199,6 +216,13 @@ function ContentComponent({
     return qb;
   }, [getQuery, periodeFilterred, periodeKey]);
   // filter-end
+
+  // funcction sum average
+  const getSums = (value: number[]) => {
+    return value.reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  };
 
   const getGHGFluxChart = async (params: any) => {
     await GHGFluxYearly.fetch({ params: params });
@@ -308,7 +332,8 @@ function ContentComponent({
 
     if (
       GHGFluxYearly.data.length > 0 &&
-      periodeKey == "Yearly" && landCoverKey
+      periodeKey == "Yearly" &&
+      landCoverKey
     ) {
       GHGFluxYearly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "MMM-yy");
@@ -338,7 +363,8 @@ function ContentComponent({
       });
     } else if (
       GHGFluxMonthly.data.length > 0 &&
-      periodeKey == "Monthly" && landCoverKey
+      periodeKey == "Monthly" &&
+      landCoverKey
     ) {
       GHGFluxMonthly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "yyyy-MM-dd", {
@@ -426,7 +452,13 @@ function ContentComponent({
       ch4,
       co2,
     };
-  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey, categoryKey]);
+  }, [
+    GHGFluxYearly.data,
+    landCoverKey,
+    GHGFluxMonthly.data,
+    periodeKey,
+    categoryKey,
+  ]);
 
   const getSumChartDataGHGFlux = useMemo(() => {
     let totalAirTemperature: number = 0;
@@ -435,118 +467,49 @@ function ContentComponent({
     let totalWaterTable: number = 0;
     let totalCh4: number = 0;
     let totalCo2: number = 0;
-    if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
-      totalAirTemperature = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_airTemperature;
-        },
-        0
-      );
-      totalSoilTemperature = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilTemperature;
-        },
-        0
-      );
-      totalSoilMoisture = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilMoisture;
-        },
-        0
-      );
-      totalWaterTable = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_waterTable;
-        },
-        0
-      );
-      totalCh4 = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_ch4;
-        },
-        0
-      );
-      totalCo2 = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_co2;
-        },
-        0
-      );
-    } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
-      totalAirTemperature = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_airTemperature;
-        },
-        0
-      );
-      totalSoilTemperature = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilTemperature;
-        },
-        0
-      );
-      totalSoilMoisture = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilMoisture;
-        },
-        0
-      );
-      totalWaterTable = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_waterTable;
-        },
-        0
-      );
-      totalCh4 = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_ch4;
-        },
-        0
-      );
-      totalCo2 = GHGFluxMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_co2;
-        },
-        0
-      );
-    } else if (!periodeKey && GHGFluxYearly.data.length > 0) {
-      totalAirTemperature = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_airTemperature;
-        },
-        0
-      );
-      totalSoilTemperature = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilTemperature;
-        },
-        0
-      );
-      totalSoilMoisture = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_soilMoisture;
-        },
-        0
-      );
-      totalWaterTable = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_waterTable;
-        },
-        0
-      );
-      totalCh4 = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_ch4;
-        },
-        0
-      );
-      totalCo2 = GHGFluxYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_co2;
-        },
-        0
-      );
+
+    if (landCoverKey) {
+      if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
+        totalAirTemperature =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_airTemperature)) /
+          GHGFluxYearly.data.length;
+        totalSoilTemperature =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_soilTemperature)) /
+          GHGFluxYearly.data.length;
+        totalSoilMoisture =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_soilMoisture)) /
+          GHGFluxYearly.data.length;
+        totalWaterTable =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_waterTable)) /
+          GHGFluxYearly.data.length;
+        totalCh4 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_ch4)) /
+          GHGFluxYearly.data.length;
+        totalCo2 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_co2)) /
+          GHGFluxYearly.data.length;
+      } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
+        totalAirTemperature =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_airTemperature)) /
+          GHGFluxMonthly.data.length;
+        totalSoilTemperature =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_soilTemperature)) /
+          GHGFluxMonthly.data.length;
+        totalSoilMoisture =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_soilMoisture)) /
+          GHGFluxMonthly.data.length;
+        totalWaterTable =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_waterTable)) /
+          GHGFluxMonthly.data.length;
+        totalCh4 =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_ch4)) /
+          GHGFluxMonthly.data.length;
+        totalCo2 =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_co2)) /
+          GHGFluxMonthly.data.length;
+      }
     }
+
     return {
       totalAirTemperature,
       totalSoilTemperature,
@@ -555,7 +518,13 @@ function ContentComponent({
       totalCh4,
       totalCo2,
     };
-  }, [GHGFluxYearly.data, landCoverKey, GHGFluxMonthly.data, periodeKey, categoryKey]);
+  }, [
+    GHGFluxYearly.data,
+    landCoverKey,
+    GHGFluxMonthly.data,
+    periodeKey,
+    categoryKey,
+  ]);
 
   // soils
   const getSoilsChart = async (params: any) => {
@@ -625,72 +594,75 @@ function ContentComponent({
       ],
     };
 
-    if (SoilsYearly.data.length > 0 && landCoverKey && periodeKey == "Yearly") {
-      SoilsYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "LLL", { locale: id });
-        bulkDensity.labels.push(date);
-        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-
-        gravimetricWaterContent.labels.push(date);
-        gravimetricWaterContent.datasets[0].data.push(
-          item.avg_gravimetricWaterContent
-        );
-
-        volumetricWaterContent.labels.push(date);
-        volumetricWaterContent.datasets[0].data.push(
-          item.avg_volumetricWaterContent
-        );
-      });
-    } else if (
-      SoilsMonthly.data.length > 0 &&
-      landCoverKey &&
-      periodeKey == "Monthly"
-    ) {
-      SoilsMonthly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
-          locale: id,
+    if(landCoverKey) {
+      if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
+        SoilsYearly.data.map((item, i) => {
+          let date = format(new Date(item.datetime), "MMM-yy", { locale: id });
+          bulkDensity.labels.push(date);
+          bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+  
+          gravimetricWaterContent.labels.push(date);
+          gravimetricWaterContent.datasets[0].data.push(
+            item.avg_gravimetricWaterContent
+          );
+  
+          volumetricWaterContent.labels.push(date);
+          volumetricWaterContent.datasets[0].data.push(
+            item.avg_volumetricWaterContent
+          );
         });
-        bulkDensity.labels.push(date);
-        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-
-        gravimetricWaterContent.labels.push(date);
-        gravimetricWaterContent.datasets[0].data.push(
-          item.avg_gravimetricWaterContent
-        );
-
-        volumetricWaterContent.labels.push(date);
-        volumetricWaterContent.datasets[0].data.push(
-          item.avg_volumetricWaterContent
-        );
-      });
-    } else if (SoilsYearly.data.length > 0 && landCoverKey && !periodeKey) {
-      SoilsYearly.data.map((item, i) => {
-        let date = format(new Date(item.datetime), "yyyy-MM-dd", {
-          locale: id,
+      } else if (
+        SoilsMonthly.data.length > 0 &&
+        periodeKey == "Monthly"
+      ) {
+        SoilsMonthly.data.map((item, i) => {
+          let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+            locale: id,
+          });
+          bulkDensity.labels.push(date);
+          bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+  
+          gravimetricWaterContent.labels.push(date);
+          gravimetricWaterContent.datasets[0].data.push(
+            item.avg_gravimetricWaterContent
+          );
+  
+          volumetricWaterContent.labels.push(date);
+          volumetricWaterContent.datasets[0].data.push(
+            item.avg_volumetricWaterContent
+          );
         });
-        bulkDensity.labels.push(date);
-        bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
-
-        gravimetricWaterContent.labels.push(date);
-        gravimetricWaterContent.datasets[0].data.push(
-          item.avg_gravimetricWaterContent
-        );
-
-        volumetricWaterContent.labels.push(date);
-        volumetricWaterContent.datasets[0].data.push(
-          item.avg_volumetricWaterContent
-        );
-      });
-    } else {
-      bulkDensity.labels = chartLabel;
-      bulkDensity.datasets[0].data = chartData;
-
-      gravimetricWaterContent.labels = chartLabel;
-      gravimetricWaterContent.datasets[0].data = chartData;
-
-      volumetricWaterContent.labels = chartLabel;
-      volumetricWaterContent.datasets[0].data = chartData;
+      } else if (SoilsYearly.data.length > 0 && !periodeKey) {
+        SoilsYearly.data.map((item, i) => {
+          let date = format(new Date(item.datetime), "yyyy-MM-dd", {
+            locale: id,
+          });
+          bulkDensity.labels.push(date);
+          bulkDensity.datasets[0].data.push(item.avg_bulkDensity);
+  
+          gravimetricWaterContent.labels.push(date);
+          gravimetricWaterContent.datasets[0].data.push(
+            item.avg_gravimetricWaterContent
+          );
+  
+          volumetricWaterContent.labels.push(date);
+          volumetricWaterContent.datasets[0].data.push(
+            item.avg_volumetricWaterContent
+          );
+        });
+      } else {
+        bulkDensity.labels = chartLabel;
+        bulkDensity.datasets[0].data = chartData;
+  
+        gravimetricWaterContent.labels = chartLabel;
+        gravimetricWaterContent.datasets[0].data = chartData;
+  
+        volumetricWaterContent.labels = chartLabel;
+        volumetricWaterContent.datasets[0].data = chartData;
+      }
     }
+
+    console.log(GHGFluxYearly.data, 'result-data')
 
     // airTemperature = dataYearly;
     return {
@@ -705,43 +677,29 @@ function ContentComponent({
     let totalGravimetricWaterContent: number = 0;
     let totalVolumetricWaterContent: number = 0;
     if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
-      totalBulkDensity = SoilsYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_bulkDensity;
-        },
-        0
-      );
-      totalGravimetricWaterContent = SoilsYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_gravimetricWaterContent;
-        },
-        0
-      );
-      totalVolumetricWaterContent = SoilsYearly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_volumetricWaterContent;
-        },
-        0
-      );
+      totalBulkDensity =
+        getSums(SoilsYearly.data.map((item) => item.avg_bulkDensity)) /
+        SoilsYearly.data.length;
+      totalGravimetricWaterContent =
+        getSums(
+          SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
+        ) / SoilsYearly.data.length;
+      totalVolumetricWaterContent =
+        getSums(
+          SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
+        ) / SoilsYearly.data.length;
     } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
-      totalBulkDensity = SoilsMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_bulkDensity;
-        },
-        0
-      );
-      totalGravimetricWaterContent = SoilsMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_gravimetricWaterContent;
-        },
-        0
-      );
-      totalVolumetricWaterContent = SoilsMonthly.data.reduce(
-        (previousValue: any, currentValue) => {
-          return previousValue + currentValue?.avg_volumetricWaterContent;
-        },
-        0
-      );
+      totalBulkDensity =
+        getSums(SoilsMonthly.data.map((item) => item.avg_bulkDensity)) /
+        SoilsYearly.data.length;
+      totalGravimetricWaterContent =
+        getSums(
+          SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent)
+        ) / SoilsYearly.data.length;
+      totalVolumetricWaterContent =
+        getSums(
+          SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent)
+        ) / SoilsYearly.data.length;
     }
     return {
       totalBulkDensity,
@@ -880,7 +838,7 @@ function ContentComponent({
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
-        relativeHumidity.datasets[0].label = item.location
+        relativeHumidity.datasets[0].label = item.location;
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
@@ -888,19 +846,19 @@ function ContentComponent({
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
-        windSpeed.datasets[0].label = item.location
+        windSpeed.datasets[0].label = item.location;
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
-        gustSpeed.datasets[0].label = item.location
+        gustSpeed.datasets[0].label = item.location;
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
-        windDirection.datasets[0].label = item.location
+        windDirection.datasets[0].label = item.location;
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
-        rain.datasets[0].label = item.location
+        rain.datasets[0].label = item.location;
       });
     } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
       WeatherMonthly.data.map((item, i) => {
@@ -913,7 +871,7 @@ function ContentComponent({
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
-        relativeHumidity.datasets[0].label = item.location
+        relativeHumidity.datasets[0].label = item.location;
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
@@ -921,19 +879,19 @@ function ContentComponent({
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
-        windSpeed.datasets[0].label = item.location
+        windSpeed.datasets[0].label = item.location;
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
-        gustSpeed.datasets[0].label = item.location
+        gustSpeed.datasets[0].label = item.location;
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
-        windDirection.datasets[0].label = item.location
+        windDirection.datasets[0].label = item.location;
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
-        rain.datasets[0].label = item.location
+        rain.datasets[0].label = item.location;
       });
     } else if (WeatherYearly.data.length > 0 && !periodeKey) {
       WeatherYearly.data.map((item, i) => {
@@ -946,7 +904,7 @@ function ContentComponent({
 
         relativeHumidity.labels.push(date);
         relativeHumidity.datasets[0].data.push(item.avg_relativeHumidity);
-        relativeHumidity.datasets[0].label = item.location
+        relativeHumidity.datasets[0].label = item.location;
 
         solarRadiation.labels.push(date);
         solarRadiation.datasets[0].data.push(item.avg_solarRadiation);
@@ -954,19 +912,19 @@ function ContentComponent({
 
         windSpeed.labels.push(date);
         windSpeed.datasets[0].data.push(item.avg_windSpeed);
-        windSpeed.datasets[0].label = item.location
+        windSpeed.datasets[0].label = item.location;
 
         gustSpeed.labels.push(date);
         gustSpeed.datasets[0].data.push(item.avg_gustSpeed);
-        gustSpeed.datasets[0].label = item.location
+        gustSpeed.datasets[0].label = item.location;
 
         windDirection.labels.push(date);
         windDirection.datasets[0].data.push(item.avg_windDirection);
-        windDirection.datasets[0].label = item.location
+        windDirection.datasets[0].label = item.location;
 
         rain.labels.push(date);
         rain.datasets[0].data.push(item.avg_rain);
-        rain.datasets[0].label = item.location
+        rain.datasets[0].label = item.location;
       });
     } else {
       temperature.labels = chartLabel;
@@ -1336,7 +1294,7 @@ function ContentComponent({
       <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
         <ScrollShadow hideScrollBar className="w-full h-full">
           <div
-            className={`w-full grid grid-cols-1 lg:grid-cols-2 items-center px-4 mb-5 gap-2 ${
+            className={`w-full grid grid-cols-1 lg:grid-cols-3 items-center px-4 mb-5 gap-2 ${
               !sidebar ? "mt-10" : "mt-5"
             }`}
           >
@@ -1345,10 +1303,10 @@ function ContentComponent({
               <ul className="list-disc text-sm">{data?.description || "-"}</ul>
             </div>
 
-            <div className="w-full flex flex-col lg:flex-row items-center justify-end gap-2">
+            <div className="lg:col-span-2 w-full flex flex-col lg:flex-row items-start justify-end gap-2">
               <div
                 className={`w-full max-w-[12rem] items-center gap-1 ${
-                  sidebar ? "hidden" : ""
+                  sidebar ? "" : ""
                 }`}
               >
                 <Autocomplete
@@ -1377,7 +1335,7 @@ function ContentComponent({
                 </Autocomplete>
               </div>
 
-              <div className={`w-full max-w-[12rem] justify-end`}>
+              <div className={`w-full max-w-[12rem] justify-end pr-4`}>
                 <Autocomplete
                   radius="full"
                   labelPlacement="outside"
@@ -1400,6 +1358,61 @@ function ContentComponent({
                     </AutocompleteItem>
                   )}
                 </Autocomplete>
+
+                <div className={`w-full my-3 ${!periodeKey ? "hidden" : ""}`}>
+                  <div
+                    className={`w-full ${
+                      periodeKey !== "Yearly" ? "hidden" : ""
+                    }`}
+                  >
+                    <label className="w-full text-gray-5 overflow-hidden">
+                      <div className="relative">
+                        <DatePicker
+                          selected={periodeDate}
+                          onChange={(date: any) => setPeriodeDate(date)}
+                          showYearPicker
+                          dateFormat="yyyy"
+                          // yearItemNumber={6}
+                          isClearable
+                          className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                        />
+                        <MdCalendarToday className="absolute left-3 top-2 h-5 w-5 text-gray-5 p-1" />
+                      </div>
+                    </label>
+                  </div>
+
+                  <div
+                    className={`w-full ${
+                      periodeKey !== "Monthly" ? "hidden" : ""
+                    }`}
+                  >
+                    <label className="w-full text-gray-5 overflow-hidden">
+                      <div className="relative">
+                        <DatePicker
+                          selectsRange={true}
+                          startDate={startDate}
+                          endDate={endDate}
+                          onChange={(dates: any) => {
+                            setDateRange(dates);
+                          }}
+                          monthsShown={1}
+                          placeholderText={"Select date"}
+                          todayButton
+                          dropdownMode="select"
+                          peekNextMonth
+                          showMonthDropdown
+                          showYearDropdown
+                          calendarClassName="-left-10"
+                          clearButtonTitle="Clear"
+                          clearButtonClassName="p-1"
+                          className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-1.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                          isClearable
+                        />
+                        <MdCalendarToday className="absolute left-3 top-2 h-5 w-5 text-gray-5 p-1" />
+                      </div>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1446,37 +1459,6 @@ function ContentComponent({
             )}
           </div>
 
-          <div
-            className={`w-full items-center gap-1 grid grid-cols-1 my-5 ${
-              sidebar ? "lg:grid-cols-3" : "lg:grid-cols-5 hidden"
-            }`}
-          >
-            <Autocomplete
-              radius="full"
-              labelPlacement="outside"
-              placeholder="Select land cover"
-              defaultItems={landCoverOptions}
-              defaultSelectedKey={landCoverKey as Key}
-              variant="faded"
-              color="primary"
-              className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
-                categoryKey === "Carbon Stock" ||
-                categoryKey === "Weather data (AWS)"
-                  ? "hidden"
-                  : ""
-              }`}
-              allowsCustomValue={true}
-              onSelectionChange={onSelectionLandCoverChange}
-              onInputChange={onInputLandCoverChange}
-            >
-              {(item) => (
-                <AutocompleteItem key={item.value}>
-                  {item.label}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
-          </div>
-
           {categoryKey == "GHG Fluxes & other variables" ? (
             <GHGFluxCharts
               chartData={getChartDataGHGFlux}
@@ -1512,8 +1494,8 @@ function ContentComponent({
               categoryKey={categoryKey}
               locationKey={locationKey}
             />
-            // <BoxPlotCharts />
-          ) : null}
+          ) : // <BoxPlotCharts />
+          null}
         </ScrollShadow>
       </div>
     </Fragment>

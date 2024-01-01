@@ -44,3 +44,8 @@
 .ol-popup-closer:after {
   content: "✖";
 }
+
+/* map-filter */
+/* .map-filter {
+  filter: sepia(100%) hue-rotate(190deg) saturate(500%) grayscale(10%);
+} */

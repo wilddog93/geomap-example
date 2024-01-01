@@ -25,7 +25,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         }`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Air Temperature (AVG)</p>
+          <p className="text-xs mb-2">Average Air Temperature</p>
           <p className="font-bold text-lg">
             {items?.totalAirTemperature
               ? formatMoney({
@@ -41,7 +41,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Temperature (AVG)</p>
+          <p className="text-xs mb-2">Average Soil Temperature</p>
           <p className="font-bold text-lg">
             {items?.totalSoilTemperature
               ? formatMoney({
@@ -57,7 +57,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Soil Moisture (AVG)</p>
+          <p className="text-xs mb-2">Average Soil Moisture</p>
           <p className="font-bold text-lg">
             {items?.totalSoilMoisture
               ? formatMoney({
@@ -67,13 +67,13 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
               : 0}
             <span className="text-sm">
               {" "}
-              (m<sup>3</sup>/m<sup>3</sup>)
+              m<sup>3</sup>/m<sup>3</sup>
             </span>
           </p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Water Table (AVG)</p>
+          <p className="text-xs mb-2">Average Water Table</p>
           <p className="font-bold text-lg">
             {items?.totalWaterTable
               ? formatMoney({
@@ -87,7 +87,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            CH <sub>4</sub> (AVG)
+            Average Methane Flux
           </p>
           <p className="font-bold text-lg">
             {items?.totalCh4
@@ -97,14 +97,15 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                 })
               : 0}
             <span className="text-sm">
-              {"  "} (tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>)
+              {"  "} tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>
             </span>
           </p>
         </div>
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">
-            CO <sub>2</sub> (AVG)
+            Average Total Respiration
+            {/* CO <sub>2</sub> (AVG) */}
           </p>
           <p className="font-bold text-lg">
             {items?.totalCo2
@@ -114,7 +115,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                 })
               : 0}
               <span className="text-sm">
-              {"  "} (tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>)
+              {"  "} tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>
             </span>
           </p>
         </div>

@@ -118,7 +118,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <div className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-14">
+              <form className="w-full flex flex-col justify-center items-center gap-1 mt-5 px-14">
                 <label htmlFor="sandi" className="text-sm text-gray-5">
                   Kata sandi
                 </label>
@@ -162,11 +162,14 @@ export default function LoginPage() {
 
                 <div className="w-full relative flex items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     variant="solid"
                     color="primary"
                     className="w-full px-4 py-2 rounded-full text-center flex items-center justify-center group-hover:bg-transparent"
-                    onClick={() => login({ password })}
+                    onClick={(e:any) => {
+                      e.preventDefault()
+                      login({ password })
+                    }}
                   >
                     {loading ? "Loading..." : "Login"}
                     <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-300 group-hover:translate-x-full -right-2">
@@ -174,7 +177,7 @@ export default function LoginPage() {
                     </div>
                   </Button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </ScrollShadow>
