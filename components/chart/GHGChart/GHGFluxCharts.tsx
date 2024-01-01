@@ -26,6 +26,7 @@ type ChartDataProps = {
   waterTable: PropsChart;
   ch4: PropsChart;
   co2: PropsChart;
+  heterothropicCo2: PropsChart;
 };
 
 type Props = {
@@ -416,6 +417,28 @@ export default function GHGFluxCharts({
               <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
             </div>
           </AccordionItem>
+
+          <AccordionItem
+            key={`${landCoverKey}-7`}
+            aria-label={`${landCoverKey}-7`}
+            title={
+              <div className="flex justify-between items-center">
+                <p
+                  className={`text-sm font-semibold`}
+                >
+                  <span>
+                    {/* CO<sub>2</sub> */}
+                    Heterothropic Respiration
+                  </span>
+                </p>
+              </div>
+            }
+          >
+            <div className="w-full flex flex-col relative">
+              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
+            </div>
+          </AccordionItem>
         </Accordion>
       </div>
 
@@ -483,6 +506,14 @@ export default function GHGFluxCharts({
               Total Respiration
             </h3>
             <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
+          </div>
+
+          <div className="w-full flex flex-col relative">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+              {/* Co<sup>2</sup> */}
+              Heterothropic Respiration
+            </h3>
+            <AreaCharts height="300" options={optionsCo2} data={chartData.heterothropicCo2} />
           </div>
         </div>
       </div>

@@ -215,7 +215,7 @@ function ContentComponent({
   }, [getQuery, periodeFilterred, periodeKey]);
   // filter-end
 
-  console.log(periodeFilterred, "result-periode");
+  // console.log(periodeFilterred, "result-periode");
 
   // funcction sum average
   const getSums = (value: number[]) => {
@@ -329,6 +329,19 @@ function ContentComponent({
         },
       ],
     };
+    let heterothropicCo2: PropsChart = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.3)",
+          tension: 0.4,
+          fill: true,
+          label: (landCoverKey as string) || "Land cover",
+        },
+      ],
+    };
 
     if (
       GHGFluxYearly.data.length > 0 &&
@@ -360,6 +373,10 @@ function ContentComponent({
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
         co2.datasets[0].label = item.land_cover;
+
+        heterothropicCo2.labels.push(date);
+        heterothropicCo2.datasets[0].data.push(item.avg_heterothropic_co2);
+        heterothropicCo2.datasets[0].label = item.land_cover;
       });
     } else if (
       GHGFluxMonthly.data.length > 0 &&
@@ -393,6 +410,10 @@ function ContentComponent({
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
         co2.datasets[0].label = item.land_cover;
+
+        heterothropicCo2.labels.push(date);
+        heterothropicCo2.datasets[0].data.push(item.avg_heterothropic_co2);
+        heterothropicCo2.datasets[0].label = item.land_cover;
       });
     } else if (GHGFluxYearly.data.length > 0 && landCoverKey && !periodeKey) {
       GHGFluxYearly.data.map((item, i) => {
@@ -441,6 +462,9 @@ function ContentComponent({
 
       co2.labels = chartLabel;
       co2.datasets[0].data = chartData;
+
+      heterothropicCo2.labels = chartLabel;
+      heterothropicCo2.datasets[0].data = chartData;
     }
 
     // airTemperature = dataYearly;
@@ -451,6 +475,7 @@ function ContentComponent({
       waterTable,
       ch4,
       co2,
+      heterothropicCo2,
     };
   }, [
     GHGFluxYearly.data,
@@ -467,6 +492,7 @@ function ContentComponent({
     let totalWaterTable: number = 0;
     let totalCh4: number = 0;
     let totalCo2: number = 0;
+    let totalHeterothropicCo2: number = 0;
 
     if (landCoverKey) {
       if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
@@ -488,6 +514,9 @@ function ContentComponent({
         totalCo2 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_co2)) /
           GHGFluxYearly.data.length;
+        totalHeterothropicCo2 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2)) /
+          GHGFluxYearly.data.length;
       } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
         totalAirTemperature =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_airTemperature)) /
@@ -507,6 +536,9 @@ function ContentComponent({
         totalCo2 =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_co2)) /
           GHGFluxMonthly.data.length;
+        totalHeterothropicCo2 =
+          getSums(GHGFluxMonthly.data?.map((e) => e.avg_heterothropic_co2)) /
+          GHGFluxMonthly.data.length;
       }
     }
 
@@ -517,6 +549,7 @@ function ContentComponent({
       totalWaterTable,
       totalCh4,
       totalCo2,
+      totalHeterothropicCo2
     };
   }, [
     GHGFluxYearly.data,

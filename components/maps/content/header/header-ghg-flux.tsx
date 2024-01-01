@@ -10,6 +10,7 @@ interface GHGFluxProps {
     totalWaterTable?: number | any;
     totalCh4?: number | any;
     totalCo2?: number | any;
+    totalHeterothropicCo2?: number | any;
   };
   sidebar?: boolean;
 }
@@ -97,7 +98,7 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                 })
               : 0}
             <span className="text-sm">
-              {"  "} tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>
+              {"  "} tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>
             </span>
           </p>
         </div>
@@ -115,7 +116,25 @@ export default function HeaderGHGFlux({ items, sidebar }: GHGFluxProps) {
                 })
               : 0}
               <span className="text-sm">
-              {"  "} tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>
+              {"  "} tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>
+            </span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">
+            Average Heterothropic Respiration
+            {/* CO <sub>2</sub> (AVG) */}
+          </p>
+          <p className="font-bold text-lg">
+            {items?.totalCo2
+              ? formatMoney({
+                  amount: items?.totalHeterothropicCo2,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">
+              {"  "} tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>
             </span>
           </p>
         </div>
