@@ -32,7 +32,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Woody Debris (AVG)</p>
+          <p className="text-xs mb-2">Average Woody Debris</p>
           <p className="font-bold text-lg">
             {items?.totalWoodyDebris
               ? formatMoney({
@@ -45,7 +45,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Litter Mass (AVG)</p>
+          <p className="text-xs mb-2">Average Litter Mass</p>
           <p className="font-bold text-lg">
             {items?.totalLitterMass
               ? formatMoney({
@@ -58,7 +58,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">%N (AVG)</p>
+          <p className="text-xs mb-2">Average %N</p>
           <p className="font-bold text-lg">
             {items?.totalNSoils
               ? formatMoney({
@@ -71,7 +71,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">%C (AVG)</p>
+          <p className="text-xs mb-2">Average %C</p>
           <p className="font-bold text-lg">
             {items?.totalCSoils
               ? formatMoney({
@@ -84,7 +84,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">N (AVG)</p>
+          <p className="text-xs mb-2">Average N</p>
           <p className="font-bold text-lg">
             {items?.totalNMGSoils
               ? formatMoney({
@@ -97,7 +97,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">C (AVG)</p>
+          <p className="text-xs mb-2">Average C</p>
           <p className="font-bold text-lg">
             {items?.totalCMGSoils
               ? formatMoney({
@@ -110,7 +110,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">TAGB Trees (AVG)</p>
+          <p className="text-xs mb-2">Average TAGB Trees</p>
           <p className="font-bold text-lg">
             {items?.totalTAGBTrees
               ? formatMoney({
@@ -123,7 +123,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Notes Trees (AVG)</p>
+          <p className="text-xs mb-2">Average Notes Trees</p>
           <p className="font-bold text-lg">
             {items?.totalNotesTrees
               ? formatMoney({
@@ -131,12 +131,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> Mg/ha</span>
+            <span className="text-sm"></span>
           </p>
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Plot Trees (AVG)</p>
+          <p className="text-xs mb-2">Average Plot Trees</p>
           <p className="font-bold text-lg">
             {items?.totalPlotTrees
               ? formatMoney({
@@ -149,7 +149,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Plot Radius Trees (AVG)</p>
+          <p className="text-xs mb-2">Average Plot Radius Trees</p>
           <p className="font-bold text-lg">
             {items?.totalPlotRadiusTrees
               ? formatMoney({
@@ -162,7 +162,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">DBH Trees (AVG)</p>
+          <p className="text-xs mb-2">Average DBH Trees</p>
           <p className="font-bold text-lg">
             {items?.totalDBHTrees
               ? formatMoney({
@@ -175,7 +175,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Wood Density Trees (AVG)</p>
+          <p className="text-xs mb-2">Average Wood Density Trees</p>
           <p className="font-bold text-lg">
             {items?.totalWoodDensityTrees
               ? formatMoney({

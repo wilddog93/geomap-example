@@ -1255,89 +1255,20 @@ function ContentComponent({
     let totalPlotRadiusTrees: number = 0;
     let totalWoodDensityTrees: number = 0;
 
-    totalWoodyDebris =
-      WoodyYearly.data.length > 0
-        ? WoodyYearly.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_total;
-          }, 0)
-        : 0;
+    totalWoodyDebris = getSums(WoodyYearly.data.map((item) => item.avg_total)) / WoodyYearly.data.length
+    totalLitterMass = getSums(LitterChartApi.data.map((item) => item.avg_litterMas)) / LitterChartApi.data.length
+    
+    totalNSoils = getSums(SoilChartApi.data.map((item) => item.avg_n)) / SoilChartApi.data.length
+    totalCSoils = getSums(SoilChartApi.data.map((item) => item.avg_c)) / SoilChartApi.data.length
+    totalNMGSoils = getSums(SoilChartApi.data.map((item) => item.avg_nMgHa)) / SoilChartApi.data.length
+    totalCMGSoils = getSums(SoilChartApi.data.map((item) => item.avg_cMgHa)) / SoilChartApi.data.length
 
-    totalLitterMass =
-      LitterChartApi.data.length > 0
-        ? LitterChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_litterMas;
-          }, 0)
-        : 0;
-
-    totalNSoils =
-      SoilChartApi.data.length > 0
-        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_n;
-          }, 0)
-        : 0;
-
-    totalCSoils =
-      SoilChartApi.data.length > 0
-        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_c;
-          }, 0)
-        : 0;
-
-    totalNMGSoils =
-      SoilChartApi.data.length > 0
-        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_nMgHa;
-          }, 0)
-        : 0;
-
-    totalCMGSoils =
-      SoilChartApi.data.length > 0
-        ? SoilChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_cMgHa;
-          }, 0)
-        : 0;
-
-    totalDBHTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_dbh;
-          }, 0)
-        : 0;
-
-    totalTAGBTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_tagb;
-          }, 0)
-        : 0;
-
-    totalNotesTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_notes;
-          }, 0)
-        : 0;
-
-    totalPlotTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_plot;
-          }, 0)
-        : 0;
-
-    totalPlotRadiusTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_plotRadius;
-          }, 0)
-        : 0;
-
-    totalWoodDensityTrees =
-      TreesChartApi.data.length > 0
-        ? TreesChartApi.data.reduce((previousValue: any, currentValue) => {
-            return previousValue + currentValue?.avg_woodDensity;
-          }, 0)
-        : 0;
+    totalDBHTrees = getSums(TreesChartApi.data.map((item) => item.avg_dbh)) / TreesChartApi.data.length
+    totalTAGBTrees = getSums(TreesChartApi.data.map((item) => item.avg_tagb)) / TreesChartApi.data.length
+    totalNotesTrees = getSums(TreesChartApi.data.map((item) => item.avg_notes)) / TreesChartApi.data.length
+    totalPlotTrees = getSums(TreesChartApi.data.map((item) => item.avg_plot)) / TreesChartApi.data.length
+    totalPlotRadiusTrees = getSums(TreesChartApi.data.map((item) => item.avg_plotRadius)) / TreesChartApi.data.length
+    totalWoodDensityTrees = getSums(TreesChartApi.data.map((item) => item.avg_woodDensity)) / TreesChartApi.data.length
 
     return {
       totalWoodyDebris,
@@ -1406,7 +1337,9 @@ function ContentComponent({
                 </Autocomplete>
               </div>
 
-              <div className={`w-full max-w-[12rem] justify-end pr-4`}>
+              <div className={`w-full max-w-[12rem] justify-end pr-4 ${
+                    categoryKey === "Carbon Stock" ? "hidden" : ""
+                  }`}>
                 <Autocomplete
                   radius="full"
                   labelPlacement="outside"
@@ -1415,9 +1348,7 @@ function ContentComponent({
                   defaultSelectedKey={periodeKey as Key}
                   variant="faded"
                   color="primary"
-                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60 ${
-                    categoryKey === "Carbon Stock" ? "hidden" : ""
-                  }`}
+                  className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60`}
                   allowsCustomValue={true}
                   onSelectionChange={onSelectionPeriodeChange}
                   onInputChange={onInputPeriodeChange}
@@ -1430,7 +1361,7 @@ function ContentComponent({
                   )}
                 </Autocomplete>
 
-                <div className={`w-full my-3 ${!periodeKey || categoryKey === "Carbon Stock" ? "hidden" : ""}`}>
+                <div className={`w-full my-3 ${!periodeKey ? "hidden" : ""}`}>
                   <div
                     className={`w-full ${
                       periodeKey !== "Yearly" ? "hidden" : ""
