@@ -10,6 +10,11 @@ interface SoilsProps {
     totalVolumetricWaterContent?: number | any;
     totalPh?: number | any;
     totalRedox?: number | any;
+    totalK?: number | any;
+    totalKtk?: number | any;
+    totalP205?: number | any;
+    totalCarbon?: number | any;
+    totalN?: number | any;
   };
   sidebar?: boolean;
 };
@@ -79,6 +84,71 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
             {items?.totalRedox
               ? formatMoney({
                   amount: items?.totalRedox,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Kalium Content</p>
+          <p className="font-bold text-lg">
+            {items?.totalRedox
+              ? formatMoney({
+                  amount: items?.totalK,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Cation Exchange Capacity</p>
+          <p className="font-bold text-lg">
+            {items?.totalRedox
+              ? formatMoney({
+                  amount: items?.totalKtk,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Phosporous Pentoxide Content</p>
+          <p className="font-bold text-lg">
+            {items?.totalP205
+              ? formatMoney({
+                  amount: items?.totalRedox,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Carbon Content</p>
+          <p className="font-bold text-lg">
+            {items?.totalRedox
+              ? formatMoney({
+                  amount: items?.totalCarbon,
+                  decimalCount: 2,
+                })
+              : 0}
+              <span className="text-sm">{" "}%</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Nitrogen Content</p>
+          <p className="font-bold text-lg">
+            {items?.totalRedox
+              ? formatMoney({
+                  amount: items?.totalN,
                   decimalCount: 2,
                 })
               : 0}

@@ -27,16 +27,26 @@ export interface SoilsStatisticsProp {
   soil_type: string;
   location: string;
   datetime: string;
-  avg_bulkDensity: number;
-  avg_gravimetricWaterContent: number;
-  avg_pH: number;
   avg_redox: number;
+  avg_pH: number;
+  avg_k: number;
+  avg_ktk: number;
+  avg_p2O5: number;
+  avg_n: number;
+  avg_carbon: number;
+  avg_gravimetricWaterContent: number;
   avg_volumetricWaterContent: number;
-  sum_bulkDensity: number;
-  sum_gravimetricWaterContent: number;
-  sum_pH: number;
+  avg_bulkDensity: number;
   sum_redox: number;
+  sum_pH: number;
+  sum_k: number;
+  sum_ktk: number;
+  sum_p2O5: number;
+  sum_n: number;
+  sum_carbon: number;
+  sum_gravimetricWaterContent: number;
   sum_volumetricWaterContent: number;
+  sum_bulkDensity: number;
 }
 
 export const PREFIX = "/soils";
