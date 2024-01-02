@@ -116,6 +116,12 @@ function ContentComponent({
   const WeatherYearly = useWeatherStatisticsYearlyApi();
   const WeatherMonthly = useWeatherStatisticsMonthlyApi();
 
+  // carbon-stock
+  const WoodyYearly = useCarbonWoodyStatisticsYearlyApi();
+  const LitterChartApi = useCarbonLittersStatisticsApi();
+  const SoilChartApi = useCarbonSoilsStatisticsApi();
+  const TreesChartApi = useCarbonTreesStatisticsApi();
+
   const now = new Date();
   const [periodeDate, setPeriodeDate] = useState(new Date());
   const [start, setStart] = useState(
@@ -549,7 +555,7 @@ function ContentComponent({
       totalWaterTable,
       totalCh4,
       totalCo2,
-      totalHeterothropicCo2
+      totalHeterothropicCo2,
     };
   }, [
     GHGFluxYearly.data,
@@ -1183,18 +1189,12 @@ function ContentComponent({
     };
   }, [WeatherYearly.data, locationKey, WeatherMonthly.data, periodeKey]);
 
-  // carbon-stock
-  const WoodyYearly = useCarbonWoodyStatisticsYearlyApi();
-  const WoodyMonthly = useCarbonWoodyStatisticsMonthlyApi();
-  const LitterChartApi = useCarbonLittersStatisticsApi();
-  const SoilChartApi = useCarbonSoilsStatisticsApi();
-  const TreesChartApi = useCarbonTreesStatisticsApi();
-
+  // carbon
   const filterChartCarbon = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search: any = {
-      $and: [{ region: { $cont: getQuery.location } }],
+    const search = {
+      $and: [{ region: { $cont: getQuery?.location } }],
     };
 
     qb.search(search);
@@ -1206,21 +1206,23 @@ function ContentComponent({
     return qb;
   }, [getQuery]);
 
+  console.log(getQuery, "query-data");
+
   const getWoodyChart = async (params: any) => {
-    await WoodyYearly.fetch(params);
-    await WoodyMonthly.fetch(params);
+    console.log(params, "paramss");
+    await WoodyYearly.fetch({ params });
   };
 
   const getLitterChart = async (params: any) => {
-    await LitterChartApi.fetch(params);
+    await LitterChartApi.fetch({ params });
   };
 
   const getSoilChart = async (params: any) => {
-    await SoilChartApi.fetch(params);
+    await SoilChartApi.fetch({ params });
   };
 
   const getTreesChart = async (params: any) => {
-    await TreesChartApi.fetch(params);
+    await TreesChartApi.fetch({ params });
   };
 
   useEffect(() => {
@@ -1230,7 +1232,9 @@ function ContentComponent({
       getSoilChart(filterChartCarbon?.queryObject);
       getTreesChart(filterChartCarbon?.queryObject);
     }
-  }, [filterChartCarbon, categoryKey]);
+  }, [categoryKey, filterChartCarbon, categoryKey]);
+
+  console.log(filterChartCarbon, "filter-carbon");
 
   const getChartDataCarbon = useMemo(() => {
     return {
@@ -1255,20 +1259,44 @@ function ContentComponent({
     let totalPlotRadiusTrees: number = 0;
     let totalWoodDensityTrees: number = 0;
 
-    totalWoodyDebris = getSums(WoodyYearly.data.map((item) => item.avg_total)) / WoodyYearly.data.length
-    totalLitterMass = getSums(LitterChartApi.data.map((item) => item.avg_litterMas)) / LitterChartApi.data.length
-    
-    totalNSoils = getSums(SoilChartApi.data.map((item) => item.avg_n)) / SoilChartApi.data.length
-    totalCSoils = getSums(SoilChartApi.data.map((item) => item.avg_c)) / SoilChartApi.data.length
-    totalNMGSoils = getSums(SoilChartApi.data.map((item) => item.avg_nMgHa)) / SoilChartApi.data.length
-    totalCMGSoils = getSums(SoilChartApi.data.map((item) => item.avg_cMgHa)) / SoilChartApi.data.length
+    totalWoodyDebris =
+      getSums(WoodyYearly.data.map((item) => item.avg_total)) /
+      WoodyYearly.data.length;
+    totalLitterMass =
+      getSums(LitterChartApi.data.map((item) => item.avg_litterMas)) /
+      LitterChartApi.data.length;
 
-    totalDBHTrees = getSums(TreesChartApi.data.map((item) => item.avg_dbh)) / TreesChartApi.data.length
-    totalTAGBTrees = getSums(TreesChartApi.data.map((item) => item.avg_tagb)) / TreesChartApi.data.length
-    totalNotesTrees = getSums(TreesChartApi.data.map((item) => item.avg_notes)) / TreesChartApi.data.length
-    totalPlotTrees = getSums(TreesChartApi.data.map((item) => item.avg_plot)) / TreesChartApi.data.length
-    totalPlotRadiusTrees = getSums(TreesChartApi.data.map((item) => item.avg_plotRadius)) / TreesChartApi.data.length
-    totalWoodDensityTrees = getSums(TreesChartApi.data.map((item) => item.avg_woodDensity)) / TreesChartApi.data.length
+    totalNSoils =
+      getSums(SoilChartApi.data.map((item) => item.avg_n)) /
+      SoilChartApi.data.length;
+    totalCSoils =
+      getSums(SoilChartApi.data.map((item) => item.avg_c)) /
+      SoilChartApi.data.length;
+    totalNMGSoils =
+      getSums(SoilChartApi.data.map((item) => item.avg_nMgHa)) /
+      SoilChartApi.data.length;
+    totalCMGSoils =
+      getSums(SoilChartApi.data.map((item) => item.avg_cMgHa)) /
+      SoilChartApi.data.length;
+
+    totalDBHTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_dbh)) /
+      TreesChartApi.data.length;
+    totalTAGBTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_tagb)) /
+      TreesChartApi.data.length;
+    totalNotesTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_notes)) /
+      TreesChartApi.data.length;
+    totalPlotTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_plot)) /
+      TreesChartApi.data.length;
+    totalPlotRadiusTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_plotRadius)) /
+      TreesChartApi.data.length;
+    totalWoodDensityTrees =
+      getSums(TreesChartApi.data.map((item) => item.avg_woodDensity)) /
+      TreesChartApi.data.length;
 
     return {
       totalWoodyDebris,
@@ -1337,9 +1365,11 @@ function ContentComponent({
                 </Autocomplete>
               </div>
 
-              <div className={`w-full max-w-[12rem] justify-end pr-4 ${
-                    categoryKey === "Carbon Stock" ? "hidden" : ""
-                  }`}>
+              <div
+                className={`w-full max-w-[12rem] justify-end pr-4 ${
+                  categoryKey === "Carbon Stock" ? "hidden" : ""
+                }`}
+              >
                 <Autocomplete
                   radius="full"
                   labelPlacement="outside"

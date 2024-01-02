@@ -58,7 +58,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average %N</p>
+          <p className="text-xs mb-2">Average % Nitrogen</p>
           <p className="font-bold text-lg">
             {items?.totalNSoils
               ? formatMoney({
@@ -71,7 +71,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average %C</p>
+          <p className="text-xs mb-2">Average % Carbon</p>
           <p className="font-bold text-lg">
             {items?.totalCSoils
               ? formatMoney({
@@ -84,7 +84,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average N</p>
+          <p className="text-xs mb-2">Average Nitrogen</p>
           <p className="font-bold text-lg">
             {items?.totalNMGSoils
               ? formatMoney({
@@ -97,7 +97,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average C</p>
+          <p className="text-xs mb-2">Average Carbon</p>
           <p className="font-bold text-lg">
             {items?.totalCMGSoils
               ? formatMoney({
@@ -110,7 +110,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average TAGB Trees</p>
+          <p className="text-xs mb-2">Average Total Aboveground Biomass Trees</p>
           <p className="font-bold text-lg">
             {items?.totalTAGBTrees
               ? formatMoney({
@@ -123,46 +123,7 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Notes Trees</p>
-          <p className="font-bold text-lg">
-            {items?.totalNotesTrees
-              ? formatMoney({
-                  amount: items?.totalNotesTrees,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"></span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Plot Trees</p>
-          <p className="font-bold text-lg">
-            {items?.totalPlotTrees
-              ? formatMoney({
-                  amount: items?.totalPlotTrees,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> Mg/ha</span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Plot Radius Trees</p>
-          <p className="font-bold text-lg">
-            {items?.totalPlotRadiusTrees
-              ? formatMoney({
-                  amount: items?.totalPlotRadiusTrees,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> Mg/ha</span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average DBH Trees</p>
+          <p className="text-xs mb-2">Average Diameter Breast Height Trees</p>
           <p className="font-bold text-lg">
             {items?.totalDBHTrees
               ? formatMoney({

@@ -123,7 +123,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-1`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>%N</p>
+                    <p className={`text-sm font-semibold`}>% Nitrogen</p>
                   </div>
                 }
               >
@@ -137,7 +137,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>%C</p>
+                    <p className={`text-sm font-semibold`}>% Carbon</p>
                   </div>
                 }
               >
@@ -151,7 +151,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-3`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>N</p>
+                    <p className={`text-sm font-semibold`}>Nitrogen</p>
                   </div>
                 }
               >
@@ -165,7 +165,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-4`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>C</p>
+                    <p className={`text-sm font-semibold`}>Carbon</p>
                   </div>
                 }
               >
@@ -189,7 +189,7 @@ export default function CarbonStockCharts({
                 aria-label={`trees-1`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>DBH</p>
+                    <p className={`text-sm font-semibold`}>Diameter Breast Height</p>
                   </div>
                 }
               >
@@ -203,7 +203,7 @@ export default function CarbonStockCharts({
                 aria-label={`trees-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>TAGB</p>
+                    <p className={`text-sm font-semibold`}>Total Aboveground Biomass</p>
                   </div>
                 }
               >
@@ -212,7 +212,7 @@ export default function CarbonStockCharts({
                 </div>
               </AccordionItem>
 
-              <AccordionItem
+              {/* <AccordionItem
                 key={`trees-3`}
                 aria-label={`trees-3`}
                 title={
@@ -252,7 +252,7 @@ export default function CarbonStockCharts({
                 <div className="w-full flex flex-col relative">
                   <PlotRadiusTreesCharts data={chartData.trees} />
                 </div>
-              </AccordionItem>
+              </AccordionItem> */}
 
               <AccordionItem
                 key={`trees-6`}
@@ -293,77 +293,56 @@ export default function CarbonStockCharts({
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Litters
+              Litter Mass
             </h3>
             <LittersCharts data={chartData.litter} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Soils (N)
+              Nitrogen Soils (%)
             </h3>
             <NSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Soils (C)
+              Carbon Soils (%)
             </h3>
             <CSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Soils (nMg/Ha)
+              Nitrogen Soils (nMg/Ha)
             </h3>
             <NMGSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Soils (cMg/Ha)
+              Carbon Soils (cMg/Ha)
             </h3>
             <CMGSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (dbh)
+              Diameter Breast Height Trees (dbh)
             </h3>
             <DBHTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (tagb)
+            Total Aboveground Biomass Trees (tagb)
             </h3>
             <TAGBTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (notes)
-            </h3>
-            <NoteTreesCharts data={chartData.trees} />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (Plot)
-            </h3>
-            <PlotTreesCharts data={chartData.trees} />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (Plot Radius)
-            </h3>
-            <PlotRadiusTreesCharts data={chartData.trees} />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Trees (Wood Density)
+              Wood Density Trees (WD)
             </h3>
             <WoodTreesCharts data={chartData.trees} />
           </div>
