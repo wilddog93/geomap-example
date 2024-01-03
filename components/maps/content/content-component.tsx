@@ -3,7 +3,9 @@ import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
   Autocomplete,
   AutocompleteItem,
+  Button,
   ScrollShadow,
+  Textarea,
 } from "@nextui-org/react";
 import { endOfYear, format, startOfYear } from "date-fns";
 import { id } from "date-fns/locale";
@@ -15,7 +17,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { MdCalendarToday } from "react-icons/md";
+import { MdCalendarToday, MdDone, MdEdit, MdSave } from "react-icons/md";
 
 // API
 import {
@@ -55,6 +57,7 @@ import { toast } from "react-toastify";
 import SoilChemChar1 from "@/components/chart/SoilChemCharts/SoilChemChart1";
 import SoilChemChar2 from "@/components/chart/SoilChemCharts/SoilChemChart2";
 import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
+import { valueOrDefault } from "chart.js/dist/helpers/helpers.core";
 
 type Props = {
   sidebar?: boolean;
@@ -137,6 +140,17 @@ function ContentComponent({
   const LitterChartApi = useCarbonLittersStatisticsApi();
   const SoilChartApi = useCarbonSoilsStatisticsApi();
   const TreesChartApi = useCarbonTreesStatisticsApi();
+
+  // desc
+  const [descriptionValue, setDescriptionValue] = useState<string>("");
+  const [isEditDesc, setIsEditDesc] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(data?.description)
+    setDescriptionValue(data?.description)
+  }, [data])
+
+  const onEdit = () => setIsEditDesc(!isEditDesc);
 
   const now = new Date();
   const [periodeDate, setPeriodeDate] = useState(new Date());
@@ -561,7 +575,7 @@ function ContentComponent({
         totalHeterothropicCo2 =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_heterothropic_co2)) /
           GHGFluxMonthly.data?.map((e) => e.avg_heterothropic_co2).length;
-      } else if(GHGFluxYearly.data.length > 0 && !periodeKey) {
+      } else if (GHGFluxYearly.data.length > 0 && !periodeKey) {
         totalAirTemperature =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_airTemperature)) /
           GHGFluxYearly.data?.map((e) => e.avg_airTemperature).length;
@@ -900,11 +914,15 @@ function ContentComponent({
         totalGravimetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent).length;
+          ) /
+          SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
+            .length;
         totalVolumetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsYearly.data.map((item) => item.avg_volumetricWaterContent).length;
+          ) /
+          SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
+            .length;
         totalPh =
           getSums(SoilsYearly.data.map((item) => item.avg_pH)) /
           SoilsYearly.data.map((item) => item.avg_pH).length;
@@ -933,11 +951,15 @@ function ContentComponent({
         totalGravimetricWaterContent =
           getSums(
             SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent).length;
+          ) /
+          SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent)
+            .length;
         totalVolumetricWaterContent =
           getSums(
             SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent).length;
+          ) /
+          SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent)
+            .length;
         totalPh =
           getSums(SoilsMonthly.data.map((item) => item.avg_pH)) /
           SoilsMonthly.data.map((item) => item.avg_pH).length;
@@ -966,11 +988,15 @@ function ContentComponent({
         totalGravimetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent).length;
+          ) /
+          SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
+            .length;
         totalVolumetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsYearly.data.map((item) => item.avg_volumetricWaterContent).length;
+          ) /
+          SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
+            .length;
         totalPh =
           getSums(SoilsYearly.data.map((item) => item.avg_pH)) /
           SoilsYearly.data.map((item) => item.avg_pH).length;
@@ -1004,7 +1030,7 @@ function ContentComponent({
       totalKtk,
       totalP205,
       totalCarbon,
-      totalN
+      totalN,
     };
   }, [
     SoilsYearly.data,
@@ -1491,6 +1517,8 @@ function ContentComponent({
     TreesChartApi.data,
   ]);
 
+  const onEditDec = (value: any) => {};
+
   return (
     <Fragment>
       <div className="w-full h-full overflow-auto flex flex-col gap-3 mt-5">
@@ -1502,7 +1530,32 @@ function ContentComponent({
           >
             <div className="w-full flex flex-col gap-3">
               <h3 className="font-bold text-xl">{data?.location || ""}</h3>
-              <ul className="list-disc text-sm">{data?.description || "-"}</ul>
+              <div className="w-full flex gap-2">
+                <p className={`${!isEditDesc ? "" : "hidden "}text-sm`}>{data?.description || "-"}</p>
+                <Textarea
+                  label="Description"
+                  placeholder="Enter your description"
+                  className={`${isEditDesc ? "" : "hidden"}`}
+                  value={descriptionValue || ""}
+                  onChange={(event) => setDescriptionValue(event.target.value)}
+                />
+                <div className={!descriptionValue ? "hidden" : ""}>
+                  <Button
+                    isIconOnly
+                    color="primary"
+                    variant="faded"
+                    aria-label="Edit Description"
+                    className=""
+                    size="sm"
+                    onPress={onEdit}
+                  >
+                    {isEditDesc ? 
+                    <MdDone className="w-4 h-4" /> :
+                    <MdEdit className="w-4 h-4" />
+                  }
+                  </Button>
+                </div>
+              </div>
             </div>
 
             <div className="lg:col-span-2 w-full flex flex-col lg:flex-row items-start justify-end gap-2">
@@ -1561,9 +1614,12 @@ function ContentComponent({
               <div
                 className={`w-full max-w-[12rem] justify-end pr-4 ${
                   categoryKey === "Carbon Stock" ||
-                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar1" ||
-                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar2" ||
-                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar3"
+                  (categoryKey === "Soil psychochemical properties" &&
+                    soilTypeKey == "chemChar1") ||
+                  (categoryKey === "Soil psychochemical properties" &&
+                    soilTypeKey == "chemChar2") ||
+                  (categoryKey === "Soil psychochemical properties" &&
+                    soilTypeKey == "chemChar3")
                     ? "hidden"
                     : ""
                 }
@@ -1677,32 +1733,10 @@ function ContentComponent({
                 />
               ) : categoryKey == "Carbon Stock" ? (
                 <HeaderCarbon items={getSumChartDataCarbon} sidebar={sidebar} />
-              ) : null
-              // <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              //   <div className="w-full flex flex-col">
-              //     <p className="text-xs mb-2">Parameter 1</p>
-              //     <p className="font-bold text-lg">0</p>
-              //     <p className="text-xs">Condition/status</p>
-              //   </div>
-
-              //   <div className="w-full flex flex-col">
-              //     <p className="text-xs mb-2">Parameter 2</p>
-              //     <p className="font-bold text-lg">0</p>
-              //     <p className="text-xs">Condition/status</p>
-              //   </div>
-
-              //   <div className="w-full flex flex-col">
-              //     <p className="text-xs mb-2">Parameter 3</p>
-              //     <p className="font-bold text-lg">0</p>
-              //     <p className="text-xs">Condition/status</p>
-              //   </div>
-
-              //   <div className="w-full flex flex-col">
-              //     <p className="text-xs mb-2">Parameter 4</p>
-              //     <p className="font-bold text-lg">0</p>
-              //     <p className="text-xs">Condition/status</p>
-              //   </div>
-              // </div>
+              ) :
+              <div className="w-full h-[250px] flex items-center justify-center mx-auto">
+                <p className="text-sm">Please choose any land cover</p>
+              </div>
             }
           </div>
 
