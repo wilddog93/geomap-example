@@ -91,13 +91,63 @@ const columns: ColumnProps[] = [
   { name: "ID", uid: "id", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
   { name: "LOCATION", uid: "location", sortable: true },
-  { name: "TEMPERATURE", uid: "temperature" },
-  { name: "RELATIVE HUMIDITY", uid: "relativeHumidity" },
-  { name: "SOLAR RADIATION", uid: "solarRadiation" },
-  { name: "WIND SPEED", uid: "windSpeed" },
-  { name: "GUST SPEED", uid: "gustSpeed" },
-  { name: "WIND DIRECTION", uid: "windDirection" },
-  { name: "RAIN", uid: "rain" },
+  {
+    name: (
+      <div>
+        TEMPERATURE
+        <p>(˚C)</p>
+      </div>
+    ),
+    uid: "temperature",
+  },
+  {
+    name: (
+      <div>
+        RELATIVE HUMIDITY
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "relativeHumidity",
+  },
+  {
+    name: (
+      <div>
+        SOLAR RADIATION
+        <p>
+          (W/m<sup>2</sup>)
+        </p>
+      </div>
+    ),
+    uid: "solarRadiation",
+  },
+  {
+    name: (
+      <div>
+        WIND SPEED
+        <p>(mph)</p>
+      </div>
+    ),
+    uid: "windSpeed",
+  },
+  {
+    name: (
+      <div>
+        GUST SPEED
+        <p>(mph)</p>
+      </div>
+    ),
+    uid: "gustSpeed",
+  },
+  // { name: "WIND DIRECTION", uid: "windDirection" },
+  {
+    name: (
+      <div>
+        RAIN
+        <p>(mm)</p>
+      </div>
+    ),
+    uid: "rain",
+  },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -136,7 +186,7 @@ export default function WeatherTables({
   setFilterValue,
   landCoverOptions,
   locationKey,
-  locationOptions
+  locationOptions,
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -155,28 +205,34 @@ export default function WeatherTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
+  const [landCoverFilter, setLandCoverFilter] = useState("");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
   const [sortKey, setSortKey] = useState<Key | null>("id");
   const [sortFilter, setSortFilter] = useState("id");
 
-  // page-count
-  // const [pages, setPages] = useState(0)
-
   let router = useRouter();
   let pathname = usePathname();
   let search = useSearchParams();
 
+  const now = new Date();
+  const [periodeDate, setPeriodeDate] = useState(new Date());
+  const [start, setStart] = useState(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  );
+  const [end, setEnd] = useState(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  );
+  const [dateRange, setDateRange] = useState<Date[] | any[]>([start, end]);
+  const [startDate, endDate] = dateRange;
+
   // date-format
-  const dateFormat = (date:any) => {
+  const dateFormat = (date: any) => {
     let _dt = format(new Date(date), "yyyy-MM-dd");
-    if(!date) return;
-    return _dt
-  } 
+    if (!date) return;
+    return _dt;
+  };
 
   // function dropdown
   const onSelectionLandCoverChange = (key: Key) => {
@@ -185,7 +241,7 @@ export default function WeatherTables({
 
   const onInputLandCoverChange = (value: string) => {
     setLandCoverFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionPeriodeChange = (key: Key) => {
@@ -194,7 +250,7 @@ export default function WeatherTables({
 
   const onInputPeriodeChange = (value: string) => {
     setPeriodeFilter(value);
-    setPage(1)
+    setPage(1);
   };
 
   const onSelectionSortChange = (key: Key) => {
@@ -203,7 +259,7 @@ export default function WeatherTables({
 
   const onInputSortChange = (value: string) => {
     setSortFilter(value);
-    setPage(1)
+    setPage(1);
   };
   // end function dropdown
 
@@ -221,23 +277,18 @@ export default function WeatherTables({
 
   // filter periode
   const periodeFilterred = useMemo(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
-      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
-      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
-    } else {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+      start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
+      end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
+    } else if (periodeKey == "Yearly") {
+      start = periodeDate ? format(startOfYear(periodeDate), "yyyy-MM-dd") : "";
+      end = periodeDate ? format(endOfYear(periodeDate), "yyyy-MM-dd") : "";
     }
 
-    // console.log({start, end}, "periode")
-
     return { start, end };
-  }, [periodeKey]);
+  }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
 
   // query-prams
@@ -273,7 +324,7 @@ export default function WeatherTables({
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
-    const search:any = {
+    const search: any = {
       $and: [
         // {
         //   date: {
@@ -285,15 +336,15 @@ export default function WeatherTables({
       ],
     };
 
-    if(periodeKey) 
-    search.$and.push({
-      date: {
-        $gte: periodeFilterred.start,
-        $lte: periodeFilterred.end,
-      },
-    })
+    if (periodeKey && periodeFilterred.start)
+      search?.$and?.push({
+        date: {
+          $gte: periodeFilterred.start,
+          $lte: periodeFilterred.end,
+        },
+      });
     if (getQuery?.page) qb.setPage(Number(getQuery?.page) || 1);
-    if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 5);
+    if (getQuery?.limit) qb.setLimit(Number(getQuery?.limit) || 10);
 
     qb.search(search);
     if (sortKey) {
@@ -324,6 +375,7 @@ export default function WeatherTables({
   const getWeatherData = async (params: any) => {
     await fetch({ params: params?.queryObject });
   };
+
   useEffect(() => {
     if (filterParams) {
       getWeatherData(filterParams);
@@ -377,13 +429,17 @@ export default function WeatherTables({
       case "id":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "date":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue ? dateFormat(cellValue) : "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue ? dateFormat(cellValue) : "-"}
+            </p>
           </div>
         );
       case "temperature":
@@ -422,7 +478,7 @@ export default function WeatherTables({
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-        case "rain":
+      case "rain":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
@@ -656,14 +712,14 @@ export default function WeatherTables({
   return (
     <Table
       isStriped
-      removeWrapper
+      // removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

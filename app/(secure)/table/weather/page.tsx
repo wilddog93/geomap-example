@@ -18,7 +18,7 @@ import { Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdPlace } from "react-icons/md";
-import { splitStringTobeArray } from "@/utils/useFunction";
+import { sortByArr, splitStringTobeArray } from "@/utils/useFunction";
 
 const itemTabs = [
   {
@@ -46,11 +46,10 @@ const itemTabs = [
 export default function TablePage(props: any) {
   // data-location
   const locationApi = useLocationApi();
-  const propertyApi = usePropsApi();
 
   const [selected, setSelected] = useState("ghg");
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string | any>("");
   let router = useRouter();
   const pathname = usePathname();
@@ -68,7 +67,7 @@ export default function TablePage(props: any) {
   };
 
   const onInputLocaationChange = (value: string) => {
-    setLocationKey(value);
+    setLocation(value);
   };
 
   const filterLocation = useMemo(() => {
@@ -95,7 +94,10 @@ export default function TablePage(props: any) {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
-  const filterByUniqueKey = (arr: SelectTypes[], key: keyof SelectTypes): SelectTypes[] => {
+  const filterByUniqueKey = (
+    arr: SelectTypes[],
+    key: keyof SelectTypes
+  ): SelectTypes[] => {
     const uniqueValues = new Set<any>();
     return arr.filter((obj) => {
       const value = obj[key];
@@ -120,53 +122,52 @@ export default function TablePage(props: any) {
           value: loc.location,
           state: newShortLocation?.trim(),
           // @ts-ignore
-          categories: splitStringTobeArray(loc.description as string),
+          categories: splitStringTobeArray(
+            (loc.optionalDescription as string) || (loc.description as string)
+          ),
+          landCoverOptions: splitStringTobeArray(loc.landCover as string),
         });
       });
     }
-    const filteredArray = filterByUniqueKey(location, 'value');
+    const filteredArray = filterByUniqueKey(location, "value");
     return filteredArray;
   }, [locationApi?.data]);
 
-  const filterLandCover = useMemo(() => {
-    const qb = RequestQueryBuilder.create();
-
-    const search = {
-      $and: [{ type: { $contL: "landcover" } }],
-    };
-
-    qb.search(search);
-    qb.sortBy({
-      field: `name`,
-      order: "ASC",
-    });
-    qb.query();
-    return qb;
-  }, []);
-
-  const getLandCover = async (params: any) => {
-    await propertyApi.fetch({ params: params });
-  };
-
-  useEffect(() => {
-    if (filterLandCover) getLandCover(filterLandCover.queryObject);
-  }, [filterLandCover]);
-
+  // landcover options
   const landCoverOptions = useMemo(() => {
-    const { data } = propertyApi;
-    let location: SelectTypes[] | any[] = [];
-    let landCover: SelectTypes[] | any[] = [];
-    if (data.length > 0) {
-      data.map((prop) => {
-        landCover.push({
-          ...prop,
-          label: prop.name,
-          value: prop.name,
+    let shortLocation = splitStringTobeArray(locationKey as string);
+    let newShortLocation = shortLocation[shortLocation.length - 1];
+
+    let locationSelected = newShortLocation?.trim();
+    let newLandCover: SelectTypes[] = [];
+
+    let filter = locationSelected
+      ? locationOptions?.filter((loc: any) => {
+          return loc?.state == locationSelected;
+        })
+      : locationOptions;
+
+    filter?.map((item: any) => {
+      item?.landCoverOptions?.map((land: any) => {
+        newLandCover.push({
+          value: land?.trim(),
+          label: land?.trim(),
         });
       });
-    }
-    return landCover;
-  }, [propertyApi?.data]);
+    });
+
+    let result = Array.from(
+      new Set(newLandCover.map((item) => item?.value))
+    ).map((value) => newLandCover.find((item: any) => item?.value === value));
+
+    const getValue = (o: any) => {
+      return o?.value;
+    };
+    let sortByValue = sortByArr(getValue, true);
+    let sortResult = result.sort(sortByValue);
+
+    return sortResult;
+  }, [locationKey, locationOptions]);
 
   // console.log({ location, locationKey, locationOptions }, "data-selected");
   return (
@@ -239,10 +240,7 @@ export default function TablePage(props: any) {
             </div>
           </div>
 
-
-          <div
-            className={`w-full mt-5 p-4`}
-          >
+          <div className={`w-full mt-5 p-4`}>
             <WeatherTables
               params={props?.searchParams}
               page={page}
