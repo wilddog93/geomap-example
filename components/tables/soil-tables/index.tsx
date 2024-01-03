@@ -393,7 +393,7 @@ export default function SoilTables({
       $and: [
         { location: { $cont: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
-        { soilType: { $eq: soilTypeKey } },
+        // { soilType: { $cont: soilTypeKey } },
         {
           $or: [
             { landCover: { $contL: getQuery?.search } },
@@ -403,6 +403,8 @@ export default function SoilTables({
         },
       ],
     };
+    if (soilTypeKey)
+      search?.$and?.push({ soilType: { $cont: soilTypeKey } });
 
     if (soilTypeKey == "physical" && periodeKey && periodeFilterred.start)
       search?.$and?.push({
