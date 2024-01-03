@@ -520,47 +520,69 @@ function ContentComponent({
       if (GHGFluxYearly.data.length > 0 && periodeKey == "Yearly") {
         totalAirTemperature =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_airTemperature)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_airTemperature).length;
         totalSoilTemperature =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_soilTemperature)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_soilTemperature).length;
         totalSoilMoisture =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_soilMoisture)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_soilMoisture).length;
         totalWaterTable =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_waterTable)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_waterTable).length;
         totalCh4 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_ch4)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_ch4).length;
         totalCo2 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_co2)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_co2).length;
         totalHeterothropicCo2 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2)) /
-          GHGFluxYearly.data.length;
+          GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2).length;
       } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
         totalAirTemperature =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_airTemperature)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_airTemperature).length;
         totalSoilTemperature =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_soilTemperature)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_soilTemperature).length;
         totalSoilMoisture =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_soilMoisture)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_soilMoisture).length;
         totalWaterTable =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_waterTable)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_waterTable).length;
         totalCh4 =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_ch4)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_ch4).length;
         totalCo2 =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_co2)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_co2).length;
         totalHeterothropicCo2 =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_heterothropic_co2)) /
-          GHGFluxMonthly.data.length;
+          GHGFluxMonthly.data?.map((e) => e.avg_heterothropic_co2).length;
+      } else if(GHGFluxYearly.data.length > 0 && !periodeKey) {
+        totalAirTemperature =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_airTemperature)) /
+          GHGFluxYearly.data?.map((e) => e.avg_airTemperature).length;
+        totalSoilTemperature =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_soilTemperature)) /
+          GHGFluxYearly.data?.map((e) => e.avg_soilTemperature).length;
+        totalSoilMoisture =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_soilMoisture)) /
+          GHGFluxYearly.data?.map((e) => e.avg_soilMoisture).length;
+        totalWaterTable =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_waterTable)) /
+          GHGFluxYearly.data?.map((e) => e.avg_waterTable).length;
+        totalCh4 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_ch4)) /
+          GHGFluxYearly.data?.map((e) => e.avg_ch4).length;
+        totalCo2 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_co2)) /
+          GHGFluxYearly.data?.map((e) => e.avg_co2).length;
+        totalHeterothropicCo2 =
+          getSums(GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2)) /
+          GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2).length;
       }
     }
 
@@ -874,102 +896,102 @@ function ContentComponent({
       if (SoilsYearly.data.length > 0 && periodeKey == "Yearly") {
         totalBulkDensity =
           getSums(SoilsYearly.data.map((item) => item.avg_bulkDensity)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_bulkDensity).length;
         totalGravimetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsYearly.data.length;
+          ) / SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent).length;
         totalVolumetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsYearly.data.length;
+          ) / SoilsYearly.data.map((item) => item.avg_volumetricWaterContent).length;
         totalPh =
           getSums(SoilsYearly.data.map((item) => item.avg_pH)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_pH).length;
         totalRedox =
           getSums(SoilsYearly.data.map((item) => item.avg_redox)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_redox).length;
         totalK =
           getSums(SoilsYearly.data.map((item) => item.avg_k)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_k).length;
         totalKtk =
           getSums(SoilsYearly.data.map((item) => item.avg_ktk)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_ktk).length;
         totalP205 =
           getSums(SoilsYearly.data.map((item) => item.avg_p2O5)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_p2O5).length;
         totalCarbon =
           getSums(SoilsYearly.data.map((item) => item.avg_carbon)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_carbon).length;
         totalN =
           getSums(SoilsYearly.data.map((item) => item.avg_n)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_n).length;
       } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
         totalBulkDensity =
           getSums(SoilsMonthly.data.map((item) => item.avg_bulkDensity)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_bulkDensity).length;
         totalGravimetricWaterContent =
           getSums(
             SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsMonthly.data.length;
+          ) / SoilsMonthly.data.map((item) => item.avg_gravimetricWaterContent).length;
         totalVolumetricWaterContent =
           getSums(
             SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsMonthly.data.length;
+          ) / SoilsMonthly.data.map((item) => item.avg_volumetricWaterContent).length;
         totalPh =
           getSums(SoilsMonthly.data.map((item) => item.avg_pH)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_pH).length;
         totalRedox =
           getSums(SoilsMonthly.data.map((item) => item.avg_redox)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_redox).length;
         totalK =
           getSums(SoilsMonthly.data.map((item) => item.avg_k)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_k).length;
         totalKtk =
           getSums(SoilsMonthly.data.map((item) => item.avg_ktk)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_ktk).length;
         totalP205 =
           getSums(SoilsMonthly.data.map((item) => item.avg_p2O5)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_p2O5).length;
         totalCarbon =
           getSums(SoilsMonthly.data.map((item) => item.avg_carbon)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_carbon).length;
         totalN =
           getSums(SoilsMonthly.data.map((item) => item.avg_n)) /
-          SoilsMonthly.data.length;
+          SoilsMonthly.data.map((item) => item.avg_n).length;
       } else {
         totalBulkDensity =
           getSums(SoilsYearly.data.map((item) => item.avg_bulkDensity)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_bulkDensity).length;
         totalGravimetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent)
-          ) / SoilsYearly.data.length;
+          ) / SoilsYearly.data.map((item) => item.avg_gravimetricWaterContent).length;
         totalVolumetricWaterContent =
           getSums(
             SoilsYearly.data.map((item) => item.avg_volumetricWaterContent)
-          ) / SoilsYearly.data.length;
+          ) / SoilsYearly.data.map((item) => item.avg_volumetricWaterContent).length;
         totalPh =
           getSums(SoilsYearly.data.map((item) => item.avg_pH)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_pH).length;
         totalRedox =
           getSums(SoilsYearly.data.map((item) => item.avg_redox)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_redox).length;
         totalK =
           getSums(SoilsYearly.data.map((item) => item.avg_k)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_k).length;
         totalKtk =
           getSums(SoilsYearly.data.map((item) => item.avg_ktk)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_ktk).length;
         totalP205 =
           getSums(SoilsYearly.data.map((item) => item.avg_p2O5)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_p2O5).length;
         totalCarbon =
           getSums(SoilsYearly.data.map((item) => item.avg_carbon)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_carbon).length;
         totalN =
           getSums(SoilsYearly.data.map((item) => item.avg_n)) /
-          SoilsYearly.data.length;
+          SoilsYearly.data.map((item) => item.avg_n).length;
       }
     }
     return {
@@ -1411,42 +1433,42 @@ function ContentComponent({
 
     totalWoodyDebris =
       getSums(WoodyYearly.data.map((item) => item.avg_total)) /
-      WoodyYearly.data.length;
+      WoodyYearly.data.map((item) => item.avg_total).length;
     totalLitterMass =
       getSums(LitterChartApi.data.map((item) => item.avg_litterMas)) /
-      LitterChartApi.data.length;
+      LitterChartApi.data.map((item) => item.avg_litterMas).length;
 
     totalNSoils =
       getSums(SoilChartApi.data.map((item) => item.avg_n)) /
-      SoilChartApi.data.length;
+      SoilChartApi.data.map((item) => item.avg_n).length;
     totalCSoils =
       getSums(SoilChartApi.data.map((item) => item.avg_c)) /
-      SoilChartApi.data.length;
+      SoilChartApi.data.map((item) => item.avg_c).length;
     totalNMGSoils =
       getSums(SoilChartApi.data.map((item) => item.avg_nMgHa)) /
-      SoilChartApi.data.length;
+      SoilChartApi.data.map((item) => item.avg_nMgHa).length;
     totalCMGSoils =
       getSums(SoilChartApi.data.map((item) => item.avg_cMgHa)) /
-      SoilChartApi.data.length;
+      SoilChartApi.data.map((item) => item.avg_cMgHa).length;
 
     totalDBHTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_dbh)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_dbh).length;
     totalTAGBTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_tagb)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_tagb).length;
     totalNotesTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_notes)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_notes).length;
     totalPlotTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_plot)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_plot).length;
     totalPlotRadiusTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_plotRadius)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_plotRadius).length;
     totalWoodDensityTrees =
       getSums(TreesChartApi.data.map((item) => item.avg_woodDensity)) /
-      TreesChartApi.data.length;
+      TreesChartApi.data.map((item) => item.avg_woodDensity).length;
 
     return {
       totalWoodyDebris,
@@ -1539,9 +1561,9 @@ function ContentComponent({
               <div
                 className={`w-full max-w-[12rem] justify-end pr-4 ${
                   categoryKey === "Carbon Stock" ||
-                  soilTypeKey == "chemChar1" ||
-                  soilTypeKey == "chemChar2" ||
-                  soilTypeKey == "chemChar3"
+                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar1" ||
+                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar2" ||
+                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar3"
                     ? "hidden"
                     : ""
                 }

@@ -56,7 +56,7 @@ const CarbonCharts: FC<CarbonChartProps> = ({ data }) => {
               groupedData[key]?.reduce(
                 (sum: any, item: any) => sum + item.avg_carbon,
                 0
-              ) || 0
+              ) / groupedData[key]?.length || 0
             );
           })
         : [],

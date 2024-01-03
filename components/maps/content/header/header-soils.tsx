@@ -100,7 +100,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "} Mg/ha</span>
           </p>
         </div>
 
@@ -139,7 +139,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "} Mg/ha</span>
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "} Mg/ha</span>
           </p>
         </div>
       </div>
