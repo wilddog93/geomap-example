@@ -67,6 +67,8 @@ import {
   endOfYear,
 } from "date-fns";
 
+import DatePicker from "react-datepicker";
+
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
   banned: "danger",
@@ -174,6 +176,17 @@ export default function FluxTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
+  const now = new Date();
+  const [periodeDate, setPeriodeDate] = useState(new Date());
+  const [start, setStart] = useState(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  );
+  const [end, setEnd] = useState(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  );
+  const [dateRange, setDateRange] = useState<Date[] | any[]>([start, end]);
+  const [startDate, endDate] = dateRange;
+
   // date-format
   const dateFormat = (date: any) => {
     let _dt = format(new Date(date), "yyyy-MM-dd");
@@ -224,23 +237,18 @@ export default function FluxTables({
 
   // filter periode
   const periodeFilterred = useMemo(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
-      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
-      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
-    } else {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+      start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
+      end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
+    } else if (periodeKey == "Yearly") {
+      start = periodeDate ? format(startOfYear(periodeDate), "yyyy-MM-dd") : "";
+      end = periodeDate ? format(endOfYear(periodeDate), "yyyy-MM-dd") : "";
     }
 
-    // console.log({start, end}, "periode")
-
     return { start, end };
-  }, [periodeKey]);
+  }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
 
   // query-prams
@@ -273,6 +281,7 @@ export default function FluxTables({
     return query;
   }, [page, limit, filterValue, locationKey, landCoverKey]);
 
+  // filter
   const filterParams = useMemo(() => {
     const qb = RequestQueryBuilder.create();
 
@@ -291,7 +300,7 @@ export default function FluxTables({
       ],
     };
 
-    if (periodeKey)
+    if (periodeKey && periodeFilterred.start)
       search?.$and?.push({
         date: {
           $gte: periodeFilterred.start,
@@ -580,10 +589,10 @@ export default function FluxTables({
                 labelPlacement="outside"
                 placeholder="Select periode"
                 defaultItems={periodeOptions}
-                defaultSelectedKey="Yearly"
+                defaultSelectedKey={periodeKey as Key}
                 variant="faded"
                 color="primary"
-                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60`}
                 allowsCustomValue={true}
                 onSelectionChange={onSelectionPeriodeChange}
                 onInputChange={onInputPeriodeChange}
@@ -596,6 +605,70 @@ export default function FluxTables({
                 )}
               </Autocomplete>
             </div>
+
+              <div className={`w-full max-w-[12rem] flex flex-col gap-2 ${!periodeKey ? "hidden" : ""}`}>
+                <div
+                  className={`w-full ${
+                    periodeKey !== "Yearly" ? "hidden" : ""
+                  }`}
+                >
+                  <label className="w-full text-gray-5 overflow-hidden">
+                    <DatePicker
+                      selected={periodeDate}
+                      onChange={(date: any) => setPeriodeDate(date)}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      yearItemNumber={6}
+                      showIcon
+                      icon={
+                        (
+                          <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                        ) as any
+                      }
+                      isClearable
+                      className="z-20 text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                      popperClassName="z-30"
+                    />
+                  </label>
+                </div>
+
+                <div
+                  className={`w-full ${
+                    periodeKey !== "Monthly" ? "hidden" : ""
+                  }`}
+                >
+                  <label className="w-full text-gray-5 overflow-hidden">
+                    <DatePicker
+                      selectsRange={true}
+                      startDate={startDate}
+                      endDate={endDate}
+                      onChange={(dates: any) => {
+                        setDateRange(dates);
+                      }}
+                      dateFormat="dd/MM-yy"
+                      monthsShown={2}
+                      placeholderText={"Select date"}
+                      // todayButton={"Today"}
+                      dropdownMode="select"
+                      peekNextMonth={true}
+                      dateFormatCalendar="MMM yyyy"
+                      showMonthDropdown
+                      showYearDropdown
+                      calendarClassName="-left-10"
+                      clearButtonClassName="p-1"
+                      className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                      popperClassName="z-30"
+                      isClearable
+                      showIcon
+                      icon={
+                        (
+                          <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                        ) as any
+                      }
+                    />
+                  </label>
+                </div>
+              </div>
           </div>
         </div>
       </div>
