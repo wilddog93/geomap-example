@@ -227,10 +227,8 @@ export default function FluxTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
+  const [landCoverFilter, setLandCoverFilter] = useState("");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
   const [sortKey, setSortKey] = useState<Key | null>("id");

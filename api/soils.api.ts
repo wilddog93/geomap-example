@@ -15,11 +15,25 @@ export interface SoilsType {
   id: number;
   date: string | any;
   plot: string | any;
+  plotCode: string | any;
+  sampleCode: string | any;
   landCover: string | any;
   type: "Heterothropic" | "Total";
-  soilType: string | any;
   location: string | any;
   values: ValuesType;
+  soilType: "physical" | "chemChar1" | "chemChar2" | "chemChar3";
+  pH: number;
+  redox: number;
+  k: number;
+  ktk: number;
+  p2O5: number;
+  n: number;
+  carbon: number;
+  gravimetricWaterContent: number;
+  volumetricWaterContent: number;
+  bulkDensity: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SoilsStatisticsProp {

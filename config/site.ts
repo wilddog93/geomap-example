@@ -27,22 +27,22 @@ export const siteConfig = {
     {
       label: "GHG Fluxes",
       path: "ghg-fluxes",
-      href: "/table/ghg-fluxes?page=1&limit=5",
+      href: "/table/ghg-fluxes?page=1&limit=10",
     },
     {
       label: "Carbon Stocks",
       path: "carbon-stocks",
-      href: "/table/carbon-stocks/woody-debris?page=1&limit=5",
+      href: "/table/carbon-stocks/woody-debris?page=1&limit=10",
     },
     {
       label: "Soil Physical Chemistry",
-      path: "soils-physical",
-      href: "/table/soils-physical?page=1&limit=5",
+      path: "soils",
+      href: "/table/soils/physical?page=1&limit=10",
     },
     {
       label: "Weather Data",
       path: "weather",
-      href: "/table/weather?page=1&limit=5",
+      href: "/table/weather?page=1&limit=10",
     },
   ],
   navTabCarbon: [
@@ -65,6 +65,28 @@ export const siteConfig = {
       label: "Trees",
       path: "trees",
       href: "/table/carbon-stocks/trees",
+    },
+  ],
+  navTabSoils: [
+    {
+      label: "Physical",
+      path: "physical",
+      href: "/table/soils/physical",
+    },
+    {
+      label: "Chamber 1",
+      path: "chamber-1",
+      href: "/table/soils/chamber-1",
+    },
+    {
+      label: "Chamber 2",
+      path: "chamber-2",
+      href: "/table/soils/chamber-2",
+    },
+    {
+      label: "Chamber 3",
+      path: "chamber-3",
+      href: "/table/soils/chamber-3",
     },
   ],
   links: {

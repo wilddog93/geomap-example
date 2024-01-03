@@ -28,13 +28,11 @@ import {
 
 import { Input } from "@nextui-org/input";
 
-import { Chip, ChipProps } from "@nextui-org/chip";
+import { ChipProps } from "@nextui-org/chip";
 
 import {
   Autocomplete,
   AutocompleteItem,
-  Select,
-  SelectItem,
   Selection,
   SortDescriptor,
   Spinner,
@@ -45,27 +43,18 @@ import { Pagination } from "@nextui-org/pagination";
 import { Button } from "@nextui-org/button";
 
 import {
-  MdCalendarMonth,
   MdCalendarToday,
   MdMoreVert,
   MdOutlineSearch,
-  MdPlace,
   MdSort,
 } from "react-icons/md";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
-import {
-  subMonths,
-  subYears,
-  format,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
-} from "date-fns";
+import { format, startOfYear, endOfYear } from "date-fns";
 import { SoilsType, useSoilsApi } from "@/api/soils.api";
+import DatePicker from "react-datepicker";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -92,11 +81,35 @@ const columns: ColumnProps[] = [
   { name: "DATE", uid: "date", sortable: true },
   { name: "PLOT", uid: "plot", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
+  { name: "SOIL TYPE", uid: "soilType", sortable: true },
   { name: "TYPE", uid: "type", sortable: true },
   { name: "SAMPLE CODE", uid: "sampleCode", sortable: true },
-  { name: "GRAVIMETRIC WATER CONTENT", uid: "gravimetricWaterContent" },
-  { name: "BULK DENSITY", uid: "bulkDensity" },
-  { name: "VOLUMETRIC WATER CONTENT", uid: "volumetricWaterContent" },
+  {
+    name: (
+      <div>
+        BULK DENSITY
+        <p>
+          (g/cm<sup>3</sup>)
+        </p>
+      </div>
+    ),
+    uid: "bulkDensity",
+  },
+  {
+    name: (
+      <div>
+        GRAVIMETRIC WATER CONTENT
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "gravimetricWaterContent",
+  },
+  { name: (
+    <div>
+      VOLUMETRIC WATER CONTENT
+      <p>(%)</p>
+    </div>
+  ), uid: "volumetricWaterContent" },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -104,6 +117,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "date",
   "plot",
   "landCover",
+  "soilType",
   "type",
   "sampleCode",
   "gravimetricWaterContent",
@@ -124,7 +138,7 @@ type TableProps = {
   locationOptions?: SelectTypes[] | any[];
 };
 
-export default function SoilTables({
+export default function PhysicalTables({
   params,
   page,
   setPage,
@@ -134,7 +148,7 @@ export default function SoilTables({
   setFilterValue,
   landCoverOptions,
   locationKey,
-  locationOptions
+  locationOptions,
 }: TableProps) {
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
@@ -154,10 +168,8 @@ export default function SoilTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
-    "Secondary Forest"
-  );
-  const [landCoverFilter, setLandCoverFilter] = useState("Secondary Forest");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
+  const [landCoverFilter, setLandCoverFilter] = useState("");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
   const [periodeFilter, setPeriodeFilter] = useState("Yearly");
   const [sortKey, setSortKey] = useState<Key | null>("id");
@@ -169,6 +181,18 @@ export default function SoilTables({
   let router = useRouter();
   let pathname = usePathname();
   let search = useSearchParams();
+
+  // date-periode
+  const now = new Date();
+  const [periodeDate, setPeriodeDate] = useState(new Date());
+  const [start, setStart] = useState(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  );
+  const [end, setEnd] = useState(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  );
+  const [dateRange, setDateRange] = useState<Date[] | any[]>([start, end]);
+  const [startDate, endDate] = dateRange;
 
   // date-format
   const dateFormat = (date: any) => {
@@ -220,23 +244,18 @@ export default function SoilTables({
 
   // filter periode
   const periodeFilterred = useMemo(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
-      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
-      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
-    } else {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+      start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
+      end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
+    } else if (periodeKey == "Yearly") {
+      start = periodeDate ? format(startOfYear(periodeDate), "yyyy-MM-dd") : "";
+      end = periodeDate ? format(endOfYear(periodeDate), "yyyy-MM-dd") : "";
     }
 
-    // console.log({start, end}, "periode")
-
     return { start, end };
-  }, [periodeKey]);
+  }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
 
   // query-prams
@@ -274,17 +293,11 @@ export default function SoilTables({
 
     const search: any = {
       $and: [
-        // {
-        //   date: {
-        //     $gte: periodeFilterred.start,
-        //     $lte: periodeFilterred.end,
-        //   },
-        // },
         { location: { $cont: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
+        { soilType: { $eq: "physical" } },
         {
           $or: [
-            { type: { $contL: getQuery?.search } },
             { landCover: { $contL: getQuery?.search } },
             { plot: { $contL: getQuery?.search } },
             { location: { $contL: getQuery?.search } },
@@ -293,7 +306,7 @@ export default function SoilTables({
       ],
     };
 
-    if (periodeKey)
+    if (periodeKey && periodeFilterred.start)
       search?.$and?.push({
         date: {
           $gte: periodeFilterred.start,
@@ -330,11 +343,11 @@ export default function SoilTables({
 
   // get-data
   const getSoilData = async (params: any) => {
-    await fetch({ params: params?.queryObject });
+    await fetch({ params });
   };
   useEffect(() => {
     if (filterParams) {
-      getSoilData(filterParams);
+      getSoilData(filterParams?.queryObject);
     }
   }, [filterParams]);
   // end get-data
@@ -362,10 +375,6 @@ export default function SoilTables({
       arr.push({
         ...item,
         no: 1 + i,
-        sampleCode: item.values.sampleCode,
-        gravimetricWaterContent: item.values.gravimetricWaterContent,
-        bulkDensity: item.values.bulkDensity,
-        volumetricWaterContent: item.values.volumetricWaterContent,
       });
     });
 
@@ -381,8 +390,6 @@ export default function SoilTables({
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
-  console.log(sortedItems, "sortedItems");
 
   const renderCell = useCallback((item: SoilsType, columnKey: Key) => {
     const cellValue = item[columnKey as keyof SoilsType];
@@ -428,6 +435,14 @@ export default function SoilTables({
             </p>
           </div>
         );
+      case "soilType":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
+          </div>
+        );
       case "sampleCode":
         return (
           <div className="flex flex-col">
@@ -452,23 +467,6 @@ export default function SoilTables({
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
-          </div>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <MdMoreVert className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu color="primary" className="text-black">
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
           </div>
         );
       default:
@@ -580,10 +578,10 @@ export default function SoilTables({
                 labelPlacement="outside"
                 placeholder="Select periode"
                 defaultItems={periodeOptions}
-                defaultSelectedKey="Yearly"
+                defaultSelectedKey={periodeKey as Key}
                 variant="faded"
                 color="primary"
-                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60`}
                 allowsCustomValue={true}
                 onSelectionChange={onSelectionPeriodeChange}
                 onInputChange={onInputPeriodeChange}
@@ -595,6 +593,70 @@ export default function SoilTables({
                   </AutocompleteItem>
                 )}
               </Autocomplete>
+            </div>
+
+            <div
+              className={`w-full max-w-[12rem] flex flex-col gap-2 ${
+                !periodeKey ? "hidden" : ""
+              }`}
+            >
+              <div
+                className={`w-full ${periodeKey !== "Yearly" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selected={periodeDate}
+                    onChange={(date: any) => setPeriodeDate(date)}
+                    showYearPicker
+                    dateFormat="yyyy"
+                    yearItemNumber={6}
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                    isClearable
+                    className="z-20 text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                    popperClassName="z-30"
+                  />
+                </label>
+              </div>
+
+              <div
+                className={`w-full ${periodeKey !== "Monthly" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(dates: any) => {
+                      setDateRange(dates);
+                    }}
+                    dateFormat="dd/MM-yy"
+                    monthsShown={2}
+                    placeholderText={"Select date"}
+                    // todayButton={"Today"}
+                    dropdownMode="select"
+                    peekNextMonth={true}
+                    dateFormatCalendar="MMM yyyy"
+                    showMonthDropdown
+                    showYearDropdown
+                    calendarClassName="-left-10"
+                    clearButtonClassName="p-1"
+                    className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                    popperClassName="z-30"
+                    isClearable
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                  />
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -682,14 +744,14 @@ export default function SoilTables({
   return (
     <Table
       isStriped
-      removeWrapper
+      // removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}
