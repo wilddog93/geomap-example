@@ -95,12 +95,78 @@ const columns: ColumnProps[] = [
   { name: "PLOT", uid: "plot", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "TYPE", uid: "type", sortable: true },
-  { name: "AIR TEMPERATURE", uid: "airTemperature" },
-  { name: "SOIL TEMPERATURE", uid: "soilTemperature" },
-  { name: "SOIL MOISTURE", uid: "soilMoisture" },
-  { name: "WATER TABLE", uid: "waterTable" },
-  { name: "CH4", uid: "ch4" },
-  { name: "CO2", uid: "co2" },
+  {
+    name: (
+      <div className="">
+        AIR TEMPERATURE
+        <p>(˚C)</p>
+      </div>
+    ),
+    uid: "airTemperature",
+  },
+  {
+    name: (
+      <div>
+        SOIL TEMPERATURE
+        <p>(˚C)</p>
+      </div>
+    ),
+    uid: "soilTemperature",
+  },
+  {
+    name: (
+      <div>
+        SOIL MOISTURE
+        <p>
+          (m<sup>3</sup>/m<sup>3</sup>)
+        </p>
+      </div>
+    ),
+    uid: "soilMoisture",
+  },
+  {
+    name: (
+      <div>
+        WATER TABLE
+        <p>cm</p>
+      </div>
+    ),
+    uid: "waterTable",
+  },
+  {
+    name: (
+      <div>
+        METHANA FLUX
+        <p>
+          (tCO<sub>2</sub>e ha<sup>-1</sup> yr<sup>-1</sup>)
+        </p>
+      </div>
+    ),
+    uid: "ch4",
+  },
+  {
+    name: (
+      <div>
+        TOTAL RESPIRATION
+        <p>
+          (tCO<sub>2</sub> ha<sup>-1</sup> yr<sup>-1</sup>)
+        </p>
+      </div>
+    ),
+    uid: "co2",
+  },
+  {
+    name: (
+      <div>
+        HETEROTHROPIC RESPIRATION
+        <p>
+          (tCO<sub>2</sub> ha<sup>-1</sup> yr
+          <sup>-1</sup>)
+        </p>
+      </div>
+    ),
+    uid: "heterothropic_co2",
+  },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -115,6 +181,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "waterTable",
   "ch4",
   "co2",
+  "heterothropic_co2",
 ];
 
 type TableProps = {
@@ -463,6 +530,12 @@ export default function FluxTables({
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
+      case "heterothropic_co2":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
+          </div>
+        );
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -606,69 +679,69 @@ export default function FluxTables({
               </Autocomplete>
             </div>
 
-              <div className={`w-full max-w-[12rem] flex flex-col gap-2 ${!periodeKey ? "hidden" : ""}`}>
-                <div
-                  className={`w-full ${
-                    periodeKey !== "Yearly" ? "hidden" : ""
-                  }`}
-                >
-                  <label className="w-full text-gray-5 overflow-hidden">
-                    <DatePicker
-                      selected={periodeDate}
-                      onChange={(date: any) => setPeriodeDate(date)}
-                      showYearPicker
-                      dateFormat="yyyy"
-                      yearItemNumber={6}
-                      showIcon
-                      icon={
-                        (
-                          <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
-                        ) as any
-                      }
-                      isClearable
-                      className="z-20 text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
-                      popperClassName="z-30"
-                    />
-                  </label>
-                </div>
-
-                <div
-                  className={`w-full ${
-                    periodeKey !== "Monthly" ? "hidden" : ""
-                  }`}
-                >
-                  <label className="w-full text-gray-5 overflow-hidden">
-                    <DatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(dates: any) => {
-                        setDateRange(dates);
-                      }}
-                      dateFormat="dd/MM-yy"
-                      monthsShown={2}
-                      placeholderText={"Select date"}
-                      // todayButton={"Today"}
-                      dropdownMode="select"
-                      peekNextMonth={true}
-                      dateFormatCalendar="MMM yyyy"
-                      showMonthDropdown
-                      showYearDropdown
-                      calendarClassName="-left-10"
-                      clearButtonClassName="p-1"
-                      className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
-                      popperClassName="z-30"
-                      isClearable
-                      showIcon
-                      icon={
-                        (
-                          <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
-                        ) as any
-                      }
-                    />
-                  </label>
-                </div>
+            <div
+              className={`w-full max-w-[12rem] flex flex-col gap-2 ${
+                !periodeKey ? "hidden" : ""
+              }`}
+            >
+              <div
+                className={`w-full ${periodeKey !== "Yearly" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selected={periodeDate}
+                    onChange={(date: any) => setPeriodeDate(date)}
+                    showYearPicker
+                    dateFormat="yyyy"
+                    yearItemNumber={6}
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                    isClearable
+                    className="z-20 text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                    popperClassName="z-30"
+                  />
+                </label>
               </div>
+
+              <div
+                className={`w-full ${periodeKey !== "Monthly" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(dates: any) => {
+                      setDateRange(dates);
+                    }}
+                    dateFormat="dd/MM-yy"
+                    monthsShown={2}
+                    placeholderText={"Select date"}
+                    // todayButton={"Today"}
+                    dropdownMode="select"
+                    peekNextMonth={true}
+                    dateFormatCalendar="MMM yyyy"
+                    showMonthDropdown
+                    showYearDropdown
+                    calendarClassName="-left-10"
+                    clearButtonClassName="p-1"
+                    className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                    popperClassName="z-30"
+                    isClearable
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -756,14 +829,13 @@ export default function FluxTables({
   return (
     <Table
       isStriped
-      removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] border-0 shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}

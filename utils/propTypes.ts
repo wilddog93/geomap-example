@@ -22,6 +22,7 @@ export interface GhgFluxTypes {
   waterTable?: number | null;
   ch4?: number | null;
   co2?: number | null;
+  heterothropic_co2?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }
