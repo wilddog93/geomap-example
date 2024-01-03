@@ -33,8 +33,6 @@ import { Chip, ChipProps } from "@nextui-org/chip";
 import {
   Autocomplete,
   AutocompleteItem,
-  Select,
-  SelectItem,
   Selection,
   SortDescriptor,
   Spinner,
@@ -44,34 +42,13 @@ import { Pagination } from "@nextui-org/pagination";
 
 import { Button } from "@nextui-org/button";
 
-import {
-  MdCalendarMonth,
-  MdCalendarToday,
-  MdMoreVert,
-  MdOutlineSearch,
-  MdPlace,
-  MdSort,
-} from "react-icons/md";
-import { useGHGFluxApi } from "@/api/ghg-flux.api";
+import { MdOutlineSearch, MdSort } from "react-icons/md";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
-import {
-  subMonths,
-  subYears,
-  format,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
-} from "date-fns";
-import {
-  CarbonLittersTypes,
-  CarbonSoilsTypes,
-  useCarbonLittersApi,
-  useCarbonSoilsApi,
-} from "@/api/carbon-stocks.api";
+import { format } from "date-fns";
+import { CarbonSoilsTypes, useCarbonSoilsApi } from "@/api/carbon-stocks.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -97,11 +74,51 @@ const columns: ColumnProps[] = [
   { name: "REGION", uid: "region", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "SITE", uid: "site", sortable: true },
-  { name: "C", uid: "c" },
-  { name: "N", uid: "n" },
-  { name: "BD", uid: "bd" },
-  { name: "cMgHa", uid: "cMgHa" },
-  { name: "nMgHa", uid: "nMgHa" },
+  {
+    name: (
+      <div>
+        CARBON
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "c",
+  },
+  {
+    name: (
+      <div>
+        NITROGEN
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "n",
+  },
+  {
+    name: (
+      <div>
+        BULK DENSITY
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "bd",
+  },
+  {
+    name: (
+      <div>
+        CARBON
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "cMgHa",
+  },
+  {
+    name: (
+      <div>
+        NITROGEN
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "nMgHa",
+  },
   { name: "SAMPLE DEPTH RANGE", uid: "sampleDepthRange" },
   { name: "SUBSTRATE", uid: "substrate" },
   { name: "DEPTH OF SAMPLE", uid: "depthOfSample" },
@@ -612,14 +629,14 @@ export default function CarbonSoilsTables({
   return (
     <Table
       isStriped
-      removeWrapper
+      // removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}

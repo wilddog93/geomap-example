@@ -75,14 +75,42 @@ const columns: ColumnProps[] = [
   { name: "SPPSCI", uid: "sppSci", sortable: true },
   { name: "FAM", uid: "fam", sortable: true },
   { name: "SOURCE FOR ALLOMETRY", uid: "sourceForAllometry", sortable: true },
-  { name: "REMAKS", uid: "remarks", sortable: true },
   { name: "PLOT", uid: "plot" },
   { name: "PLOT RADIUS", uid: "plotRadius" },
-  { name: "DBH", uid: "dbh" },
+  {
+    name: (
+      <div>
+        DIAMETER BREAST HEIGHT
+        <p>
+          (g/cm<sup>3</sup>)
+        </p>
+      </div>
+    ),
+    uid: "dbh",
+  },
   { name: "NOTES", uid: "notes" },
-  { name: "WOOD DENSITY", uid: "woodDensity" },
-  { name: "TAGB", uid: "tagb" },
+  {
+    name: (
+      <div>
+        WOOD DENSITY
+        <p>
+          (g/cm<sup>3</sup>)
+        </p>
+      </div>
+    ),
+    uid: "woodDensity",
+  },
+  {
+    name: (
+      <div>
+        TOTAL ABOVEGROUND BIOMASS
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "tagb",
+  },
   { name: "YEAR PLANT", uid: "yearPlant" },
+  { name: "REMAKS", uid: "remarks", sortable: true },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -382,12 +410,6 @@ export default function TreesTables({
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
           </div>
         );
-      case "remarks":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
-          </div>
-        );
       case "plot":
         return (
           <div className="flex flex-col">
@@ -425,6 +447,12 @@ export default function TreesTables({
           </div>
         );
       case "yearPlant":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
+          </div>
+        );
+      case "remarks":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue || 0}</p>
@@ -619,14 +647,14 @@ export default function TreesTables({
   return (
     <Table
       isStriped
-      removeWrapper
+      // removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}

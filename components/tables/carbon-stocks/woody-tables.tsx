@@ -96,13 +96,75 @@ const columns: ColumnProps[] = [
   { name: "REGION", uid: "region", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "SITE", uid: "site", sortable: true },
-  { name: "VOLUME ROTTEN", uid: "volumeRotten" },
-  { name: "VOLUME SOUND", uid: "volumeSound" },
-  { name: "VOLUME MEDIUM", uid: "volumeMedium" },
-  { name: "MASS ROTTEN", uid: "massRotten" },
-  { name: "MASS SOUND", uid: "massSound" },
-  { name: "MASS MEDIUM", uid: "massMedium" },
-  { name: "TOTAL", uid: "total" },
+  {
+    name: (
+      <div>
+        VOLUME ROTTEN
+        <p>
+          (m<sup>3</sup>/ha)
+        </p>
+      </div>
+    ),
+    uid: "volumeRotten",
+  },
+  {
+    name: (
+      <div>
+        VOLUME SOUND
+        <p>
+          (m<sup>3</sup>/ha)
+        </p>
+      </div>
+    ),
+    uid: "volumeSound",
+  },
+  {
+    name: (
+      <div>
+        VOLUME MEDIUM
+        <p>
+          (m<sup>3</sup>/ha)
+        </p>
+      </div>
+    ),
+    uid: "volumeMedium",
+  },
+  {
+    name: (
+      <div>
+        MASS ROTTEN
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "massRotten",
+  },
+  {
+    name: (
+      <div>
+        MASS SOUND
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "massSound",
+  },
+  {
+    name: (
+      <div>
+        MASS MEDIUM
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "massMedium",
+  },
+  {
+    name: (
+      <div>
+        TOTAL
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "total",
+  },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -176,6 +238,17 @@ export default function WoodyTables({
   let pathname = usePathname();
   let search = useSearchParams();
 
+  const now = new Date();
+  const [periodeDate, setPeriodeDate] = useState(new Date());
+  const [start, setStart] = useState(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  );
+  const [end, setEnd] = useState(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  );
+  const [dateRange, setDateRange] = useState<Date[] | any[]>([start, end]);
+  const [startDate, endDate] = dateRange;
+
   // date-format
   const dateFormat = (date: any) => {
     let _dt = format(new Date(date), "yyyy-MM-dd");
@@ -226,23 +299,18 @@ export default function WoodyTables({
 
   // filter periode
   const periodeFilterred = useMemo(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
     if (periodeKey == "Monthly") {
-      start = format(startOfMonth(currentDate), "yyyy-MM-dd");
-      end = format(endOfMonth(currentDate), "yyyy-MM-dd");
-    } else {
-      start = format(startOfYear(currentDate), "yyyy-MM-dd");
-      end = format(endOfYear(currentDate), "yyyy-MM-dd");
+      start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
+      end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
+    } else if (periodeKey == "Yearly") {
+      start = periodeDate ? format(startOfYear(periodeDate), "yyyy-MM-dd") : "";
+      end = periodeDate ? format(endOfYear(periodeDate), "yyyy-MM-dd") : "";
     }
 
-    // console.log({start, end}, "periode")
-
     return { start, end };
-  }, [periodeKey]);
+  }, [periodeKey, periodeDate, startDate, endDate]);
   // filter perioded end
 
   // query-prams
@@ -370,8 +438,12 @@ export default function WoodyTables({
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a: CarbonWoodyTypes, b: CarbonWoodyTypes) => {
-      const first = a[sortDescriptor.column as keyof CarbonWoodyTypes] as number;
-      const second = b[sortDescriptor.column as keyof CarbonWoodyTypes] as number;
+      const first = a[
+        sortDescriptor.column as keyof CarbonWoodyTypes
+      ] as number;
+      const second = b[
+        sortDescriptor.column as keyof CarbonWoodyTypes
+      ] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -668,14 +740,13 @@ export default function WoodyTables({
   return (
     <Table
       isStriped
-      removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}

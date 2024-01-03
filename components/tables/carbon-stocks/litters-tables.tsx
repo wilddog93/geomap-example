@@ -33,8 +33,6 @@ import { Chip, ChipProps } from "@nextui-org/chip";
 import {
   Autocomplete,
   AutocompleteItem,
-  Select,
-  SelectItem,
   Selection,
   SortDescriptor,
   Spinner,
@@ -45,21 +43,14 @@ import { Pagination } from "@nextui-org/pagination";
 import { Button } from "@nextui-org/button";
 
 import {
-  MdCalendarMonth,
-  MdCalendarToday,
-  MdMoreVert,
   MdOutlineSearch,
-  MdPlace,
   MdSort,
 } from "react-icons/md";
-import { useGHGFluxApi } from "@/api/ghg-flux.api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
-  subMonths,
-  subYears,
   format,
   startOfMonth,
   endOfMonth,
@@ -97,7 +88,15 @@ const columns: ColumnProps[] = [
   { name: "REGION", uid: "region", sortable: true },
   { name: "LAND COVER", uid: "landCover", sortable: true },
   { name: "SITE", uid: "site", sortable: true },
-  { name: "Litter Mass", uid: "litterMass" },
+  {
+    name: (
+      <div>
+        LITTER MASS
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "litterMass",
+  },
   { name: "WET WT", uid: "wetWt" },
   { name: "DRY WT", uid: "dryWt" },
   { name: "MINUS PLASTIC BAG", uid: "minusPlasticBag" },
@@ -397,7 +396,9 @@ export default function LittersTables({
       case "landCover":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || "-"}</p>
+            <p className="text-bold text-small capitalize">
+              {cellValue || "-"}
+            </p>
           </div>
         );
       case "site":
@@ -633,14 +634,14 @@ export default function LittersTables({
   return (
     <Table
       isStriped
-      removeWrapper
+      // removeWrapper
       color="primary"
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
       }}
       selectedKeys={selectedKeys}
