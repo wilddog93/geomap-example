@@ -219,9 +219,6 @@ export default function Home() {
     return sortResult;
   }, [locationKey, locationOptions]);
 
-  console.log(landCoverOptions, "result-landcover")
-  console.log(locationOptions, "result-location")
-
   return (
     <main className="relative w-full h-full flex-grow text-default-500">
       <Navbar />

@@ -65,7 +65,7 @@ export default function TablePage(props: any) {
   };
 
   const onInputLocaationChange = (value: string) => {
-    setLocationKey(value);
+    setLocation(value);
   };
 
   const filterLocation = useMemo(() => {

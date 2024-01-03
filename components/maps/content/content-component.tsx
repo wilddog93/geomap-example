@@ -1561,9 +1561,9 @@ function ContentComponent({
               <div
                 className={`w-full max-w-[12rem] justify-end pr-4 ${
                   categoryKey === "Carbon Stock" ||
-                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar1" ||
-                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar2" ||
-                  categoryKey === "Soil psychochemical propertiesn " && soilTypeKey == "chemChar3"
+                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar1" ||
+                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar2" ||
+                  categoryKey === "Soil psychochemical properties" && soilTypeKey == "chemChar3"
                     ? "hidden"
                     : ""
                 }
