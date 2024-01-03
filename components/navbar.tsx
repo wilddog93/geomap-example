@@ -39,7 +39,7 @@ import {
 } from "react-icons/md";
 
 import { Logo } from "@/components/icons";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { User } from "@nextui-org/user";
 import {
   Dropdown,
@@ -66,10 +66,12 @@ import { convertBytes } from "@/utils/useFunction";
 import { FaCircleNotch } from "react-icons/fa";
 import {
   useCarbonFilesApi,
+  useCarbonSoilsFilesApi,
   useGHGFilesApi,
   useLittersFilesApi,
   useLocationFilesApi,
   useSoilsFilesApi,
+  useTreesFilesApi,
   useWeatherFilesApi,
   useWoodyFilesApi,
 } from "@/api/import.api";
@@ -82,26 +84,8 @@ export const Navbar = () => {
   let navRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const pathname = usePathname();
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
+  const searchParams = useSearchParams();
+  const params = useParams();
 
   // import
   const GHGImport = useGHGFilesApi();
@@ -111,6 +95,8 @@ export const Navbar = () => {
   const CarbonImport = useCarbonFilesApi();
   const CarbonWoodyImport = useWoodyFilesApi();
   const CarbonLittersImport = useLittersFilesApi();
+  const CarbonSoilsImport = useCarbonSoilsFilesApi();
+  const CarbonTreesImport = useTreesFilesApi();
 
   const [selected, setSelected] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -126,19 +112,19 @@ export const Navbar = () => {
   const logout = async (options?: AxiosRequestConfig) => {
     let config = options;
     // cconfi
-    setLoading(true)
+    setLoading(true);
     try {
       const { data: lists, ...result } = await axios.$post(
         "/auth/logout",
         options
       );
-      toast.info("Logout is successfully!")
-      setLoading(false)
+      toast.info("Logout is successfully!");
+      setLoading(false);
       await auth.logout();
       await router.push("/login");
-    } catch (error:any) {
-      toast.error(error?.response?.data?.message)
-      setLoading(false)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+      setLoading(false);
     }
   };
 
@@ -172,67 +158,82 @@ export const Navbar = () => {
 
   const onFilesUpload = async (files: File[]) => {
     // Handle the multiple file upload logic here
-    
+    if (!files || files.length == 0) {
+      toast.error("Please input your document files!");
+      return;
+    }
+
     let formData = new FormData();
     let imagefile = files;
     formData.append("file", imagefile[0]);
-    if (!files || files.length == 0) {
-      toast.error("Please input your document files!");
-    } else {
-      if (selected == "Carbon Stock") {
-        await CarbonImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded carbon:", files);
-      } else if (selected == "GHG Fluxes") {
-        await GHGImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded ghg:", files);
-      } else if (selected == "NCS Location") {
-        await LocationImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded location:", files);
-      } else if (selected == "Soil psychochemical properties") {
-        await SoilsImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded soil:", files);
-      } else if (selected == "Weather data (AWS)") {
-        await WeatherImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded weather:", files);
-      } else if (selected == "Woody Debris") {
-        await CarbonWoodyImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded carbon:", files);
-      } else if (selected == "Litters") {
-        await CarbonLittersImport.fetch(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Files uploaded carbon:", files);
-      } else {
-        console.log("Files uploaded:", files);
+    setLoadingImport(true)
+    try {
+      switch (selected) {
+        case "NCS Location":
+          return await LocationImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "GHG Fluxes":
+          return await GHGImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Soil psychochemical properties":
+          return await SoilsImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Weather data (AWS)":
+          return await WeatherImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Woody Debris":
+          return await CarbonWoodyImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Litters":
+          return await CarbonLittersImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Carbon Soils":
+          return await CarbonSoilsImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        case "Carbon Trees":
+          return await CarbonTreesImport.fetch(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+        default:
+          break;
       }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoadingImport(false)
+      onCloseImport()
     }
-    
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -281,7 +282,7 @@ export const Navbar = () => {
           <ul className="hidden lg:flex gap-4 justify-start ml-2">
             {siteConfig.navItems.map((item) => {
               // console.log(pathname.includes(label), item.label, 'href')
-              let label = item?.label.toLowerCase()
+              let label = item?.label.toLowerCase();
               if (pathname == item.href || pathname.includes(label)) {
                 return (
                   <NavbarItem isActive key={item.href}>
@@ -425,6 +426,26 @@ export const Navbar = () => {
                   >
                     Litter Mass
                   </DropdownItem>
+
+                  <DropdownItem
+                    key="carbon-soils"
+                    onPress={() => {
+                      setSelected("Carbon Soils");
+                      onOpen();
+                    }}
+                  >
+                    Carbon Soils
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="carbon-trees"
+                    onPress={() => {
+                      setSelected("Carbon Trees");
+                      onOpen();
+                    }}
+                  >
+                    Carbon Trees
+                  </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
             </Dropdown>
@@ -475,7 +496,9 @@ export const Navbar = () => {
       {/* modal */}
       <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onCloseImport}>
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1 border-b-2 border-default-200">{selected}</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1 border-b-2 border-default-200">
+            {selected}
+          </ModalHeader>
           <ModalBody>
             <div className="w-full flex flex-col gap-2 mb-3">
               <div className="w-full flex flex-col gap-2">
@@ -534,7 +557,7 @@ export const Navbar = () => {
               type="button"
               className=""
               color="primary"
-              onClick={() => onFilesUpload(files)}
+              onClick={() => onFilesUpload(files).then(router.refresh)}
               disabled={
                 GHGImport.fetching ||
                 CarbonImport.fetching ||
