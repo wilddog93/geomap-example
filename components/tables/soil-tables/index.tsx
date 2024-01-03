@@ -19,6 +19,13 @@ import {
   TableCell,
 } from "@nextui-org/table";
 
+import {
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/dropdown";
+
 import { Input } from "@nextui-org/input";
 
 import { ChipProps } from "@nextui-org/chip";
@@ -59,8 +66,8 @@ const sortOptions: SelectTypes[] = [
   { label: "DATE", value: "date" },
   { label: "PLOT", value: "plot" },
   { label: "LAND COVER", value: "landCover" },
-  { label: "TYPE", value: "type" },
   { label: "SOIL TYPE", value: "soilType" },
+  { label: "TYPE", value: "type" },
 ];
 
 const columns: ColumnProps[] = [
@@ -92,12 +99,78 @@ const columns: ColumnProps[] = [
     ),
     uid: "gravimetricWaterContent",
   },
-  { name: (
-    <div>
-      VOLUMETRIC WATER CONTENT
-      <p>(%)</p>
-    </div>
-  ), uid: "volumetricWaterContent" },
+  {
+    name: (
+      <div>
+        VOLUMETRIC WATER CONTENT
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "volumetricWaterContent",
+  },
+  {
+    name: (
+      <div>
+        PH
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "pH",
+  },
+  {
+    name: (
+      <div>
+        REDOX POTENTIAL
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "redox",
+  },
+  {
+    name: (
+      <div>
+        KALIUM CONTENT
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "k",
+  },
+  {
+    name: (
+      <div>
+        CATION EXCHANGE CAPACITY
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "ktk",
+  },
+  {
+    name: (
+      <div>
+        PHOSPOROUS PENTOXIDE CONTENT
+        <p>(%)</p>
+      </div>
+    ),
+    uid: "p205",
+  },
+  {
+    name: (
+      <div>
+        CARBON CONTENT
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "carbon",
+  },
+  {
+    name: (
+      <div>
+        NITROGEN CONTENT
+        <p>(Mg/ha)</p>
+      </div>
+    ),
+    uid: "n",
+  },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -108,8 +181,35 @@ const INITIAL_VISIBLE_COLUMNS = [
   "soilType",
   "type",
   "sampleCode",
-  "ph",
+  "gravimetricWaterContent",
+  "bulkDensity",
+  "volumetricWaterContent",
+  "pH",
   "redox",
+  "k",
+  "ktk",
+  "p205",
+  "carbon",
+  "n",
+];
+
+const soilTypeOptions: SelectTypes[] = [
+  {
+    value: "physical",
+    label: "Physical",
+  },
+  {
+    value: "chemChar1",
+    label: "Chemistry Char 1",
+  },
+  {
+    value: "chemChar2",
+    label: "Chemistry Char 2",
+  },
+  {
+    value: "chemChar3",
+    label: "Chemistry Char 3",
+  },
 ];
 
 type TableProps = {
@@ -125,7 +225,7 @@ type TableProps = {
   locationOptions?: SelectTypes[] | any[];
 };
 
-export default function PhysicalTables({
+export default function SoilTables({
   params,
   page,
   setPage,
@@ -140,7 +240,6 @@ export default function PhysicalTables({
   // const [filterValue, setFilterValue] = useState("");
   // data-table-with-api
   const { fetch, data, meta, fetching } = useSoilsApi();
-  const [dataTables, setdataTables] = useState<SoilsType[] | any[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -155,10 +254,10 @@ export default function PhysicalTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>("");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>("Secondary Forest");
   const [landCoverFilter, setLandCoverFilter] = useState("");
-  const [periodeKey, setPeriodeKey] = useState<Key | null>("Yearly");
-  const [periodeFilter, setPeriodeFilter] = useState("Yearly");
+  const [periodeKey, setPeriodeKey] = useState<Key | null>("");
+  const [periodeFilter, setPeriodeFilter] = useState("");
   const [sortKey, setSortKey] = useState<Key | null>("id");
   const [sortFilter, setSortFilter] = useState("id");
 
@@ -186,6 +285,18 @@ export default function PhysicalTables({
     let _dt = format(new Date(date), "yyyy-MM-dd");
     if (!date) return;
     return _dt;
+  };
+
+  // soils
+  const [soilTypeKey, setSoilTypeKey] = useState<Key | null>("physical");
+  const [soilTypeInput, setSoilTypeInput] = useState<string>("");
+
+  const onSelectionSoilTypeChange = (key: Key) => {
+    setSoilTypeKey(key);
+  };
+
+  const onInputSoilTypeChange = (value: string) => {
+    setSoilTypeInput(value);
   };
 
   // function dropdown
@@ -282,7 +393,7 @@ export default function PhysicalTables({
       $and: [
         { location: { $cont: getQuery?.location } },
         { landCover: { $cont: getQuery?.landCover } },
-        { soilType: { $eq: "physical" } },
+        { soilType: { $eq: soilTypeKey } },
         {
           $or: [
             { landCover: { $contL: getQuery?.search } },
@@ -293,7 +404,7 @@ export default function PhysicalTables({
       ],
     };
 
-    if (periodeKey && periodeFilterred.start)
+    if (soilTypeKey == "physical" && periodeKey && periodeFilterred.start)
       search?.$and?.push({
         date: {
           $gte: periodeFilterred.start,
@@ -317,7 +428,7 @@ export default function PhysicalTables({
     }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, sortKey, periodeKey]);
+  }, [getQuery, periodeFilterred, sortKey, periodeKey, soilTypeKey, landCoverKey]);
 
   useEffect(() => {
     router.replace(
@@ -332,6 +443,7 @@ export default function PhysicalTables({
   const getSoilData = async (params: any) => {
     await fetch({ params });
   };
+
   useEffect(() => {
     if (filterParams) {
       getSoilData(filterParams?.queryObject);
@@ -438,24 +550,6 @@ export default function PhysicalTables({
             </p>
           </div>
         );
-      case "gravimetricWaterContent":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
-          </div>
-        );
-      case "bulkDensity":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
-          </div>
-        );
-      case "volumetricWaterContent":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue || 0}</p>
-          </div>
-        );
       default:
         return cellValue;
     }
@@ -520,7 +614,7 @@ export default function PhysicalTables({
                 labelPlacement="outside"
                 placeholder="Select land cover"
                 defaultItems={landCoverOptions}
-                defaultSelectedKey="Secondary Forest"
+                defaultSelectedKey={landCoverKey as Key}
                 variant="faded"
                 color="primary"
                 className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -536,13 +630,35 @@ export default function PhysicalTables({
               </Autocomplete>
             </div>
 
+            <div className="flex w-full max-w-[12rem] flex-col gap-2">
+              <Autocomplete
+                radius="full"
+                labelPlacement="outside"
+                placeholder="Select soil type"
+                defaultItems={soilTypeOptions}
+                defaultSelectedKey={soilTypeKey as Key}
+                variant="faded"
+                color="primary"
+                className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60`}
+                allowsCustomValue={true}
+                onSelectionChange={onSelectionSoilTypeChange}
+                onInputChange={onInputSoilTypeChange}
+              >
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+            </div>
+
             <div className="w-full max-w-[12rem] flex flex-col gap-2">
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
                 placeholder="Sort By"
                 defaultItems={sortOptions}
-                defaultSelectedKey="id"
+                defaultSelectedKey={sortKey as Key}
                 variant="faded"
                 color="primary"
                 className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
@@ -559,7 +675,11 @@ export default function PhysicalTables({
               </Autocomplete>
             </div>
 
-            <div className="w-full max-w-[12rem] flex flex-col gap-2">
+            <div
+              className={`w-full max-w-[12rem] flex flex-col gap-2 ${
+                soilTypeKey !== "physical" ? "hidden" : ""
+              }`}
+            >
               <Autocomplete
                 radius="full"
                 labelPlacement="outside"
@@ -584,7 +704,7 @@ export default function PhysicalTables({
 
             <div
               className={`w-full max-w-[12rem] flex flex-col gap-2 ${
-                !periodeKey ? "hidden" : ""
+                soilTypeKey !== "physical" || !periodeKey ? "hidden" : ""
               }`}
             >
               <div
@@ -660,6 +780,7 @@ export default function PhysicalTables({
     landCoverOptions,
     onSelectionLandCoverChange,
     onInputLandCoverChange,
+    soilTypeKey,
   ]);
 
   const bottomContent = useMemo(() => {

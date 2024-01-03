@@ -10,28 +10,22 @@ import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import Footer from "@/components/footer";
 import { SearchIcon } from "@/components/icons";
 import { Navbar } from "@/components/navbar";
-import PhysicalTables from "@/components/tables/soil-tables/physical-tables";
-import { Autocomplete, AutocompleteItem, Button, Tab, Tabs } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdPlace } from "react-icons/md";
 import { sortByArr, splitStringTobeArray } from "@/utils/useFunction";
+import SoilTables from "@/components/tables/soil-tables";
 
-export default function Chamber1Page(props: any) {
+export default function TablePage(props: any) {
   // data-location
   const locationApi = useLocationApi();
 
-  const [selected, setSelected] = useState("ghg");
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string | any>("");
   let router = useRouter();
   const pathname = usePathname();
-
-  const handleChange = (key: Key) => {
-    setSelected(key as any);
-    setPage(1);
-  };
 
   const [location, setLocation] = useState<string>("");
   const [locationKey, setLocationKey] = useState<React.Key | null>("");
@@ -68,7 +62,10 @@ export default function Chamber1Page(props: any) {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
-  const filterByUniqueKey = (arr: SelectTypes[], key: keyof SelectTypes): SelectTypes[] => {
+  const filterByUniqueKey = (
+    arr: SelectTypes[],
+    key: keyof SelectTypes
+  ): SelectTypes[] => {
     const uniqueValues = new Set<any>();
     return arr.filter((obj) => {
       const value = obj[key];
@@ -211,28 +208,8 @@ export default function Chamber1Page(props: any) {
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 mt-3">
-            <Tabs
-              variant="underlined"
-              selectedKey={pathname}
-              aria-label="Tabs"
-              color="primary"
-            >
-              {siteConfig.navTabSoils.map((item, id) => {
-                return (
-                  <Tab
-                    key={item.href}
-                    id={item.href}
-                    href={item.href}
-                    title={item.label}
-                  />
-                );
-              })}
-            </Tabs>
-          </div>
-
           <div className={`w-full mt-5 p-4`}>
-            <PhysicalTables
+            <SoilTables
               params={props?.searchParams}
               page={page}
               setPage={setPage}

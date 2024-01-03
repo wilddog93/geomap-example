@@ -37,7 +37,7 @@ export const siteConfig = {
     {
       label: "Soil Physical Chemistry",
       path: "soils",
-      href: "/table/soils/physical?page=1&limit=10",
+      href: "/table/soils?page=1&limit=10",
     },
     {
       label: "Weather Data",
@@ -65,28 +65,6 @@ export const siteConfig = {
       label: "Trees",
       path: "trees",
       href: "/table/carbon-stocks/trees",
-    },
-  ],
-  navTabSoils: [
-    {
-      label: "Physical",
-      path: "physical",
-      href: "/table/soils/physical",
-    },
-    {
-      label: "Chamber 1",
-      path: "chamber-1",
-      href: "/table/soils/chamber-1",
-    },
-    {
-      label: "Chamber 2",
-      path: "chamber-2",
-      href: "/table/soils/chamber-2",
-    },
-    {
-      label: "Chamber 3",
-      path: "chamber-3",
-      href: "/table/soils/chamber-3",
     },
   ],
   links: {
