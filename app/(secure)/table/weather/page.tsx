@@ -17,29 +17,6 @@ import { Fragment, Key, useEffect, useMemo, useState } from "react";
 import { MdPlace } from "react-icons/md";
 import { sortByArr, splitStringTobeArray } from "@/utils/useFunction";
 
-const itemTabs = [
-  {
-    id: "ghg",
-    label: "GHG Flux",
-    value: "ghg-flux",
-  },
-  {
-    id: "carbon",
-    label: "Carbon Stock",
-    value: "carbon-stock",
-  },
-  {
-    id: "weather",
-    label: "Weather Data",
-    value: "weather-data",
-  },
-  {
-    id: "soil",
-    label: "Soil Physical Chemistry",
-    value: "soil-physical-chemistry",
-  },
-];
-
 export default function TablePage(props: any) {
   // data-location
   const locationApi = useLocationApi();
