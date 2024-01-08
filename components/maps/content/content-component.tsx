@@ -46,7 +46,6 @@ import {
   useCarbonLittersStatisticsApi,
   useCarbonSoilsStatisticsApi,
   useCarbonTreesStatisticsApi,
-  useCarbonWoodyStatisticsMonthlyApi,
   useCarbonWoodyStatisticsYearlyApi,
 } from "@/api/carbon-stocks.api";
 import CarbonStockCharts from "@/components/chart/CarbonStockChart/CarbonStockCharts";
@@ -57,6 +56,8 @@ import DatePicker from "react-datepicker";
 import SoilChemChar1 from "@/components/chart/SoilChemCharts/SoilChemChart1";
 import SoilChemChar2 from "@/components/chart/SoilChemCharts/SoilChemChart2";
 import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
+import useAxios from "@/hooks/use-axios";
+import { AxiosRequestConfig } from "axios";
 // import { DataChartBoxPlot } from "@/components/chart/data-boxplot";
 
 type Props = {
@@ -127,6 +128,8 @@ function ContentComponent({
   onInputLandCoverChange,
   onSelectionLandCoverChange,
 }: Props) {
+  // axios
+  const axios = useAxios();
   // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
@@ -145,11 +148,12 @@ function ContentComponent({
   // desc
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [isEditDesc, setIsEditDesc] = useState<boolean>(false);
+  const [isLoadingDesc, setIsLoadingDesc] = useState(false);
+  const [errorDesc, setErrorDesc] = useState<string>("");
 
   useEffect(() => {
-    if(data?.description)
-    setDescriptionValue(data?.description)
-  }, [data])
+    if (data?.description) setDescriptionValue(data?.description);
+  }, [data]);
 
   const onEdit = () => setIsEditDesc(!isEditDesc);
 
@@ -554,7 +558,10 @@ function ContentComponent({
         totalHeterothropicCo2 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2)) /
           GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2).length;
-      } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Range by date") {
+      } else if (
+        GHGFluxMonthly.data.length > 0 &&
+        periodeKey == "Range by date"
+      ) {
         totalAirTemperature =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_airTemperature)) /
           GHGFluxMonthly.data?.map((e) => e.avg_airTemperature).length;
@@ -815,7 +822,10 @@ function ContentComponent({
           redox.labels.push(date);
           redox.datasets[0].data.push(item.avg_redox);
         });
-      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Range by date") {
+      } else if (
+        SoilsMonthly.data.length > 0 &&
+        periodeKey == "Range by date"
+      ) {
         SoilsMonthly.data.map((item, i) => {
           let date = format(new Date(item.datetime), "yyyy-MM-dd", {
             locale: id,
@@ -942,7 +952,10 @@ function ContentComponent({
         totalN =
           getSums(SoilsYearly.data.map((item) => item.avg_n)) /
           SoilsYearly.data.map((item) => item.avg_n).length;
-      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Range by date") {
+      } else if (
+        SoilsMonthly.data.length > 0 &&
+        periodeKey == "Range by date"
+      ) {
         totalBulkDensity =
           getSums(SoilsMonthly.data.map((item) => item.avg_bulkDensity)) /
           SoilsMonthly.data.map((item) => item.avg_bulkDensity).length;
@@ -1196,7 +1209,10 @@ function ContentComponent({
         rain.datasets[0].data.push(item.avg_rain);
         rain.datasets[0].label = item.location;
       });
-    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Range by date") {
+    } else if (
+      WeatherMonthly.data.length > 0 &&
+      periodeKey == "Range by date"
+    ) {
       WeatherMonthly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "dd MMM yy", {
           locale: id,
@@ -1333,7 +1349,10 @@ function ContentComponent({
         getSums(WeatherYearly.data.map((item) => item.avg_windDirection)) /
         WeatherYearly.data.length;
       totalRain = getSums(WeatherYearly.data.map((item) => item.sum_rain));
-    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Range by date") {
+    } else if (
+      WeatherMonthly.data.length > 0 &&
+      periodeKey == "Range by date"
+    ) {
       totalTemperature =
         getSums(WeatherMonthly.data.map((item) => item.avg_temperature)) /
         WeatherMonthly.data.length;
@@ -1515,7 +1534,33 @@ function ContentComponent({
     TreesChartApi.data,
   ]);
 
-  const onEditDec = (value: any) => {};
+  const onEditDec = async (
+    id?: any,
+    body?: any,
+    options?: AxiosRequestConfig
+  ) => {
+    if (!id) return;
+    const PREFIX_LOCATION = `/locations/${id}`;
+    try {
+      setIsLoadingDesc(true);
+      const { data: lists, ...result } = await axios.$put(
+        PREFIX_LOCATION,
+        body,
+        options
+      );
+      // setData(lists);
+      // setMeta(result);
+      // toast.info("NCS Location Document has been imported!");
+      setDescriptionValue(lists?.description)
+      setIsEditDesc(false)
+    } catch (err: any) {
+      setErrorDesc(err?.response?.data?.message);
+      console.log(err, "result-data-dec-error");
+      // toast.error(err?.response?.data?.message);
+    } finally {
+      setIsLoadingDesc(false);
+    }
+  };
 
   return (
     <Fragment>
@@ -1529,13 +1574,16 @@ function ContentComponent({
             <div className="w-full flex flex-col gap-3">
               <h3 className="font-bold text-xl">{data?.location || ""}</h3>
               <div className="w-full flex gap-2">
-                <p className={`${!isEditDesc ? "" : "hidden "}text-sm`}>{data?.description || "-"}</p>
+                <p className={`${!isEditDesc ? "" : "hidden "}text-sm`}>
+                  {data?.description || "-"}
+                </p>
                 <Textarea
                   label="Description"
                   placeholder="Enter your description"
                   className={`${isEditDesc ? "" : "hidden"}`}
                   value={descriptionValue || ""}
                   onChange={(event) => setDescriptionValue(event.target.value)}
+                  errorMessage={errorDesc}
                 />
                 <div className={!descriptionValue ? "hidden" : ""}>
                   <Button
@@ -1545,12 +1593,22 @@ function ContentComponent({
                     aria-label="Edit Description"
                     className=""
                     size="sm"
-                    onPress={onEdit}
+                    onPress={
+                      !isEditDesc
+                        ? onEdit
+                        : () =>
+                            onEditDec(data?.id, {
+                              description: descriptionValue,
+                            })
+                    }
+                    isLoading={isLoadingDesc}
                   >
-                    {isEditDesc ? 
-                    <MdDone className="w-4 h-4" /> :
-                    <MdEdit className="w-4 h-4" />
-                  }
+                    {isEditDesc && !isLoadingDesc ? (
+                      <MdDone className="w-4 h-4" />
+                    ) : (
+                      <MdEdit className="w-4 h-4" />
+                    )}
+                    {isLoadingDesc && "loading..."}
                   </Button>
                 </div>
               </div>
@@ -1714,28 +1772,21 @@ function ContentComponent({
               !sidebar ? "lg:border-y-2 lg:border-default-300" : ""
             }`}
           >
-            {
-              categoryKey == "GHG Fluxes & other variables" && landCoverKey ? (
-                <HeaderGHGFlux
-                  items={getSumChartDataGHGFlux}
-                  sidebar={sidebar}
-                />
-              ) : categoryKey == "Soil psychochemical properties" &&
-                landCoverKey &&
-                soilTypeKey ? (
-                <HeaderSoils items={getSumChartDataSoils} sidebar={sidebar} />
-              ) : categoryKey == "Weather data (AWS)" ? (
-                <HeaderWeather
-                  items={getSumChartDataWeather}
-                  sidebar={sidebar}
-                />
-              ) : categoryKey == "Carbon Stock" ? (
-                <HeaderCarbon items={getSumChartDataCarbon} sidebar={sidebar} />
-              ) :
+            {categoryKey == "GHG Fluxes & other variables" && landCoverKey ? (
+              <HeaderGHGFlux items={getSumChartDataGHGFlux} sidebar={sidebar} />
+            ) : categoryKey == "Soil psychochemical properties" &&
+              landCoverKey &&
+              soilTypeKey ? (
+              <HeaderSoils items={getSumChartDataSoils} sidebar={sidebar} />
+            ) : categoryKey == "Weather data (AWS)" ? (
+              <HeaderWeather items={getSumChartDataWeather} sidebar={sidebar} />
+            ) : categoryKey == "Carbon Stock" ? (
+              <HeaderCarbon items={getSumChartDataCarbon} sidebar={sidebar} />
+            ) : (
               <div className="w-full h-[250px] flex items-center justify-center mx-auto">
                 <p className="text-sm">Please choose any land cover</p>
               </div>
-            }
+            )}
           </div>
 
           {categoryKey == "GHG Fluxes & other variables" && landCoverKey ? (
@@ -1763,12 +1814,11 @@ function ContentComponent({
               chartData={getChartDataSoilsChem}
               sidebar={sidebar as boolean}
             />
-          )  
-          : categoryKey == "Soil psychochemical properties" &&
+          ) : categoryKey == "Soil psychochemical properties" &&
             landCoverKey &&
             soilTypeKey == "chemChar2" ? (
             <SoilChemChar2
-              chartData={getChartDataSoilsChem }
+              chartData={getChartDataSoilsChem}
               sidebar={sidebar as boolean}
             />
           ) : categoryKey == "Soil psychochemical properties" &&
@@ -1778,8 +1828,7 @@ function ContentComponent({
               chartData={getChartDataSoilsChem}
               sidebar={sidebar as boolean}
             />
-          ) 
-          : categoryKey == "Weather data (AWS)" ? (
+          ) : categoryKey == "Weather data (AWS)" ? (
             <WeatherCharts
               chartData={getChartDataWeather}
               sidebar={sidebar as boolean}
@@ -1795,8 +1844,7 @@ function ContentComponent({
               categoryKey={categoryKey}
               locationKey={locationKey}
             />
-          ) : 
-          null}
+          ) : null}
 
           {/* <BoxPlotCharts data={DataChartBoxPlot} />  */}
         </ScrollShadow>
