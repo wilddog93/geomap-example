@@ -76,7 +76,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}pH</span>
+              <span className="text-sm">{" "}-</span>
           </p>
         </div>
 

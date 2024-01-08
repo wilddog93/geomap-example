@@ -102,7 +102,7 @@ const PHCharts: FC<PHChartProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} pH`;
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} (-)`;
           },
         },
       },
@@ -113,7 +113,7 @@ const PHCharts: FC<PHChartProps> = ({ data }) => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'pH',
+          text: '(-)',
         },
       },
     },
