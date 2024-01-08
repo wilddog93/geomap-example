@@ -76,7 +76,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const periodeOptions: SelectTypes[] = [
   { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Monthly" },
+  { label: "Range by date", value: "Range by date" },
 ];
 
 const sortOptions: SelectTypes[] = [
@@ -301,7 +301,7 @@ export default function WoodyTables({
   const periodeFilterred = useMemo(() => {
     let start: string | null | any = "";
     let end: string | null | any = "";
-    if (periodeKey == "Monthly") {
+    if (periodeKey == "Range by date") {
       start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
       end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
     } else if (periodeKey == "Yearly") {

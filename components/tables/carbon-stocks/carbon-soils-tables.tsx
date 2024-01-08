@@ -58,7 +58,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const periodeOptions: SelectTypes[] = [
   { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Monthly" },
+  { label: "Range by date", value: "Range by date" },
 ];
 
 const sortOptions: SelectTypes[] = [

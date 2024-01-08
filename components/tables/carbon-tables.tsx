@@ -75,7 +75,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const periodeOptions: SelectTypes[] = [
   { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Monthly" },
+  { label: "Range by date", value: "Range by date" },
 ];
 
 const sortOptions: SelectTypes[] = [
@@ -208,7 +208,7 @@ export default function CarbonTables({
     const today = new Date();
     let start: string | null | any = "";
     let end: string | null | any = "";
-    if (periodeKey == "Monthly") {
+    if (periodeKey == "Range by date") {
       start = format(startOfMonth(currentDate), "yyyy-MM-dd");
       end = format(endOfMonth(currentDate), "yyyy-MM-dd");
     } else {
