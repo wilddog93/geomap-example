@@ -118,13 +118,14 @@ const CSoilCharts: FC<CSoilChartsProps> = ({ data }) => {
         }
       },
     },
-    barThickness: 80,
+    barThickness: 60,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(%) percent',
+        },
       },
     },
   };

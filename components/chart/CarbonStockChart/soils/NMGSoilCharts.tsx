@@ -113,18 +113,19 @@ const NMGSoilCharts: FC<NMGSoilChartsProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/Ha`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} Mg/ha`
           }
         }
       },
     },
-    barThickness: 80,
+    barThickness: 60,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Mg/ha',
+        },
       },
     },
   };

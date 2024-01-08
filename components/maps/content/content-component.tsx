@@ -57,7 +57,6 @@ import DatePicker from "react-datepicker";
 import SoilChemChar1 from "@/components/chart/SoilChemCharts/SoilChemChart1";
 import SoilChemChar2 from "@/components/chart/SoilChemCharts/SoilChemChart2";
 import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
-import BoxPlotCharts from "@/components/chart/BoxPlotCharts";
 // import { DataChartBoxPlot } from "@/components/chart/data-boxplot";
 
 type Props = {
