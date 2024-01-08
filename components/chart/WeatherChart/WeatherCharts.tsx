@@ -76,9 +76,18 @@ export default function WeatherCharts({
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ˚C`
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ˚c`
           }
         }
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(˚c) celcius',
+        },
       },
     },
   };
@@ -118,6 +127,15 @@ export default function WeatherCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(%) percent',
+        },
+      },
+    },
   };
 
   const optionsRadiation = {
@@ -155,6 +173,15 @@ export default function WeatherCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'W/m²',
+        },
+      },
+    },
   };
 
   const optionsSpeed = {
@@ -190,6 +217,15 @@ export default function WeatherCharts({
             return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} mph`
           }
         }
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'mph',
+        },
       },
     },
   };
@@ -266,6 +302,15 @@ export default function WeatherCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'mm',
+        },
+      },
+    },
   };
 
   return (
@@ -295,7 +340,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsTemperature}
@@ -316,7 +361,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsPercent}
@@ -337,7 +382,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsRadiation}
@@ -358,7 +403,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsSpeed}
@@ -379,7 +424,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsSpeed}
@@ -400,7 +445,7 @@ export default function WeatherCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <BarCharts
                 height="300"
                 options={optionsRain}
@@ -418,7 +463,7 @@ export default function WeatherCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Temperature</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Temperature</h3>
             <AreaCharts
               height="300"
               options={optionsTemperature}
@@ -427,7 +472,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Relative Humidity</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Relative Humidity</h3>
             <AreaCharts
               height="300"
               options={optionsPercent}
@@ -436,7 +481,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Solar Radiation</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Solar Radiation</h3>
             <AreaCharts
               height="300"
               options={optionsRadiation}
@@ -445,7 +490,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Wind Speed</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Wind Speed</h3>
             <AreaCharts
               height="300"
               options={optionsSpeed}
@@ -454,7 +499,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Gust Speed</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Gust Speed</h3>
             <AreaCharts
               height="300"
               options={optionsSpeed}
@@ -463,7 +508,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Rainfall</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Rainfall</h3>
             <BarCharts height="300" options={optionsRain} data={chartData.rain} />
           </div>
         </div>
