@@ -109,11 +109,12 @@ const RedoxCharts: FC<RedoxChartProps> = ({ data }) => {
     },
     barThickness: 80,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(%) percent',
+        },
       },
     },
   };

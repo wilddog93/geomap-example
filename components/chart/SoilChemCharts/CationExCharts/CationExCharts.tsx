@@ -54,7 +54,7 @@ const CationExCharts: FC<CationExChartProps> = ({ data }) => {
             const key = `${location}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_p205,
+                (sum: any, item: any) => sum + item.avg_ktk,
                 0
               ) || 0
             );
@@ -102,18 +102,19 @@ const CationExCharts: FC<CationExChartProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`;
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} cmol(+) kg⁻¹`;
           },
         },
       },
     },
     barThickness: 80,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'cmol(+) kg⁻¹',
+        },
       },
     },
   };

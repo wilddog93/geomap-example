@@ -78,6 +78,15 @@ export default function SoilsCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(%) percent',
+        },
+      },
+    }
   };
 
   const optionsBD = {
@@ -115,6 +124,15 @@ export default function SoilsCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'g/cm³',
+        },
+      },
+    }
   };
 
   return (
@@ -144,7 +162,7 @@ export default function SoilsCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsBD}
@@ -165,7 +183,7 @@ export default function SoilsCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={options}
@@ -186,7 +204,7 @@ export default function SoilsCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={options}

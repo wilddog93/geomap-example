@@ -102,18 +102,19 @@ const KaliumCharts: FC<KaliumChartProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`;
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} cmol(+) kg⁻¹`;
           },
         },
       },
     },
     barThickness: 80,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'cmol(+) kg⁻¹',
+        },
       },
     },
   };

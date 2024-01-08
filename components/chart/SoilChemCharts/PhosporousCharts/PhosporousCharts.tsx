@@ -54,7 +54,7 @@ const PhosporousCharts: FC<PhosporousChartProps> = ({ data }) => {
             const key = `${location}-${landCover}`;
             return (
               groupedData[key]?.reduce(
-                (sum: any, item: any) => sum + item.avg_p205,
+                (sum: any, item: any) => sum + item.avg_p2O5,
                 0
               ) || 0
             );
@@ -102,18 +102,19 @@ const PhosporousCharts: FC<PhosporousChartProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`;
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} ppm`;
           },
         },
       },
     },
     barThickness: 80,
     scales: {
-      x: {
-        stacked: true,
-      },
       y: {
-        stacked: true,
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'ppm',
+        },
       },
     },
   };

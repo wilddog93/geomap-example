@@ -17,9 +17,6 @@ type Props = {
 
 export default function SoilChemChar2({ chartData, sidebar }: Props) {
   // cchart
-
-  // carbon-stock
-
   return (
     <Fragment>
       <div className={`w-full mt-5 ${sidebar ? "" : "hidden"}`}>
@@ -31,36 +28,6 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
           <div className="border-1 border-b border-default-300 w-full"></div>
         </div>
         <Accordion>
-          <AccordionItem
-            key={`chem-1`}
-            aria-label={`chem-1`}
-            title={
-              <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>PH</p>
-              </div>
-            }
-            aria-selected="true"
-          >
-            <div className="w-full flex flex-col relative">
-              <PHCharts data={chartData} />
-            </div>
-          </AccordionItem>
-
-          <AccordionItem
-            key={`chem-2`}
-            aria-label={`chem-2`}
-            title={
-              <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Redox Potential</p>
-              </div>
-            }
-            aria-selected="true"
-          >
-            <div className="w-full flex flex-col relative">
-              <RedoxCharts data={chartData} />
-            </div>
-          </AccordionItem>
-
           <AccordionItem
             key={`chem-3`}
             aria-label={`chem-3`}
@@ -105,21 +72,6 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
               <PhosporousCharts data={chartData} />
             </div>
           </AccordionItem>
-
-          <AccordionItem
-            key={`chem-6`}
-            aria-label={`chem-6`}
-            title={
-              <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Carbon Content</p>
-              </div>
-            }
-            aria-selected="true"
-          >
-            <div className="w-full flex flex-col relative">
-              <CarbonCharts data={chartData} />
-            </div>
-          </AccordionItem>
         </Accordion>
       </div>
 
@@ -137,18 +89,6 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
         <div
           className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5`}
         >
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">PH</h3>
-            <PHCharts data={chartData} />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Redox Potential
-            </h3>
-            <RedoxCharts data={chartData} />
-          </div>
-
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Kalium Content
@@ -168,13 +108,6 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
               Phosporous Pentoxide Content
             </h3>
             <PhosporousCharts data={chartData} />
-          </div>
-
-          <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Carbon Content
-            </h3>
-            <CarbonCharts data={chartData} />
           </div>
         </div>
       </div>

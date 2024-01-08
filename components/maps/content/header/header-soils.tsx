@@ -22,7 +22,9 @@ interface SoilsProps {
 export type MyUnionType = (callbackfn: (previousValue: any, currentValue: any) => any) => any;
 
 
+
 export default function HeaderSoils({ items, sidebar }: SoilsProps) {
+  console.log(formatMoney({ amount: items.totalK }), "result-2")
   return (
     <Fragment>
       <div className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 lg:grid-cols-3`}>
@@ -74,7 +76,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "}pH</span>
           </p>
         </div>
 
@@ -94,26 +96,26 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Kalium Content</p>
           <p className="font-bold text-lg">
-            {items?.totalRedox
+            {items?.totalK
               ? formatMoney({
                   amount: items?.totalK,
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "} Mg/ha</span>
+              <span className="text-sm">{" "} cmol(+) kg<sup>-1</sup></span>
           </p>
         </div>
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Cation Exchange Capacity</p>
           <p className="font-bold text-lg">
-            {items?.totalRedox
+            {items?.totalKtk
               ? formatMoney({
                   amount: items?.totalKtk,
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "}cmol(+) kg<sup>-1</sup></span>
           </p>
         </div>
 
@@ -122,18 +124,18 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
           <p className="font-bold text-lg">
             {items?.totalP205
               ? formatMoney({
-                  amount: items?.totalRedox,
+                  amount: items?.totalP205,
                   decimalCount: 2,
                 })
               : 0}
-              <span className="text-sm">{" "}%</span>
+              <span className="text-sm">{" "}ppm</span>
           </p>
         </div>
 
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Carbon Content</p>
           <p className="font-bold text-lg">
-            {items?.totalRedox
+            {items?.totalCarbon
               ? formatMoney({
                   amount: items?.totalCarbon,
                   decimalCount: 2,
@@ -146,7 +148,7 @@ export default function HeaderSoils({ items, sidebar }: SoilsProps) {
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Nitrogen Content</p>
           <p className="font-bold text-lg">
-            {items?.totalRedox
+            {items?.totalN
               ? formatMoney({
                   amount: items?.totalN,
                   decimalCount: 2,

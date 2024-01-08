@@ -25,6 +25,7 @@ import {
   useGHGFluxStatisticsYearlyApi,
 } from "@/api/ghg-flux.api";
 import {
+  useSoilsBoxPlotApi,
   useSoilsStatisticsMonthlyApi,
   useSoilsStatisticsYearlyApi,
 } from "@/api/soils.api";
@@ -53,11 +54,11 @@ import HeaderCarbon from "./header/header-carbon";
 
 // date-piceker
 import DatePicker from "react-datepicker";
-import { toast } from "react-toastify";
 import SoilChemChar1 from "@/components/chart/SoilChemCharts/SoilChemChart1";
 import SoilChemChar2 from "@/components/chart/SoilChemCharts/SoilChemChart2";
 import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
-import { valueOrDefault } from "chart.js/dist/helpers/helpers.core";
+import BoxPlotCharts from "@/components/chart/BoxPlotCharts";
+// import { DataChartBoxPlot } from "@/components/chart/data-boxplot";
 
 type Props = {
   sidebar?: boolean;
@@ -132,6 +133,7 @@ function ContentComponent({
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
   const SoilsYearly = useSoilsStatisticsYearlyApi();
   const SoilsMonthly = useSoilsStatisticsMonthlyApi();
+  const SoilsBoxPlot = useSoilsBoxPlotApi();
   const WeatherYearly = useWeatherStatisticsYearlyApi();
   const WeatherMonthly = useWeatherStatisticsMonthlyApi();
 
@@ -672,10 +674,6 @@ function ContentComponent({
       search?.$and?.push({ landCover: { $eq: getQuery.landCover } });
 
     qb.search(search);
-    qb.sortBy({
-      field: `date`,
-      order: "ASC",
-    });
     qb.query();
     return qb;
   }, [getQuery, categoryKey, soilTypeKey]);
@@ -687,6 +685,7 @@ function ContentComponent({
 
   const getSoilsChartChem = async (params: any) => {
     await SoilsYearly.fetch({ params: params });
+    // await SoilsBoxPlot.fetch({ params: params });
   };
 
   useEffect(() => {
@@ -1765,11 +1764,12 @@ function ContentComponent({
               chartData={getChartDataSoilsChem}
               sidebar={sidebar as boolean}
             />
-          ) : categoryKey == "Soil psychochemical properties" &&
+          )  
+          : categoryKey == "Soil psychochemical properties" &&
             landCoverKey &&
             soilTypeKey == "chemChar2" ? (
             <SoilChemChar2
-              chartData={getChartDataSoilsChem}
+              chartData={getChartDataSoilsChem }
               sidebar={sidebar as boolean}
             />
           ) : categoryKey == "Soil psychochemical properties" &&
@@ -1779,7 +1779,8 @@ function ContentComponent({
               chartData={getChartDataSoilsChem}
               sidebar={sidebar as boolean}
             />
-          ) : categoryKey == "Weather data (AWS)" ? (
+          ) 
+          : categoryKey == "Weather data (AWS)" ? (
             <WeatherCharts
               chartData={getChartDataWeather}
               sidebar={sidebar as boolean}
@@ -1795,8 +1796,10 @@ function ContentComponent({
               categoryKey={categoryKey}
               locationKey={locationKey}
             />
-          ) : // <BoxPlotCharts />
+          ) : 
           null}
+
+          {/* <BoxPlotCharts data={DataChartBoxPlot} />  */}
         </ScrollShadow>
       </div>
     </Fragment>

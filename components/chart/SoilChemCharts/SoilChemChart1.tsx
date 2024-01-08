@@ -2,19 +2,29 @@ import { SelectTypes } from "@/utils/propTypes";
 import { Accordion, AccordionItem, Tab, Tabs } from "@nextui-org/react";
 import React, { Fragment, Key, useEffect, useMemo } from "react";
 import { MdInfo } from "react-icons/md";
-import { SoilsStatisticsProp } from "@/api/soils.api";
+import { SoilsStatBoxPlotProps, SoilsStatisticsProp } from "@/api/soils.api";
 import PHCharts from "./PHCharts/PHCharts";
 import RedoxCharts from "./RedoxCharts/RedoxCharts";
+import PHChartBoxPlot from "./PHCharts/PHChartBoxPlot";
+
+type PropsChart = {
+  min_pH: number;
+  max_pH: number,
+  std_pH: number,
+  q1_pH: number,
+  q2_pH: number,
+  q3_pH: number,
+  avg_pH: number;
+  site: string;
+}
 
 type Props = {
   chartData: SoilsStatisticsProp[];
   sidebar: boolean;
+  landCoverKey?: Key | string
 };
 
-export default function SoilChemChar1({ chartData, sidebar }: Props) {
-  // cchart
-
-  // carbon-stock
+export default function SoilChemChar1({ chartData, sidebar,landCoverKey }: Props) {
 
   return (
     <Fragment>
@@ -82,7 +92,6 @@ export default function SoilChemChar1({ chartData, sidebar }: Props) {
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
               Redox Potential
             </h3>
-            <RedoxCharts data={chartData} />
           </div>
         </div>
       </div>

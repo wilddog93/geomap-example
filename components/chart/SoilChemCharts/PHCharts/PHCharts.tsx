@@ -102,18 +102,19 @@ const PHCharts: FC<PHChartProps> = ({ data }) => {
         },
         callbacks: {
           label: function (item: any) {
-            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} %`;
+            return `${item?.dataset?.label} : ${item?.raw?.toFixed(2)} pH`;
           },
         },
       },
     },
     barThickness: 80,
     scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
+       y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'pH',
+        },
       },
     },
   };
