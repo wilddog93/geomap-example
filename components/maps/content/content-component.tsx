@@ -110,7 +110,7 @@ const soilTypeOptions: SelectTypes[] = [
 
 const periodeOptions = [
   { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Monthly" },
+  { label: "Range by date", value: "Range by date" },
 ];
 
 function ContentComponent({
@@ -179,7 +179,7 @@ function ContentComponent({
   const periodeFilterred = useMemo(() => {
     let start: string | null | any = "";
     let end: string | null | any = "";
-    if (periodeKey == "Monthly") {
+    if (periodeKey == "Range by date") {
       start = startDate ? format(new Date(startDate), "yyyy-MM-dd") : "";
       end = endDate ? format(new Date(endDate), "yyyy-MM-dd") : "";
     } else if (periodeKey == "Yearly") {
@@ -417,7 +417,7 @@ function ContentComponent({
       });
     } else if (
       GHGFluxMonthly.data.length > 0 &&
-      periodeKey == "Monthly" &&
+      periodeKey == "Range by date" &&
       landCoverKey
     ) {
       GHGFluxMonthly.data.map((item, i) => {
@@ -554,7 +554,7 @@ function ContentComponent({
         totalHeterothropicCo2 =
           getSums(GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2)) /
           GHGFluxYearly.data?.map((e) => e.avg_heterothropic_co2).length;
-      } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Monthly") {
+      } else if (GHGFluxMonthly.data.length > 0 && periodeKey == "Range by date") {
         totalAirTemperature =
           getSums(GHGFluxMonthly.data?.map((e) => e.avg_airTemperature)) /
           GHGFluxMonthly.data?.map((e) => e.avg_airTemperature).length;
@@ -815,7 +815,7 @@ function ContentComponent({
           redox.labels.push(date);
           redox.datasets[0].data.push(item.avg_redox);
         });
-      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
+      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Range by date") {
         SoilsMonthly.data.map((item, i) => {
           let date = format(new Date(item.datetime), "yyyy-MM-dd", {
             locale: id,
@@ -942,7 +942,7 @@ function ContentComponent({
         totalN =
           getSums(SoilsYearly.data.map((item) => item.avg_n)) /
           SoilsYearly.data.map((item) => item.avg_n).length;
-      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Monthly") {
+      } else if (SoilsMonthly.data.length > 0 && periodeKey == "Range by date") {
         totalBulkDensity =
           getSums(SoilsMonthly.data.map((item) => item.avg_bulkDensity)) /
           SoilsMonthly.data.map((item) => item.avg_bulkDensity).length;
@@ -1196,7 +1196,7 @@ function ContentComponent({
         rain.datasets[0].data.push(item.avg_rain);
         rain.datasets[0].label = item.location;
       });
-    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
+    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Range by date") {
       WeatherMonthly.data.map((item, i) => {
         let date = format(new Date(item.datetime), "dd MMM yy", {
           locale: id,
@@ -1333,7 +1333,7 @@ function ContentComponent({
         getSums(WeatherYearly.data.map((item) => item.avg_windDirection)) /
         WeatherYearly.data.length;
       totalRain = getSums(WeatherYearly.data.map((item) => item.sum_rain));
-    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Monthly") {
+    } else if (WeatherMonthly.data.length > 0 && periodeKey == "Range by date") {
       totalTemperature =
         getSums(WeatherMonthly.data.map((item) => item.avg_temperature)) /
         WeatherMonthly.data.length;
@@ -1671,7 +1671,7 @@ function ContentComponent({
 
                   <div
                     className={`w-full ${
-                      periodeKey !== "Monthly" ? "hidden" : ""
+                      periodeKey !== "Range by date" ? "hidden" : ""
                     }`}
                   >
                     <label className="w-full text-gray-5 overflow-hidden">
