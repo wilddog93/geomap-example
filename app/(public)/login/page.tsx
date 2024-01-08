@@ -170,6 +170,7 @@ export default function LoginPage() {
                       e.preventDefault()
                       login({ password })
                     }}
+                    isLoading={loading}
                   >
                     {loading ? "Loading..." : "Login"}
                     <div className="absolute p-2 bg-white rounded-full shadow-sm z-10 duration-300 group-hover:translate-x-full -right-2">
