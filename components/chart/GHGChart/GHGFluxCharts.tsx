@@ -481,7 +481,7 @@ export default function GHGFluxCharts({
           >
             <div className="w-full flex flex-col relative">
               <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
-              <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
+              <AreaCharts height="300" options={optionsCo2} data={chartData.heterothropicCo2} />
             </div>
           </AccordionItem>
         </Accordion>

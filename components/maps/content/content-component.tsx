@@ -484,6 +484,10 @@ function ContentComponent({
         co2.labels.push(date);
         co2.datasets[0].data.push(item.avg_co2);
         co2.datasets[0].label = item.land_cover;
+
+        heterothropicCo2.labels.push(date);
+        heterothropicCo2.datasets[0].data.push(item.avg_heterothropic_co2);
+        heterothropicCo2.datasets[0].label = item.land_cover;
       });
     } else {
       airTemperature.labels = chartLabel;
