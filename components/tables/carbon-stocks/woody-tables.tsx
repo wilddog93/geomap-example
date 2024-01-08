@@ -748,6 +748,7 @@ export default function WoodyTables({
       classNames={{
         wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
+        thead: "-top-3"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

@@ -58,22 +58,12 @@ import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
-  subMonths,
-  subYears,
   format,
-  startOfMonth,
-  endOfMonth,
   startOfYear,
   endOfYear,
 } from "date-fns";
 
 import DatePicker from "react-datepicker";
-
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  banned: "danger",
-  inactive: "warning",
-};
 
 const periodeOptions: SelectTypes[] = [
   { label: "Yearly", value: "Yearly" },
@@ -835,6 +825,7 @@ export default function FluxTables({
       classNames={{
         wrapper: "max-h-[450px] border-0 shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
+        thead: "-top-3"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

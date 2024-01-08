@@ -57,14 +57,11 @@ import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, SelectTypes } from "@/utils/propTypes";
 import { RequestQueryBuilder } from "@nestjsx/crud-request";
 import {
-  subMonths,
-  subYears,
   format,
-  startOfMonth,
-  endOfMonth,
   startOfYear,
   endOfYear,
 } from "date-fns";
+import DatePicker from "react-datepicker";
 import { useWeatherApi, WeatherTypes } from "@/api/weather.api";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -559,28 +556,6 @@ export default function WeatherTables({
             className="w-full sm:max-w-[44%] rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
           />
           <div className="flex flex-col lg:flex-row gap-3">
-            {/* <div className="flex w-full max-w-[12rem] flex-col gap-2">
-              <Autocomplete
-                radius="full"
-                labelPlacement="outside"
-                placeholder="Select land cover"
-                defaultItems={landCoverOptions}
-                defaultSelectedKey="Secondary Forest"
-                variant="faded"
-                color="primary"
-                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
-                allowsCustomValue={true}
-                onSelectionChange={onSelectionLandCoverChange}
-                onInputChange={onInputLandCoverChange}
-              >
-                {(item) => (
-                  <AutocompleteItem key={item.value}>
-                    {item.label}
-                  </AutocompleteItem>
-                )}
-              </Autocomplete>
-            </div> */}
-
             <div className="w-full max-w-[12rem] flex flex-col gap-2">
               <Autocomplete
                 radius="full"
@@ -610,10 +585,10 @@ export default function WeatherTables({
                 labelPlacement="outside"
                 placeholder="Select periode"
                 defaultItems={periodeOptions}
-                defaultSelectedKey="Yearly"
+                defaultSelectedKey={periodeKey as Key}
                 variant="faded"
                 color="primary"
-                className="w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60"
+                className={`w-full max-w-xs rounded-full bg-white dark:bg-default/60 backdrop-blur-xl hover:bg-default-200/70 dark:hover:bg-default/70 group-data-[focused=true]:bg-default-200/50 dark:group-data-[focused=true]:bg-default/60`}
                 allowsCustomValue={true}
                 onSelectionChange={onSelectionPeriodeChange}
                 onInputChange={onInputPeriodeChange}
@@ -626,21 +601,80 @@ export default function WeatherTables({
                 )}
               </Autocomplete>
             </div>
+
+            <div
+              className={`w-full max-w-[12rem] flex flex-col gap-2 ${
+                !periodeKey ? "hidden" : ""
+              }`}
+            >
+              <div
+                className={`w-full ${periodeKey !== "Yearly" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selected={periodeDate}
+                    onChange={(date: any) => setPeriodeDate(date)}
+                    showYearPicker
+                    dateFormat="yyyy"
+                    yearItemNumber={6}
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                    isClearable
+                    className="z-20 text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none"
+                    popperClassName="z-30"
+                  />
+                </label>
+              </div>
+
+              <div
+                className={`w-full ${periodeKey !== "Range by date" ? "hidden" : ""}`}
+              >
+                <label className="w-full text-gray-5 overflow-hidden">
+                  <DatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(dates: any) => {
+                      setDateRange(dates);
+                    }}
+                    dateFormat="dd/MM-yy"
+                    monthsShown={2}
+                    placeholderText={"Select date"}
+                    // todayButton={"Today"}
+                    dropdownMode="select"
+                    peekNextMonth={true}
+                    dateFormatCalendar="MMM yyyy"
+                    showMonthDropdown
+                    showYearDropdown
+                    calendarClassName="-left-10"
+                    clearButtonClassName="p-1"
+                    className="text-sm w-full text-gray-5 rounded-full border-2 border-stroke bg-transparent py-3.5 pl-8 pr-6 outline-none focus:border-primary focus-visible:shadow-none "
+                    popperClassName="z-30"
+                    isClearable
+                    showIcon
+                    icon={
+                      (
+                        <MdCalendarToday className="h-3 w-3 text-gray-5 m-auto top-1" />
+                      ) as any
+                    }
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     );
   }, [
     filterValue,
-    statusFilter,
-    visibleColumns,
     onSearchChange,
-    onRowsPerPageChange,
-    hasSearchFilter,
-    landCoverFilter,
-    landCoverOptions,
-    onSelectionLandCoverChange,
-    onInputLandCoverChange,
+    onClear,
+    onInputSortChange,
+    onInputPeriodeChange,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -692,13 +726,13 @@ export default function WeatherTables({
       </div>
     );
   }, [
-    selectedKeys,
-    items.length,
     page,
     pages,
-    hasSearchFilter,
     onRowsPerPageChange,
     limit,
+    onNextPage,
+    onPreviousPage,
+    setPage,
   ]);
 
   const getSelect = useMemo(() => {
@@ -707,7 +741,7 @@ export default function WeatherTables({
     return items.filter((column) =>
       Array.from(selectedKeys).includes(column.id.toString())
     );
-  }, [selectedKeys]);
+  }, [selectedKeys, items]);
 
   return (
     <Table
@@ -720,6 +754,8 @@ export default function WeatherTables({
       bottomContentPlacement="outside"
       classNames={{
         wrapper: "max-h-[450px] shadow-none",
+        base: "overflow-x-auto overflow-y-hidden py-5",
+        thead: "-top-3"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
@@ -729,13 +765,13 @@ export default function WeatherTables({
       topContentPlacement="outside"
       onSortChange={setSortDescriptor}
     >
-      <TableHeader columns={headerColumns}>
+      <TableHeader className="" columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
             allowsSorting={column.sortable}
-            // className="bg-primary/20"
+            // className="bg-blue-200"
           >
             {column.name}
           </TableColumn>

@@ -77,17 +77,6 @@ const columns: ColumnProps[] = [
   { name: "SOURCE FOR ALLOMETRY", uid: "sourceForAllometry", sortable: true },
   { name: "PLOT", uid: "plot" },
   { name: "PLOT RADIUS", uid: "plotRadius" },
-  {
-    name: (
-      <div>
-        DIAMETER BREAST HEIGHT
-        <p>
-          (g/cm<sup>3</sup>)
-        </p>
-      </div>
-    ),
-    uid: "dbh",
-  },
   { name: "NOTES", uid: "notes" },
   {
     name: (
@@ -99,6 +88,17 @@ const columns: ColumnProps[] = [
       </div>
     ),
     uid: "woodDensity",
+  },
+  {
+    name: (
+      <div>
+        DIAMETER BREAST HEIGHT
+        <p>
+          (g/cm<sup>3</sup>)
+        </p>
+      </div>
+    ),
+    uid: "dbh",
   },
   {
     name: (
@@ -656,6 +656,7 @@ export default function TreesTables({
       classNames={{
         wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
+        thead: "-top-3"
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}

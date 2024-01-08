@@ -19,16 +19,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 
-import {
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/dropdown";
-
 import { Input } from "@nextui-org/input";
-
-import { ChipProps } from "@nextui-org/chip";
 
 import {
   Autocomplete,
@@ -42,12 +33,7 @@ import { Pagination } from "@nextui-org/pagination";
 
 import { Button } from "@nextui-org/button";
 
-import {
-  MdCalendarToday,
-  MdMoreVert,
-  MdOutlineSearch,
-  MdSort,
-} from "react-icons/md";
+import { MdCalendarToday, MdOutlineSearch, MdSort } from "react-icons/md";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { objectToQueryString } from "@/utils/useFunction";
 import { ColumnProps, GhgFluxTypes, SelectTypes } from "@/utils/propTypes";
@@ -112,7 +98,7 @@ const columns: ColumnProps[] = [
     name: (
       <div>
         PH
-        <p>(%)</p>
+        <p>(-)</p>
       </div>
     ),
     uid: "pH",
@@ -130,7 +116,7 @@ const columns: ColumnProps[] = [
     name: (
       <div>
         KALIUM CONTENT
-        <p>(Mg/ha)</p>
+        <p>(cmol(+) kg<sup>-1</sup>)</p>
       </div>
     ),
     uid: "k",
@@ -139,7 +125,7 @@ const columns: ColumnProps[] = [
     name: (
       <div>
         CATION EXCHANGE CAPACITY
-        <p>(%)</p>
+        <p>(cmol(+) kg<sup>-1</sup>)</p>
       </div>
     ),
     uid: "ktk",
@@ -148,7 +134,7 @@ const columns: ColumnProps[] = [
     name: (
       <div>
         PHOSPOROUS PENTOXIDE CONTENT
-        <p>(%)</p>
+        <p>(ppm)</p>
       </div>
     ),
     uid: "p205",
@@ -254,7 +240,9 @@ export default function SoilTables({
   });
 
   // dropdown
-  const [landCoverKey, setLandCoverKey] = useState<Key | null>("Secondary Forest");
+  const [landCoverKey, setLandCoverKey] = useState<Key | null>(
+    "Secondary Forest"
+  );
   const [landCoverFilter, setLandCoverFilter] = useState("");
   const [periodeKey, setPeriodeKey] = useState<Key | null>("");
   const [periodeFilter, setPeriodeFilter] = useState("");
@@ -403,8 +391,7 @@ export default function SoilTables({
         },
       ],
     };
-    if (soilTypeKey)
-      search?.$and?.push({ soilType: { $cont: soilTypeKey } });
+    if (soilTypeKey) search?.$and?.push({ soilType: { $cont: soilTypeKey } });
 
     if (soilTypeKey == "physical" && periodeKey && periodeFilterred.start)
       search?.$and?.push({
@@ -430,7 +417,14 @@ export default function SoilTables({
     }
     qb.query();
     return qb;
-  }, [getQuery, periodeFilterred, sortKey, periodeKey, soilTypeKey, landCoverKey]);
+  }, [
+    getQuery,
+    periodeFilterred,
+    sortKey,
+    periodeKey,
+    soilTypeKey,
+    landCoverKey,
+  ]);
 
   useEffect(() => {
     router.replace(
@@ -733,7 +727,9 @@ export default function SoilTables({
               </div>
 
               <div
-                className={`w-full ${periodeKey !== "Range by date" ? "hidden" : ""}`}
+                className={`w-full ${
+                  periodeKey !== "Range by date" ? "hidden" : ""
+                }`}
               >
                 <label className="w-full text-gray-5 overflow-hidden">
                   <DatePicker
@@ -863,6 +859,7 @@ export default function SoilTables({
       classNames={{
         wrapper: "max-h-[450px] shadow-none",
         base: "overflow-x-auto overflow-y-hidden py-5",
+        thead: "-top-3",
       }}
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
