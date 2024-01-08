@@ -33,13 +33,19 @@ import {
   MdCamera,
   MdDelete,
   MdDocumentScanner,
+  MdLogout,
   MdOutlineUpload,
   MdSettings,
   MdUpload,
 } from "react-icons/md";
 
 import { Logo } from "@/components/icons";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { User } from "@nextui-org/user";
 import {
   Dropdown,
@@ -108,9 +114,11 @@ export const Navbar = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const auth = useAuth();
   const axios = useAxios();
+  const logoutHandle = useDisclosure();
 
   const logout = async (options?: AxiosRequestConfig) => {
     let config = options;
+    let body = {};
     // cconfi
     setLoading(true);
     try {
@@ -166,7 +174,7 @@ export const Navbar = () => {
     let formData = new FormData();
     let imagefile = files;
     formData.append("file", imagefile[0]);
-    setLoadingImport(true)
+    setLoadingImport(true);
     try {
       switch (selected) {
         case "NCS Location":
@@ -229,10 +237,10 @@ export const Navbar = () => {
           break;
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setLoadingImport(false)
-      onCloseImport()
+      setLoadingImport(false);
+      onCloseImport();
     }
   };
 
@@ -261,9 +269,12 @@ export const Navbar = () => {
             "items-center",
             "data-[active=true]:after:content-['']",
             "data-[active=true]:after:absolute",
-            "data-[active=true]:after:-top-1",
-            "data-[active=true]:after:left-3",
-            "data-[active=true]:after:right-3",
+            "data-[active=true]:after:top-8",
+            "lg:data-[active=true]:after:-top-1",
+            "data-[active=true]:after:left-0",
+            "lg:data-[active=true]:after:left-3",
+            "data-[active=true]:after:right-0",
+            "lg:data-[active=true]:after:right-3",
             "data-[active=true]:after:h-[4px]",
             "data-[active=true]:after:rounded-[2px]",
             "data-[active=true]:after:bg-primary",
@@ -450,6 +461,58 @@ export const Navbar = () => {
               </DropdownMenu>
             </Dropdown>
           </div>
+
+          <Dropdown
+            showArrow
+            radius="sm"
+            classNames={{
+              base: "before:bg-default-200", // change arrow background
+              content: "p-0 gap-0 border-small border-divider bg-background",
+            }}
+          >
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                variant="light"
+                aria-label="settings"
+                radius="full"
+              >
+                <MdSettings className="w-5 h-5" />
+              </Button>
+            </DropdownTrigger>
+
+            <DropdownMenu
+              aria-label="Custom item styles"
+              // disabledKeys={["profile"]}
+              className="gap-0"
+              color="primary"
+              itemClasses={{
+                base: [
+                  "rounded-md gap-0",
+                  "text-default-500",
+                  "transition-opacity",
+                  "data-[hover=true]:text-foreground",
+                  "data-[hover=true]:bg-default-100",
+                  "dark:data-[hover=true]:bg-default-50",
+                  "data-[selectable=true]:focus:bg-default-50",
+                  "data-[pressed=true]:opacity-70",
+                  "data-[focus-visible=true]:ring-default-500",
+                ],
+              }}
+            >
+              <DropdownSection className="mb-0" aria-label="Logout actions">
+                <DropdownItem
+                  key="logout"
+                  onPress={logoutHandle.onOpen}
+                  startContent={<MdLogout className="w-4 h-4" />}
+                  className="gap-1"
+                  // endContent={<MdUpload className="text-large" />}
+                >
+                  Sign out
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarContent>
 
         <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -472,24 +535,46 @@ export const Navbar = () => {
             </Button>
           </div>
           <div className="mx-4 mt-2 flex flex-col gap-2">
-            {siteConfig.navMenuItems.map((item, index) => (
-              <NavbarMenuItem key={`${item}-${index}`}>
-                <Link
-                  color={
-                    index === 2
-                      ? "primary"
-                      : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                  }
-                  href={item.href}
-                  size="lg"
-                >
-                  {item.label}
-                </Link>
-              </NavbarMenuItem>
-            ))}
+            {siteConfig.navMenuItems.map((item, index) => {
+              let label = item?.label.toLowerCase();
+              if (pathname == item.href || pathname.includes(label)) {
+                return (
+                  <NavbarItem isActive key={item.href}>
+                    <Link
+                      className={clsx(
+                        linkStyles({ color: "foreground" }),
+                        "data-[active=true]:text-lg"
+                      )}
+                      color="primary"
+                      href={item.href}
+                      size="lg"
+                    >
+                      {item.label}
+                    </Link>
+                  </NavbarItem>
+                );
+              }
+              return (
+                <NavbarMenuItem key={`${item}-${index}`}>
+                  <Link color="foreground" href={item.href} size="lg">
+                    {item.label}
+                  </Link>
+                </NavbarMenuItem>
+              );
+            })}
           </div>
+          <NavbarMenuItem>
+            <Button
+              onPress={logoutHandle.onOpen}
+              variant="light"
+              size="lg"
+              className="mx-auto mt-3"
+              color="danger"
+              startContent={<MdLogout className="w-4 h-4" />}
+            >
+              Sign Out
+            </Button>
+          </NavbarMenuItem>
         </NavbarMenu>
       </NextUINavbar>
 
@@ -580,6 +665,44 @@ export const Navbar = () => {
               ) : (
                 <span className="text-xs">Yes, Import it!</span>
               )}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* logout-modal */}
+      <Modal
+        hideCloseButton
+        backdrop="opaque"
+        isOpen={logoutHandle.isOpen}
+        onOpenChange={logoutHandle.onOpenChange}
+      >
+        <ModalContent>
+          <ModalBody>
+            <div className="w-full text-center flex flex-col gap-2 pt-5 px-5 text-3xl font-semibold min-h-[100px] justify-center items-center">
+              Are you sure to sign out?
+            </div>
+          </ModalBody>
+          <ModalFooter className="justify-center mb-3">
+            <Button
+              type="button"
+              radius="full"
+              color="default"
+              onClick={logoutHandle.onOpenChange}
+            >
+              <span className="text-xs font-semibold">No</span>
+            </Button>
+
+            <Button
+              type="button"
+              radius="full"
+              color="primary"
+              onClick={() =>
+                logout({ headers: { "Content-Type": "application/json" } })
+              }
+              isLoading={loading}
+            >
+              <span className="text-xs font-semibold">Yes, Sign out!</span>
             </Button>
           </ModalFooter>
         </ModalContent>
