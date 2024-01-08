@@ -80,6 +80,15 @@ export default function GHGFluxCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '(˚C) celcius',
+        },
+      },
+    },
   };
 
   const optionsSoil = {
@@ -117,6 +126,15 @@ export default function GHGFluxCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'm³/m³',
+        },
+      },
+    }
   };
 
   const optionsWater = {
@@ -154,6 +172,15 @@ export default function GHGFluxCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'cm',
+        },
+      },
+    }
   };
 
   const optionsCo2 = {
@@ -191,6 +218,15 @@ export default function GHGFluxCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'tCO₂ ha⁻¹ yr⁻¹',
+        },
+      },
+    }
   };
 
   const optionsCh4 = {
@@ -228,6 +264,15 @@ export default function GHGFluxCharts({
         }
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'tCO₂e ha⁻¹ yr⁻¹',
+        },
+      },
+    }
   };
 
   const options = {
@@ -296,7 +341,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsTemperature}
@@ -319,7 +364,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsTemperature}
@@ -342,7 +387,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsSoil}
@@ -365,7 +410,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts
                 height="300"
                 options={optionsWater}
@@ -391,7 +436,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts height="300" options={optionsCh4} data={chartData.ch4} />
             </div>
           </AccordionItem>
@@ -413,7 +458,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
             </div>
           </AccordionItem>
@@ -435,7 +480,7 @@ export default function GHGFluxCharts({
             }
           >
             <div className="w-full flex flex-col relative">
-              <h3 className="font-semibold text-xs -mb-5">{periodeKey}</h3>
+              <h3 className="font-semibold text-xs -mb-2">{periodeKey}</h3>
               <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
             </div>
           </AccordionItem>
@@ -449,7 +494,7 @@ export default function GHGFluxCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               Air Temperature
             </h3>
             <AreaCharts
@@ -460,7 +505,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               Soil Temperature
             </h3>
             <AreaCharts
@@ -471,7 +516,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               Soil Moisture
             </h3>
             <AreaCharts
@@ -482,7 +527,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               Water Table
             </h3>
             <AreaCharts
@@ -493,7 +538,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Ch<sup>4</sup> */}
               Methane Flux
             </h3>
@@ -501,7 +546,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Co<sup>2</sup> */}
               Total Respiration
             </h3>
@@ -509,7 +554,7 @@ export default function GHGFluxCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Co<sup>2</sup> */}
               Heterothropic Respiration
             </h3>
