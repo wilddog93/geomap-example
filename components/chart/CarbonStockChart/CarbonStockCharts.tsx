@@ -62,7 +62,7 @@ export default function CarbonStockCharts({
           <Tab key="litters" title="Litters">
             <div className="w-full flex flex-col gap-2 px-2">
               <div className="w-full flex justify-between items-center text-sm">
-                <h3 className="text-default-700 font-bold">Above Ground Record</h3>
+                <h3 className="text-default-700 font-bold">Aboveground Stock</h3>
                 <MdInfo className="w-3 h-4" />
               </div>
               <div className="border-1 border-b border-default-300 w-full"></div>
@@ -87,7 +87,7 @@ export default function CarbonStockCharts({
           <Tab key="woody" title="Woody Debris">
             <div className="w-full flex flex-col gap-2 px-2">
               <div className="w-full flex justify-between items-center text-sm">
-                <h3 className="text-default-700 font-bold">Above Ground Record</h3>
+                <h3 className="text-default-700 font-bold">Aboveground Stock</h3>
                 <MdInfo className="w-3 h-4" />
               </div>
               <div className="border-1 border-b border-default-300 w-full"></div>
@@ -112,7 +112,7 @@ export default function CarbonStockCharts({
           <Tab key="trees" title="Trees">
             <div className="w-full flex flex-col gap-2 px-2">
               <div className="w-full flex justify-between items-center text-sm">
-                <h3 className="text-sm font-bold">Above Ground Record</h3>
+                <h3 className="text-sm font-bold">Aboveground Stock</h3>
                 <MdInfo className="w-3 h-4" />
               </div>
               <div className="border-1 border-b border-default-300 w-full"></div>
@@ -150,48 +150,6 @@ export default function CarbonStockCharts({
                 </div>
               </AccordionItem>
 
-              {/* <AccordionItem
-                key={`trees-3`}
-                aria-label={`trees-3`}
-                title={
-                  <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Notes</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <NoteTreesCharts data={chartData.trees} />
-                </div>
-              </AccordionItem>
-
-              <AccordionItem
-                key={`trees-4`}
-                aria-label={`trees-4`}
-                title={
-                  <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Plot</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <PlotTreesCharts data={chartData.trees} />
-                </div>
-              </AccordionItem>
-
-              <AccordionItem
-                key={`trees-5`}
-                aria-label={`trees-5`}
-                title={
-                  <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Plot Radius</p>
-                  </div>
-                }
-              >
-                <div className="w-full flex flex-col relative">
-                  <PlotRadiusTreesCharts data={chartData.trees} />
-                </div>
-              </AccordionItem> */}
-
               <AccordionItem
                 key={`trees-6`}
                 aria-label={`trees-6`}
@@ -210,7 +168,7 @@ export default function CarbonStockCharts({
           <Tab key="soils" title="Soils">
             <div className="w-full flex flex-col gap-2 px-2">
               <div className="w-full flex justify-between items-center text-sm">
-                <h3 className="text-default-700 font-bold">Low Ground Record</h3>
+                <h3 className="text-default-700 font-bold">Belowground Stock</h3>
                 <MdInfo className="w-3 h-4" />
               </div>
               <div className="border-1 border-b border-default-300 w-full"></div>
@@ -281,7 +239,7 @@ export default function CarbonStockCharts({
       >
         <div className="w-full flex flex-col gap-2">
           <div className="w-full flex justify-between items-center text-sm">
-            <h3 className="text-default-700 font-bold">Aboveground Record</h3>
+            <h3 className="text-default-700 font-bold">Aboveground Stock</h3>
             <MdInfo className="w-3 h-4" />
           </div>
           <div className="border-1 border-b border-default-300 w-full"></div>
@@ -327,7 +285,7 @@ export default function CarbonStockCharts({
 
         <div className="w-full flex flex-col gap-2">
           <div className="w-full flex justify-between items-center text-sm">
-            <h3 className="text-default-700 font-bold">Aboveground Record</h3>
+            <h3 className="text-default-700 font-bold">Belowground Stock</h3>
             <MdInfo className="w-3 h-4" />
           </div>
           <div className="border-1 border-b border-default-300 w-full"></div>
