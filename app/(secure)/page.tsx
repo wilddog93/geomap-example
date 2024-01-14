@@ -109,10 +109,6 @@ export default function Home() {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
-  type locationProps = {
-    
-  }
-
   const filterByUniqueKey = (
     arr: SelectTypes[],
     key: keyof SelectTypes
@@ -177,8 +173,9 @@ export default function Home() {
         });
       }
     }
-    console.log(location, "location-value")
+    // console.log(location, "location-value")
     const filteredArray = filterByUniqueKey(location, "value");
+    console.log(filteredArray, "location-value")
     // const filteredArray = location
     return filteredArray;
   }, [locationApi?.data , categoryKey]);

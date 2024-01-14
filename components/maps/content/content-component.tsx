@@ -58,6 +58,7 @@ import SoilChemChar2 from "@/components/chart/SoilChemCharts/SoilChemChart2";
 import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
 import useAxios from "@/hooks/use-axios";
 import { AxiosRequestConfig } from "axios";
+import { useRouter } from "next/navigation";
 // import { DataChartBoxPlot } from "@/components/chart/data-boxplot";
 
 type Props = {
@@ -130,6 +131,7 @@ function ContentComponent({
 }: Props) {
   // axios
   const axios = useAxios();
+  const router = useRouter()
   // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
@@ -170,13 +172,10 @@ function ContentComponent({
 
   const getFilterLocation = useCallback(
     (key: Key) => {
-      let state = locationOptions
-        ?.filter((item) => item.location == key)
-        .map((item) => item.state)
-        .toString();
+      let state = categoryKey == "Carbon Stock" ? locationOptions?.filter((item) => item.state == key).map((item) => item.state).toString() : locationOptions?.filter((item) => item.location == key).map((item) => item.state).toString();
       return { state };
     },
-    [locationOptions]
+    [locationOptions, categoryKey]
   );
 
   // filter periode
@@ -204,6 +203,8 @@ function ContentComponent({
 
     return { location, landCover };
   }, [locationKey, landCoverKey, getFilterLocation]);
+
+  console.log(getQuery, "getQuery")
 
   // chart
   // filter
@@ -1563,8 +1564,11 @@ function ContentComponent({
       // toast.error(err?.response?.data?.message);
     } finally {
       setIsLoadingDesc(false);
+      
     }
   };
+
+  console.log(descriptionValue, 'value')
 
   return (
     <Fragment>
@@ -1603,7 +1607,7 @@ function ContentComponent({
                         : () =>
                             onEditDec(data?.id, {
                               description: descriptionValue,
-                            })
+                            }).then(router.refresh)
                     }
                     isLoading={isLoadingDesc}
                   >
