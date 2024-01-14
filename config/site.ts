@@ -47,24 +47,24 @@ export const siteConfig = {
   ],
   navTabCarbon: [
     {
-      label: "Woody Debris",
-      path: "woody-debris",
-      href: "/table/carbon-stocks/woody-debris",
-    },
-    {
       label: "Litters",
       path: "litters",
       href: "/table/carbon-stocks/litters",
     },
     {
-      label: "Soils",
-      path: "carbon-soils",
-      href: "/table/carbon-stocks/carbon-soils",
+      label: "Woody Debris",
+      path: "woody-debris",
+      href: "/table/carbon-stocks/woody-debris",
     },
     {
       label: "Trees",
       path: "trees",
       href: "/table/carbon-stocks/trees",
+    },
+    {
+      label: "Soils",
+      path: "carbon-soil",
+      href: "/table/carbon-stocks/carbon-soil",
     },
   ],
   links: {

@@ -245,7 +245,7 @@ export default function CarbonStockCharts({
           <div className="border-1 border-b border-default-300 w-full"></div>
         </div>
         <div
-          className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5`}
+          className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 py-5`}
         >
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
@@ -291,7 +291,7 @@ export default function CarbonStockCharts({
           <div className="border-1 border-b border-default-300 w-full"></div>
         </div>
         <div
-          className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5`}
+          className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 py-5`}
         >
           {/* lowground */}
           <div className="w-full flex flex-col relative">
