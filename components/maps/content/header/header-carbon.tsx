@@ -32,19 +32,6 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
       >
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Woody Debris</p>
-          <p className="font-bold text-lg">
-            {items?.totalWoodyDebris
-              ? formatMoney({
-                  amount: items?.totalWoodyDebris,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> Mg/ha</span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Litter Mass</p>
           <p className="font-bold text-lg">
             {items?.totalLitterMass
@@ -58,37 +45,11 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average % Nitrogen</p>
+          <p className="text-xs mb-2">Average Woody Debris</p>
           <p className="font-bold text-lg">
-            {items?.totalNSoils
+            {items?.totalWoodyDebris
               ? formatMoney({
-                  amount: items?.totalNSoils,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> %</span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average % Carbon</p>
-          <p className="font-bold text-lg">
-            {items?.totalCSoils
-              ? formatMoney({
-                  amount: items?.totalCSoils,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> %</span>
-          </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Nitrogen</p>
-          <p className="font-bold text-lg">
-            {items?.totalNMGSoils
-              ? formatMoney({
-                  amount: items?.totalNMGSoils,
+                  amount: items?.totalWoodyDebris,
                   decimalCount: 2,
                 })
               : 0}
@@ -97,20 +58,9 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
 
         <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Carbon</p>
-          <p className="font-bold text-lg">
-            {items?.totalCMGSoils
-              ? formatMoney({
-                  amount: items?.totalCMGSoils,
-                  decimalCount: 2,
-                })
-              : 0}
-            <span className="text-sm"> Mg/ha</span>
+          <p className="text-xs mb-2">
+            Average Total Aboveground Biomass Trees
           </p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <p className="text-xs mb-2">Average Total Aboveground Biomass Trees</p>
           <p className="font-bold text-lg">
             {items?.totalTAGBTrees
               ? formatMoney({
@@ -131,7 +81,10 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> g/cm<sup>3</sup></span>
+            <span className="text-sm">
+              {" "}
+              g/cm<sup>3</sup>
+            </span>
           </p>
         </div>
 
@@ -144,7 +97,63 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
                   decimalCount: 2,
                 })
               : 0}
-            <span className="text-sm"> g/cm<sup>3</sup></span>
+            <span className="text-sm">
+              {" "}
+              g/cm<sup>3</sup>
+            </span>
+          </p>
+        </div>
+
+        {/* lowground */}
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average % Nitrogen (Soils)</p>
+          <p className="font-bold text-lg">
+            {items?.totalNSoils
+              ? formatMoney({
+                  amount: items?.totalNSoils,
+                  decimalCount: 2,
+                })
+              : 0}
+            <span className="text-sm"> %</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average % Carbon (Soils)</p>
+          <p className="font-bold text-lg">
+            {items?.totalCSoils
+              ? formatMoney({
+                  amount: items?.totalCSoils,
+                  decimalCount: 2,
+                })
+              : 0}
+            <span className="text-sm"> %</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Nitrogen (Soils)</p>
+          <p className="font-bold text-lg">
+            {items?.totalNMGSoils
+              ? formatMoney({
+                  amount: items?.totalNMGSoils,
+                  decimalCount: 2,
+                })
+              : 0}
+            <span className="text-sm"> Mg/ha</span>
+          </p>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <p className="text-xs mb-2">Average Carbon (Soils)</p>
+          <p className="font-bold text-lg">
+            {items?.totalCMGSoils
+              ? formatMoney({
+                  amount: items?.totalCMGSoils,
+                  decimalCount: 2,
+                })
+              : 0}
+            <span className="text-sm"> Mg/ha</span>
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ import {
 } from "@/utils/useFunction";
 // api
 import { useAuth } from "@/stores/auth";
-import { useLocationApi, usePropsApi } from "@/api/properties.api";
+import { LocationTypes, useLocationApi, usePropsApi } from "@/api/properties.api";
 // component
 import MapComponent from "@/components/maps/MapComponent";
 import { Navbar } from "@/components/navbar";
@@ -109,6 +109,10 @@ export default function Home() {
     if (filterLocation) getLocations(filterLocation.queryObject);
   }, [filterLocation]);
 
+  type locationProps = {
+    
+  }
+
   const filterByUniqueKey = (
     arr: SelectTypes[],
     key: keyof SelectTypes
@@ -124,27 +128,80 @@ export default function Home() {
     });
   };
 
+  const filterByUniqueKeyPoint = (
+    arr: LocationTypes[],
+    key: keyof LocationTypes
+  ): LocationTypes[] => {
+    const uniqueValues = new Set<any>();
+    return arr.filter((obj) => {
+      const value = obj[key];
+      if (uniqueValues.has(value)) {
+        return false; // Duplicate key value, exclude from the result
+      }
+      uniqueValues.add(value);
+      return true; // Unique key value, include in the result
+    });
+  };
+
   const locationOptions = useMemo(() => {
     const { data } = locationApi;
     let location: any[] | SelectTypes[] = [];
     if (data.length > 0) {
-      data.map((loc: any) => {
-        let shortLocation = splitStringTobeArray(loc.location);
-        let newShortLocation = shortLocation[shortLocation.length - 1];
-        location.push({
-          ...loc,
-          label: loc.location,
-          value: loc.location,
-          state: newShortLocation?.trim(),
-          // @ts-ignore
-          categories: splitStringTobeArray((loc.optionalDescription as string) || (loc.description as string)),
-          landCoverOptions: splitStringTobeArray((loc.landCover as string))
+      if(categoryKey == "Carbon Stock") {
+        data.map((loc: any) => {
+          let shortLocation = splitStringTobeArray(loc.location);
+          let newShortLocation = shortLocation[shortLocation.length - 1];
+          location.push({
+            ...loc,
+            label: newShortLocation?.trim(),
+            value: newShortLocation?.trim(),
+            state: newShortLocation?.trim(),
+            // @ts-ignore
+            categories: splitStringTobeArray((loc.optionalDescription as string) || (loc.description as string)),
+            landCoverOptions: splitStringTobeArray((loc.landCover as string))
+          });
         });
-      });
+      } else {
+        data.map((loc: any) => {
+          let shortLocation = splitStringTobeArray(loc.location);
+          let newShortLocation = shortLocation[shortLocation.length - 1];
+          location.push({
+            ...loc,
+            label: loc.location,
+            value: loc.location,
+            state: newShortLocation?.trim(),
+            // @ts-ignore
+            categories: splitStringTobeArray((loc.optionalDescription as string) || (loc.description as string)),
+            landCoverOptions: splitStringTobeArray((loc.landCover as string))
+          });
+        });
+      }
     }
+    console.log(location, "location-value")
     const filteredArray = filterByUniqueKey(location, "value");
+    // const filteredArray = location
     return filteredArray;
-  }, [locationApi?.data]);
+  }, [locationApi?.data , categoryKey]);
+
+  const locationPoint = useMemo(() => {
+    const { data } = locationApi;
+    let location: any[] | SelectTypes[] = [];
+    data.map((loc: any) => {
+      let shortLocation = splitStringTobeArray(loc.location);
+      let newShortLocation = shortLocation[shortLocation.length - 1];
+      location.push({
+        ...loc,
+        state: newShortLocation?.trim(),
+        // @ts-ignore
+        categories: splitStringTobeArray((loc.optionalDescription as string) || (loc.description as string)),
+        landCoverOptions: splitStringTobeArray((loc.landCover as string))
+      });
+    });
+    console.log(location, "location-value")
+    const filteredArray = filterByUniqueKeyPoint(location as LocationTypes[], "location");
+    // const filteredArray = location
+    return filteredArray;
+  }, [locationApi?.data , categoryKey]);
 
   // lcoation to be map data poin
   const mapData = useMemo(() => {
@@ -153,8 +210,8 @@ export default function Home() {
     let newCat: SelectTypes[] = [];
     let landCovers: any[] = [];
     let newLandCover: SelectTypes[] = [];
-    if (locationOptions.length > 0) {
-      locationOptions.map((items: any) => {
+    if (locationPoint.length > 0) {
+      locationPoint.map((items: any) => {
         items?.categories?.map((x: any) => {
           points.push({
             ...items,
@@ -183,7 +240,9 @@ export default function Home() {
       );
     }
     return { points, categories: newCat, landCovers: newLandCover };
-  }, [locationOptions]);
+  }, [locationPoint]);
+
+  // console.log({locationOptions , mapData}, 'locationOptions')
 
   // land-cover options
   const landCoverOptions = useMemo(() => {

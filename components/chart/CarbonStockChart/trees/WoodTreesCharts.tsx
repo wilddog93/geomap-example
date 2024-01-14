@@ -45,7 +45,7 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
   };
 
   const groupedData = data.reduce((acc: any, item) => {
-    const key = `${item.region}-${item.land_cover}`;
+    const key = `${item.site}-${item.land_cover}`;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -53,16 +53,16 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
     return acc;
   }, {});
 
-  // Extract unique regions and land_covers values
-  const regions = Array.from(new Set(data.map((item) => item.region)));
+  // Extract unique sites and land_covers values
+  const sites = Array.from(new Set(data.map((item) => item.site)));
   const landCovers = Array.from(new Set(data.map((item) => item.land_cover)));
   // Prepare datasets for stacked bar chart
   const datasets = landCovers.map((landCover) => ({
     label: landCover.length > 0 ? landCover : ["all"],
     data:
-      regions.length > 0
-        ? regions.map((region) => {
-            const key = `${region}-${landCover}`;
+      sites.length > 0
+        ? sites.map((site) => {
+            const key = `${site}-${landCover}`;
             return (
               groupedData[key]?.reduce(
                 (sum: any, item: any) => sum + item.avg_woodDensity,
@@ -79,7 +79,7 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
   }));
 
   const chartData = {
-    labels: regions,
+    labels: sites,
     datasets: datasets,
   };
 
@@ -118,7 +118,7 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
         }
       },
     },
-    barThickness: 60,
+    // barThickness: 60,
     scales: {
       y: {
         beginAtZero: true,

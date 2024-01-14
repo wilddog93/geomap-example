@@ -88,10 +88,22 @@ import { SearchIcon } from "../icons";
 // GHG Fluxes & other variables, Carbon Stock, Soil psychochemical properties, Weather data (AWS)
 const categoryOptions: SelectTypes[] = [
   { value: "Carbon Stock", label: "Carbon Stock" },
-  { value: "GHG Fluxes & other variables", label: "GHG Fluxes & other variables" },
-  { value: "Soil psychochemical properties", label: "Soil psychochemical properties" },
-  { value: "Soil Chemistry properties 1", label: "Soil Chemistry properties 1" },
-  { value: "Soil Chemistry properties 2", label: "Soil Chemistry properties 2" },
+  {
+    value: "GHG Fluxes & other variables",
+    label: "GHG Fluxes & other variables",
+  },
+  {
+    value: "Soil psychochemical properties",
+    label: "Soil psychochemical properties",
+  },
+  {
+    value: "Soil Chemistry properties 1",
+    label: "Soil Chemistry properties 1",
+  },
+  {
+    value: "Soil Chemistry properties 2",
+    label: "Soil Chemistry properties 2",
+  },
   { value: "soil chemistry_3", label: "Soil Chemistry 3" },
   { value: "weather data", label: "Weather Data" },
 ];
@@ -137,13 +149,16 @@ const MapComponent = ({
     console.log(filterred, "filterred");
     if (categoryKey)
       filterred = filterred.filter((item) => item.category === categoryKey);
-    if (locationKey)
+    if (locationKey && categoryKey == "Carbon Stock")
+      filterred = filterred.filter((item) => item.state === locationKey);
+
+    if (locationKey && categoryKey !== "Carbon Stock")
       filterred = filterred.filter((item) => item.location === locationKey);
 
     return filterred;
   }, [mapData, locationKey, categoryKey]);
 
-  // console.log(mapFilterred, "locations-data-filter", categoryKey);
+  console.log(mapFilterred, "locations-data-filter", categoryKey);
 
   const mapCenter = useMemo(() => {
     let center: any[] = fromLonLat([109.4342, -0.271486]);
@@ -390,8 +405,8 @@ const MapComponent = ({
       <div
         id="map"
         className="map-filter relative"
-        style={{ 
-          width: "100%", 
+        style={{
+          width: "100%",
           height: "100%",
         }}
       >

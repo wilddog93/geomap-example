@@ -45,7 +45,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
   };
 
   const groupedData = data.reduce((acc: any, item) => {
-    const key = `${item.region}-${item.land_cover}`;
+    const key = `${item.site}-${item.land_cover}`;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -55,14 +55,15 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
 
   // Extract unique regions and land_covers values
   const regions = Array.from(new Set(data.map((item) => item.region)));
+  const sites = Array.from(new Set(data.map((item) => item.site)));
   const landCovers = Array.from(new Set(data.map((item) => item.land_cover)));
   // Prepare datasets for stacked bar chart
   const datasets = landCovers.map((landCover) => ({
     label: landCover.length > 0 ? landCover : ["all"],
     data:
-      regions.length > 0
-        ? regions.map((region) => {
-            const key = `${region}-${landCover}`;
+      sites.length > 0
+        ? sites.map((site) => {
+            const key = `${site}-${landCover}`;
             return (
               groupedData[key]?.reduce(
                 (sum: any, item: any) => sum + item.avg_cMgHa,
@@ -79,7 +80,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
   }));
 
   const chartData = {
-    labels: regions,
+    labels: sites,
     datasets: datasets,
   };
 
@@ -118,7 +119,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
         }
       },
     },
-    barThickness: 60,
+    // barThickness: 60,
     scales: {
       y: {
         beginAtZero: true,
