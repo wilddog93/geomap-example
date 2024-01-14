@@ -28,8 +28,9 @@ export type MyUnionType = (
 export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
   return (
     <Fragment>
+      <h3 className="text-default-700 font-bold">Above Ground Record</h3>
       <div
-        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
+        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3`}
       >
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average Litter Mass</p>
@@ -103,7 +104,12 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
             </span>
           </p>
         </div>
+      </div>
 
+      <h3 className="text-default-700 font-bold">Low Ground Record</h3>
+      <div
+        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
+      >
         {/* lowground */}
         <div className="w-full flex flex-col">
           <p className="text-xs mb-2">Average % Nitrogen (Soils)</p>
