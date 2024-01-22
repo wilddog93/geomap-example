@@ -123,7 +123,7 @@ const DBHTreesCharts: FC<DBHTreesChartsProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'g/cm³',
         },
       },

@@ -28,7 +28,7 @@ export type MyUnionType = (
 export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
   return (
     <Fragment>
-      <h3 className="text-default-700 font-bold">Aboveground Stock</h3>
+      <h3 className="text-default-700 font-bold mt-3">Aboveground Stock</h3>
       <div
         className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 ${!sidebar ? "lg:grid-cols-5" : ""}`}
       >
@@ -106,9 +106,11 @@ export default function HeaderCarbon({ items, sidebar }: CarbonProps) {
         </div>
       </div>
 
+      <div className="w-full border-b-2 border-default-300 my-3"></div>
+
       <h3 className="text-default-700 font-bold">Belowground Stock</h3>
       <div
-        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 lg:grid-cols-4`}
+        className={`w-full grid grid-cols-1 gap-4 py-3 sm:grid-cols-3 ${!sidebar ? "lg:grid-cols-5" : ""}`}
       >
         {/* lowground */}
         <div className="w-full flex flex-col">

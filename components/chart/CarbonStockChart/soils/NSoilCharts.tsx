@@ -124,7 +124,7 @@ const NSoilCharts: FC<NSoilChartsProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(%) percent',
         },
       },

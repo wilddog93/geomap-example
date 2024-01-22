@@ -123,7 +123,7 @@ const WoodTreesCharts: FC<WoodTreesChartsProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'g/cm³',
         },
       },

@@ -124,7 +124,7 @@ const CMGSoilCharts: FC<CMGSoilChartsProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'Mg/ha',
         },
       },

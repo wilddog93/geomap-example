@@ -73,7 +73,7 @@ export default function CarbonStockCharts({
                 aria-label={`litters-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Litter Mass</p>
+                    <p className={`text-sm font-semibold`}>Litter Mass <span>(Mg/ha)</span></p>
                   </div>
                 }
                 aria-selected="true"
@@ -98,7 +98,7 @@ export default function CarbonStockCharts({
                 aria-label={`woody-1`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Total</p>
+                    <p className={`text-sm font-semibold`}>Total <span>(Mg/ha)</span></p>
                   </div>
                 }
                 aria-selected="true"
@@ -124,7 +124,7 @@ export default function CarbonStockCharts({
                 title={
                   <div className="flex justify-between items-center">
                     <p className={`text-sm font-semibold`}>
-                      Diameter Breast Height
+                      Diameter Breast Height <span>(g/cm)<sup>3</sup></span>
                     </p>
                   </div>
                 }
@@ -140,7 +140,7 @@ export default function CarbonStockCharts({
                 title={
                   <div className="flex justify-between items-center">
                     <p className={`text-sm font-semibold`}>
-                      Total Aboveground Biomass
+                      Total Aboveground Biomass <span>(Mg/ha)</span>
                     </p>
                   </div>
                 }
@@ -155,7 +155,7 @@ export default function CarbonStockCharts({
                 aria-label={`trees-6`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Wood Density</p>
+                    <p className={`text-sm font-semibold`}>Wood Density <span>(g/cm)<sup>3</sup></span></p>
                   </div>
                 }
               >
@@ -179,7 +179,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-1`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>% Nitrogen</p>
+                    <p className={`text-sm font-semibold`}>Nitrogen (%)</p>
                   </div>
                 }
               >
@@ -193,7 +193,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-2`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>% Carbon</p>
+                    <p className={`text-sm font-semibold`}>Carbon (%)</p>
                   </div>
                 }
               >
@@ -207,7 +207,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-3`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Nitrogen</p>
+                    <p className={`text-sm font-semibold`}>Nitrogen <span>(Mg/ha)</span></p>
                   </div>
                 }
               >
@@ -221,7 +221,7 @@ export default function CarbonStockCharts({
                 aria-label={`soil-4`}
                 title={
                   <div className="flex justify-between items-center">
-                    <p className={`text-sm font-semibold`}>Carbon</p>
+                    <p className={`text-sm font-semibold`}>Carbon <span>(Mg/ha)</span></p>
                   </div>
                 }
               >
@@ -248,36 +248,36 @@ export default function CarbonStockCharts({
           className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 py-5`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Litter Mass
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Litter Mass <span>(Mg/ha)</span>
             </h3>
             <LittersCharts data={chartData.litter} />
           </div>
           
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Woody Debris
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Woody Debris <span>(Mg/ha)</span>
             </h3>
             <WoodyCharts data={chartData.woody} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Diameter Breast Height Trees (dbh)
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Diameter Breast Height Trees <span>(g/cm)<sup>3</sup></span>
             </h3>
             <DBHTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Total Aboveground Biomass Trees (tagb)
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Total Aboveground Biomass Trees <span>(Mg/ha)</span>
             </h3>
             <TAGBTreesCharts data={chartData.trees} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Wood Density Trees (WD)
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Wood Density Trees <span>(g/cm)<sup>3</sup></span>
             </h3>
             <WoodTreesCharts data={chartData.trees} />
           </div>
@@ -295,29 +295,29 @@ export default function CarbonStockCharts({
         >
           {/* lowground */}
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm">
               Nitrogen Soils (%)
             </h3>
             <NSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
+            <h3 className="font-semibold text-xs lg:text-sm">
               Carbon Soils (%)
             </h3>
             <CSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Nitrogen Soils (nMg/Ha)
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Nitrogen Soils <span>(Mg/ha)</span>
             </h3>
             <NMGSoilCharts data={chartData.soils} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Carbon Soils (cMg/Ha)
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Carbon Soils <span>(Mg/ha)</span>
             </h3>
             <CMGSoilCharts data={chartData.soils} />
           </div>

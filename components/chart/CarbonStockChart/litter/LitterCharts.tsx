@@ -114,7 +114,7 @@ const LittersCharts: FC<LittersChartsProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'Mg/ha',
         },
       },
