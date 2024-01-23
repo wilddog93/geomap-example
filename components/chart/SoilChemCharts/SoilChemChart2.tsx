@@ -33,7 +33,7 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
             aria-label={`chem-3`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Kalium Content</p>
+                <p className={`text-sm font-semibold`}>Kalium Content <span>(cmol(+) kg<sup>-1</sup>)</span></p>
               </div>
             }
             aria-selected="true"
@@ -48,7 +48,7 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
             aria-label={`chem-4`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Cation Exchange Capacity</p>
+                <p className={`text-sm font-semibold`}>Cation Exchange Capacity <span>(cmol(+) kg<sup>-1</sup>)</span></p>
               </div>
             }
             aria-selected="true"
@@ -63,7 +63,7 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
             aria-label={`chem-5`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Phosporous Pentoxide Content</p>
+                <p className={`text-sm font-semibold`}>Phosporous Pentoxide Content <span>(ppm)</span></p>
               </div>
             }
             aria-selected="true"
@@ -90,22 +90,22 @@ export default function SoilChemChar2({ chartData, sidebar }: Props) {
           className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Kalium Content
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Kalium Content <span>(cmol(+) kg<sup>-1</sup>)</span>
             </h3>
             <KaliumCharts data={chartData} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Cation Exchange Capacity
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Cation Exchange Capacity <span>(cmol(+) kg<sup>-1</sup>)</span>
             </h3>
             <CationExCharts data={chartData} />
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Phosporous Pentoxide Content
+            <h3 className="font-semibold text-xs lg:text-sm">
+              Phosporous Pentoxide Content <span>(ppm)</span>
             </h3>
             <PhosporousCharts data={chartData} />
           </div>

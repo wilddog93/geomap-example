@@ -112,7 +112,7 @@ const PHCharts: FC<PHChartProps> = ({ data }) => {
        y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(-)',
         },
       },

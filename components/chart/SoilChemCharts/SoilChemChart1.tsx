@@ -42,7 +42,7 @@ export default function SoilChemChar1({ chartData, sidebar,landCoverKey }: Props
             aria-label={`chem-1`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>PH</p>
+                <p className={`text-sm font-semibold`}>PH <span>(-)</span></p>
               </div>
             }
             aria-selected="true"
@@ -57,7 +57,7 @@ export default function SoilChemChar1({ chartData, sidebar,landCoverKey }: Props
             aria-label={`chem-2`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Redox Potential</p>
+                <p className={`text-sm font-semibold`}>Redox Potential <span>(%)</span></p>
               </div>
             }
             aria-selected="true"
@@ -81,17 +81,18 @@ export default function SoilChemChar1({ chartData, sidebar,landCoverKey }: Props
         </div>
 
         <div
-          className={`w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5`}
+          className={`w-full grid grid-cols-1 sm:grid-cols-2 gap-8 py-5`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">PH</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">PH <span>(-)</span></h3>
             <PHCharts data={chartData} />
           </div>
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Redox Potential
+              Redox Potential <span>(%)</span>
             </h3>
+            <RedoxCharts data={chartData} />
           </div>
         </div>
       </div>

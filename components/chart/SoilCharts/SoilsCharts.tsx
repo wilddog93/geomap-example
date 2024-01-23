@@ -82,7 +82,7 @@ export default function SoilsCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(%) percent',
         },
       },
@@ -128,7 +128,7 @@ export default function SoilsCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'g/cm³',
         },
       },
@@ -156,7 +156,7 @@ export default function SoilsCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Bulk Density
+                  Bulk Density <span>(g/cm<sup>3</sup>)</span>
                 </p>
               </div>
             }
@@ -177,7 +177,7 @@ export default function SoilsCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Gravimetric Water Content
+                  Gravimetric Water Content <span>(%)</span>
                 </p>
               </div>
             }
@@ -198,7 +198,7 @@ export default function SoilsCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Volumetric Water Content
+                  Volumetric Water Content <span>(%)</span>
                 </p>
               </div>
             }
@@ -222,7 +222,7 @@ export default function SoilsCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Bulk Density</h3>
+            <h3 className="font-semibold text-xs lg:text-sm">Bulk Density <span>(g/cm<sup>3</sup>)</span></h3>
             <AreaCharts
               height="300"
               options={optionsBD}
@@ -231,7 +231,7 @@ export default function SoilsCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Gravimetric Water Content</h3>
+            <h3 className="font-semibold text-xs lg:text-sm">Gravimetric Water Content <span>(%)</span></h3>
             <AreaCharts
               height="300"
               options={options}
@@ -240,7 +240,7 @@ export default function SoilsCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Volumetric Water Content</h3>
+            <h3 className="font-semibold text-xs lg:text-sm">Volumetric Water Content <span>(%)</span></h3>
             <AreaCharts
               height="300"
               options={options}

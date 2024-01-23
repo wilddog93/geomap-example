@@ -34,7 +34,7 @@ export default function SoilChemChar3({ chartData, sidebar }: Props) {
             aria-label={`chem-2`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Carbon Content</p>
+                <p className={`text-sm font-semibold`}>Carbon Content <span>(Mg/ha)</span></p>
               </div>
             }
             aria-selected="true"
@@ -49,7 +49,7 @@ export default function SoilChemChar3({ chartData, sidebar }: Props) {
             aria-label={`chem-1`}
             title={
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-semibold`}>Nitrogen Content</p>
+                <p className={`text-sm font-semibold`}>Nitrogen Content <span>(Mg/ha)</span></p>
               </div>
             }
             aria-selected="true"
@@ -77,13 +77,13 @@ export default function SoilChemChar3({ chartData, sidebar }: Props) {
         >
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-5">
-              Carbon Content
+              Carbon Content <span>(Mg/ha)</span>
             </h3>
             <CarbonCharts data={chartData} />
           </div>
           
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Nitrogen Content</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-5">Nitrogen Content <span>(Mg/ha)</span></h3>
             <NitrogenCharts data={chartData} />
           </div>
         </div>

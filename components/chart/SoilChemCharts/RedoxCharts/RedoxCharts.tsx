@@ -112,7 +112,7 @@ const RedoxCharts: FC<RedoxChartProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(%) percent',
         },
       },

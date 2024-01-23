@@ -112,7 +112,7 @@ const CationExCharts: FC<CationExChartProps> = ({ data }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'cmol(+) kg⁻¹',
         },
       },
