@@ -85,7 +85,7 @@ export default function WeatherCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(˚c) celcius',
         },
       },
@@ -131,7 +131,7 @@ export default function WeatherCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(%) percent',
         },
       },
@@ -177,7 +177,7 @@ export default function WeatherCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'W/m²',
         },
       },
@@ -223,7 +223,7 @@ export default function WeatherCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'mph',
         },
       },
@@ -306,7 +306,7 @@ export default function WeatherCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'mm',
         },
       },
@@ -334,7 +334,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Temperature
+                  Temperature <span>(˚C)</span>
                 </p>
               </div>
             }
@@ -355,7 +355,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Relative Humidity
+                  Relative Humidity <span>(%)</span>
                 </p>
               </div>
             }
@@ -376,7 +376,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Solar Radiation
+                  Solar Radiation <span>(W/m<sup>2</sup>)</span>
                 </p>
               </div>
             }
@@ -397,7 +397,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Wind Speed
+                  Wind Speed <span>(mph)</span>
                 </p>
               </div>
             }
@@ -418,7 +418,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Gust Speed
+                  Gust Speed <span>(mph)</span>
                 </p>
               </div>
             }
@@ -439,7 +439,7 @@ export default function WeatherCharts({
             title={
               <div className="flex justify-between items-center">
                 <p className={`text-sm font-semibold`}>
-                  Rainfall
+                  Rainfall <span>(mm)</span>
                 </p>
               </div>
             }
@@ -463,7 +463,7 @@ export default function WeatherCharts({
           }`}
         >
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Temperature</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Temperature <span>(˚C)</span></h3>
             <AreaCharts
               height="300"
               options={optionsTemperature}
@@ -472,7 +472,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Relative Humidity</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Relative Humidity <span>(%)</span></h3>
             <AreaCharts
               height="300"
               options={optionsPercent}
@@ -481,7 +481,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Solar Radiation</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Solar Radiation <span>(W/m<sup>2</sup>)</span></h3>
             <AreaCharts
               height="300"
               options={optionsRadiation}
@@ -490,7 +490,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Wind Speed</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Wind Speed <span>(mph)</span></h3>
             <AreaCharts
               height="300"
               options={optionsSpeed}
@@ -499,7 +499,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Gust Speed</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Gust Speed <span>(mph)</span></h3>
             <AreaCharts
               height="300"
               options={optionsSpeed}
@@ -508,7 +508,7 @@ export default function WeatherCharts({
           </div>
 
           <div className="w-full flex flex-col relative">
-            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Rainfall</h3>
+            <h3 className="font-semibold text-xs lg:text-sm -mb-2">Rainfall <span>(mm)</span></h3>
             <BarCharts height="300" options={optionsRain} data={chartData.rain} />
           </div>
         </div>
