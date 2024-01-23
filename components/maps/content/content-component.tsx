@@ -1556,7 +1556,7 @@ function ContentComponent({
       // setData(lists);
       // setMeta(result);
       // toast.info("NCS Location Document has been imported!");
-      setDescriptionValue(lists?.description)
+      setDescriptionValue(lists?.optionalDescription || lists?.description)
       setIsEditDesc(false)
     } catch (err: any) {
       setErrorDesc(err?.response?.data?.message);
@@ -1606,7 +1606,7 @@ function ContentComponent({
                         ? onEdit
                         : () =>
                             onEditDec(data?.id, {
-                              description: descriptionValue,
+                              optionalDescription: descriptionValue,
                             }).then(router.refresh)
                     }
                     isLoading={isLoadingDesc}
