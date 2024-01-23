@@ -59,6 +59,7 @@ import SoilChemChar3 from "@/components/chart/SoilChemCharts/SoilChemChart3";
 import useAxios from "@/hooks/use-axios";
 import { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 // import { DataChartBoxPlot } from "@/components/chart/data-boxplot";
 
 type Props = {
@@ -131,7 +132,7 @@ function ContentComponent({
 }: Props) {
   // axios
   const axios = useAxios();
-  const router = useRouter()
+  const router = useRouter();
   // chart
   const GHGFluxYearly = useGHGFluxStatisticsYearlyApi();
   const GHGFluxMonthly = useGHGFluxStatisticsMonthlyApi();
@@ -154,7 +155,9 @@ function ContentComponent({
   const [errorDesc, setErrorDesc] = useState<string>("");
 
   useEffect(() => {
-    if (data?.description) setDescriptionValue(data?.description);
+    if (data?.optionalDescription)
+      setDescriptionValue(data?.optionalDescription);
+    else if (data?.description) setDescriptionValue(data?.description);
   }, [data]);
 
   const onEdit = () => setIsEditDesc(!isEditDesc);
@@ -172,7 +175,16 @@ function ContentComponent({
 
   const getFilterLocation = useCallback(
     (key: Key) => {
-      let state = categoryKey == "Carbon Stock" ? locationOptions?.filter((item) => item.state == key).map((item) => item.state).toString() : locationOptions?.filter((item) => item.location == key).map((item) => item.state).toString();
+      let state =
+        categoryKey == "Carbon Stock"
+          ? locationOptions
+              ?.filter((item) => item.state == key)
+              .map((item) => item.state)
+              .toString()
+          : locationOptions
+              ?.filter((item) => item.location == key)
+              .map((item) => item.state)
+              .toString();
       return { state };
     },
     [locationOptions, categoryKey]
@@ -204,7 +216,7 @@ function ContentComponent({
     return { location, landCover };
   }, [locationKey, landCoverKey, getFilterLocation]);
 
-  console.log(getQuery, "getQuery")
+  console.log(getQuery, "getQuery");
 
   // chart
   // filter
@@ -890,7 +902,7 @@ function ContentComponent({
       }
     }
 
-    console.log(SoilsYearly.data, "result-data");
+    // console.log(SoilsYearly.data, "result-data");
 
     // airTemperature = dataYearly;
     return {
@@ -1426,8 +1438,6 @@ function ContentComponent({
     return qb;
   }, [getQuery]);
 
-  console.log(getQuery, "query-data");
-
   const getWoodyChart = async (params: any) => {
     console.log(params, "paramss");
     await WoodyYearly.fetch({ params });
@@ -1553,22 +1563,25 @@ function ContentComponent({
         body,
         options
       );
+      // console.log({result, lists}, 'result')
       // setData(lists);
       // setMeta(result);
       // toast.info("NCS Location Document has been imported!");
-      setDescriptionValue(lists?.optionalDescription || lists?.description)
-      setIsEditDesc(false)
+      setDescriptionValue(
+        result?.optionalDescription
+          ? result?.optionalDescription
+          : result?.description
+      );
+      setIsEditDesc(false);
     } catch (err: any) {
       setErrorDesc(err?.response?.data?.message);
       console.log(err, "result-data-dec-error");
       // toast.error(err?.response?.data?.message);
     } finally {
       setIsLoadingDesc(false);
-      
+      router.refresh()
     }
   };
-
-  console.log(descriptionValue, 'value')
 
   return (
     <Fragment>
@@ -1583,7 +1596,7 @@ function ContentComponent({
               <h3 className="font-bold text-xl">{data?.location || ""}</h3>
               <div className="w-full flex gap-2">
                 <p className={`${!isEditDesc ? "" : "hidden "}text-sm`}>
-                  {data?.description || "-"}
+                  {descriptionValue || "-"}
                 </p>
                 <Textarea
                   label="Description"
@@ -1593,7 +1606,7 @@ function ContentComponent({
                   onChange={(event) => setDescriptionValue(event.target.value)}
                   errorMessage={errorDesc}
                 />
-                <div className={!descriptionValue ? "hidden" : ""}>
+                <div className={descriptionValue ? "" : "hidden"}>
                   <Button
                     isIconOnly
                     color="primary"
