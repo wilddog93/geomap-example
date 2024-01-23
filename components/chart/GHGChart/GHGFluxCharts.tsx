@@ -84,7 +84,7 @@ export default function GHGFluxCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: '(˚C) celcius',
         },
       },
@@ -130,7 +130,7 @@ export default function GHGFluxCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'm³/m³',
         },
       },
@@ -176,7 +176,7 @@ export default function GHGFluxCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'cm',
         },
       },
@@ -222,7 +222,7 @@ export default function GHGFluxCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'tCO₂ ha⁻¹ yr⁻¹',
         },
       },
@@ -268,7 +268,7 @@ export default function GHGFluxCharts({
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'tCO₂e ha⁻¹ yr⁻¹',
         },
       },
@@ -335,7 +335,7 @@ export default function GHGFluxCharts({
                 <p
                   className={`text-sm font-semibold`}
                 >
-                  Air Temperature
+                  Air Temperature <span>(˚C)</span>
                 </p>
               </div>
             }
@@ -358,7 +358,7 @@ export default function GHGFluxCharts({
                 <p
                   className={`text-sm font-semibold`}
                 >
-                  Soil Temperature
+                  Soil Temperature <span>(˚C)</span>
                 </p>
               </div>
             }
@@ -381,7 +381,7 @@ export default function GHGFluxCharts({
                 <p
                   className={`text-sm font-semibold`}
                 >
-                  Soil Moisture
+                  Soil Moisture <span>(m<sup>3</sup>/m<sup>3</sup>)</span>
                 </p>
               </div>
             }
@@ -404,7 +404,7 @@ export default function GHGFluxCharts({
                 <p
                   className={`text-sm font-semibold`}
                 >
-                  Water Table
+                  Water Table <span>(cm)</span>
                 </p>
               </div>
             }
@@ -429,7 +429,7 @@ export default function GHGFluxCharts({
                 >
                   <span>
                     {/* CH<sub>4</sub> */}
-                    Methane Flux
+                    Methane Flux <span>(tCO<sub>2</sub>e ha<sup>-1</sup>yr<sup>-1</sup>)</span>
                   </span>
                 </p>
               </div>
@@ -451,7 +451,7 @@ export default function GHGFluxCharts({
                 >
                   <span>
                     {/* CO<sub>2</sub> */}
-                    Total Respiration
+                    Total Respiration <span>(tCO<sub>2</sub> ha<sup>-1</sup>yr<sup>-1</sup>)</span>
                   </span>
                 </p>
               </div>
@@ -473,7 +473,7 @@ export default function GHGFluxCharts({
                 >
                   <span>
                     {/* CO<sub>2</sub> */}
-                    Heterothropic Respiration
+                    Heterothropic Respiration <span>(tCO<sub>2</sub> ha<sup>-1</sup>yr<sup>-1</sup>)</span>
                   </span>
                 </p>
               </div>
@@ -495,7 +495,7 @@ export default function GHGFluxCharts({
         >
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
-              Air Temperature
+              Air Temperature <span>(˚C)</span>
             </h3>
             <AreaCharts
               height="300"
@@ -506,7 +506,7 @@ export default function GHGFluxCharts({
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
-              Soil Temperature
+              Soil Temperature <span>(˚C)</span>
             </h3>
             <AreaCharts
               height="300"
@@ -517,7 +517,7 @@ export default function GHGFluxCharts({
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
-              Soil Moisture
+              Soil Moisture <span>(m<sup>3</sup>/m<sup>3</sup>)</span>
             </h3>
             <AreaCharts
               height="300"
@@ -528,7 +528,7 @@ export default function GHGFluxCharts({
 
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
-              Water Table
+              Water Table <span>(cm)</span>
             </h3>
             <AreaCharts
               height="300"
@@ -540,7 +540,7 @@ export default function GHGFluxCharts({
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Ch<sup>4</sup> */}
-              Methane Flux
+              Methane Flux <span>(tCO<sub>2</sub>e ha<sup>-1</sup>yr<sup>-1</sup>)</span>
             </h3>
             <AreaCharts height="300" options={optionsCh4} data={chartData.ch4} />
           </div>
@@ -548,7 +548,7 @@ export default function GHGFluxCharts({
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Co<sup>2</sup> */}
-              Total Respiration
+              Total Respiration <span>(tCO<sub>2</sub> ha<sup>-1</sup>yr<sup>-1</sup>)</span>
             </h3>
             <AreaCharts height="300" options={optionsCo2} data={chartData.co2} />
           </div>
@@ -556,7 +556,7 @@ export default function GHGFluxCharts({
           <div className="w-full flex flex-col relative">
             <h3 className="font-semibold text-xs lg:text-sm -mb-2">
               {/* Co<sup>2</sup> */}
-              Heterothropic Respiration
+              Heterothropic Respiration <span>(tCO<sub>2</sub> ha<sup>-1</sup>yr<sup>-1</sup>)</span>
             </h3>
             <AreaCharts height="300" options={optionsCo2} data={chartData.heterothropicCo2} />
           </div>
