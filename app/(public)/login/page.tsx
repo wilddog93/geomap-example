@@ -67,8 +67,15 @@ export default function LoginPage() {
 
   return (
     <div className="relative overflow-hidden w-full h-screen lg:h-full flex items-center bg-white shadow-default">
-      <div className="relative w-full lg:w-2/3 h-full hidden lg:flex">
-        <div className="w-full h-full flex flex-col justify-between p-10 absolute z-30">
+      <div
+        style={{ 
+          backgroundImage: `url(/image/login-img.png)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+        className="relative w-full lg:w-2/3 h-full hidden lg:flex min-h-screen">
+        <div className="w-full h-full flex flex-col justify-between p-10 z-30">
           <h1 className="text-white drop-shadow-md text-8xl font-bold">
             Melindungi Alam, Melestarikan Kehidupan
           </h1>
@@ -85,15 +92,6 @@ export default function LoginPage() {
               </p>
             </CardBody>
           </Card>
-        </div>
-        <div className="w-full absolute inset-0 z-10">
-          <Image
-            className="w-full object-cover object-center"
-            src="/image/login-img.png"
-            alt="Barrier Logo"
-            sizes="100vh"
-            radius="none"
-          />
         </div>
       </div>
 
